@@ -68,8 +68,9 @@ Refactor your project tree to match maven standards. (Tip: you should exit eclip
 Include necessary libraries such as mysql-connector, JUnit, Mockito, Slf4j, and create the test classes for the backend you have already developed (Note: This is against TDD best practices. You should always code your tests simulteanously while developing your features).
 
 ####4.3.2. Implement your features in the web-ui
-Using the provided template https://github.com/loicortola/computer-database/TODO:inserttemplate, integrate the previous features using Servlets, JSPs, JSTL, and Tags.  
+Using the provided template https://github.com/loicortola/spec-cdb/tree/master/static, integrate the previous features using Servlets, JSPs, JSTL, and Tags.  
 Implement Computer listing (paginated), add, edit, delete, total count features.  
+Warning: All features will be implemented and tested using Selenium automated with maven
 
 ####4.3.3. Secure through validation
 Implement both frontend (jQuery) and backend validation in the web-ui.
