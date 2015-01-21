@@ -54,18 +54,20 @@ Please use Singleton patterns where it makes sense, and implement your own Persi
 ####4.2.2. Pages
 Now that your app's main features work, implement the pageable feature. We recommend the use of a Page class, containing your entities and the page information.  
 
-####4.2.3. Code review, logging
+####4.2.3. Code review, logging (t0 + 2 days)
 Important Points: Architecture (daos, mappers, services, models, exceptions etc...)? Singleton, IOC patterns? Validation (dirty checking?)? Date API? Secure inputs?  
 Javadoc? Comments? Use Slf4j-api logging library, with the most common implementation: logback.  
 
-###4.3. CLI + Web interface client
+###4.3. CLI + Web interface client 
 Now that your backend skeleton is working, we want to add a second more user-friendly UI, such as a Web-UI.  
 As it will require more and more libraries (more JARs to include in the build path etc...), we should consider using a build manager. Moreover, testing is a very important aspect of QA, and testing libraries should be implemented before going any further, the same for logging.  
 Then, you can work on implementing all features on the provided static pages, using JSTL, Tags, Servlets, JSPs...  
 
 ####4.3.1. Maven, Logging & Unit testing
 Refactor your project tree to match maven standards. (Tip: you should exit eclipse, move folders around, and reimport your project using File -> Import -> Existing maven projects).  
-Include necessary libraries such as mysql-connector, JUnit, Mockito, Slf4j, and create the test classes for the backend you have already developed (Note: This is against TDD best practices. You should always code your tests simulteanously while developing your features).
+Include necessary libraries such as mysql-connector, JUnit, Mockito, Slf4j, and create the test classes for the backend you have already developed (N.B.: This is against TDD best practices. You should always code your tests simulteanously while developing your features).  
+Creating test classes implies to take into account ALL possibilities: Illegal calls, legal calls with invalid data, and legal calls with valid data.  
+
 
 ####4.3.2. Implement listing and computer add features in the web-ui
 Using the provided template https://github.com/loicortola/spec-cdb/tree/master/static, integrate the previous features using Servlets, JSPs, JSTL, and Tags.  
@@ -82,7 +84,7 @@ Warning: All features will be implemented and tested using Selenium automated wi
 ####4.3.3. Secure through validation
 Implement both frontend (jQuery) and backend validation in the web-ui.
 
-####4.3.4. Code review
+####4.3.4. Code review (t0 + 7 days)
 Important Points: Maven structure? Library scopes? Architecture (daos, mappers, services, models, dtos, controllers, exceptions, validators)? Validation? Unit test coverage? What about selenium integration into maven?  JSTL Tags and HTML documents structure.  
 Prepare a point about Threading (Connections, concurrency), and Transactions.
 
