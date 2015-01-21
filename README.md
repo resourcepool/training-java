@@ -67,27 +67,44 @@ Then, you can work on implementing all features on the provided static pages, us
 Refactor your project tree to match maven standards. (Tip: you should exit eclipse, move folders around, and reimport your project using File -> Import -> Existing maven projects).  
 Include necessary libraries such as mysql-connector, JUnit, Mockito, Slf4j, and create the test classes for the backend you have already developed (Note: This is against TDD best practices. You should always code your tests simulteanously while developing your features).
 
-####4.3.2. Implement your features in the web-ui
+####4.3.2. Implement listing and computer add features in the web-ui
 Using the provided template https://github.com/loicortola/spec-cdb/tree/master/static, integrate the previous features using Servlets, JSPs, JSTL, and Tags.  
-Implement Computer listing (paginated), add, edit, delete, total count features.  
-Warning: All features will be implemented and tested using Selenium automated with maven
+Use DTOs (Data Transfer Object) to transport only relevant data to the JSPs.  
+Implement Computer listing (paginated), and add features.  
+Create two tags (In your own Taglib): one for the pagination module, one for links.  
+Example: 
+```
+<mylib:link target="dashboard" page="${requestScope.page.current + 1}" limit="${requestScope.page.limit}" ... />   
+<mylib:pagination page="${requestScope.page.current}" page-count="${requestScope.page.count}" ... />  
+```
+Warning: All features will be implemented and tested using Selenium automated with maven.  
 
 ####4.3.3. Secure through validation
 Implement both frontend (jQuery) and backend validation in the web-ui.
 
-####4.3.4. Implement search and order by features
+####4.3.4. Code review
+Important Points: Maven structure? Library scopes? Architecture (daos, mappers, services, models, dtos, controllers, exceptions, validators)? Validation? Unit test coverage? What about selenium integration into maven?  JSTL Tags and HTML documents structure.  
+Prepare a point about Threading (Connections, concurrency), and Transactions.
+
+####4.3.5. Implement all other features in the web-ui
+Implement Computer edit, delete, total count features.  
+Warning: All features will be implemented and tested using Selenium automated with maven  
+
+####4.3.6. Implement search and order by features
 Search box can look for either computer or company objects.
 
-####4.3.5. Add Company deletion feature in cli
-In the command line interface, add a feature which deletes a company, and all computers related to this company. Warning: Using SQL CASCADE is forbidden.
+####4.3.7. Add Company deletion feature in cli
+In the command line interface, add a feature which deletes a company, and all computers related to this company. Warning: Using SQL CASCADE is forbidden. This implies the use of a transaction.  
 
-####4.3.6. Code review
-Important Points: Architecture (daos, mappers, services, models, dtos, controllers, exceptions, validators)? Validation? Unit test coverage? Maven structure? Library scopes? Search and order by design choices? JSTL Tags and HTML documents structure.  
-Point about Threading (Connections, concurrency), and Transactions.
-
-####4.3.7. Connection pool, Transactions
+####4.3.8. Connection pool, Transactions
 Add a connection pool (BoneCP), put your credentials in an external properties file.  
 Implement a solid transaction handling model.  
+
+####4.3.9. Code review
+Important Points: Maven structure? Library scopes? Architecture (daos, mappers, services, models, dtos, controllers, exceptions, validators)? Validation? Unit test coverage? Search and order by design choices? JSTL Tags and HTML documents structure.  
+Point about Threading (Connections, concurrency), and Transactions.
+
+####4.3.10. Threadlocal
 Replace existing connection logic with a ThreadLocal object. 
 
 ###4.4. Embracing Spring Framework
