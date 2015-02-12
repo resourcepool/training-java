@@ -134,7 +134,7 @@ Add custom error pages.
 ####4.4.5. i18n
 Implement spring multilingual features (French/English).
 
-####4.4.6. Code Review
+####4.4.6. Code Review (t0 + 14 days)
 Important Points: How did you split your Spring / Spring MVC contexts? How to switch from a language to another? How about javascript translation? Did you use spring-mvc annotations, forms and models?
 
 ###4.5. Multi module, ORM, and Security
@@ -152,18 +152,20 @@ Following modules can be created: core, persistence, service, binding, webapp, c
 Add Spring Security to your project. Choose a stateless approach, and use an extra UserDAO and related SQL table to store and retrieve user login info.  
 Use Digest HTTP Auth.
 
-####4.5.4. Code Review
+####4.5.4. Code Review (t0 + 20 days)
 Important points: Which API was the most efficient for your queries? Limitations of those APIs.
 Maven and Spring contexts evaluation, unit tests evaluation.
 
 ###4.6. Web Services, REST API
 
-####4.6.1. Jax WS / Jax RS
+####4.6.1. Jax WS / Jax RS 
 Now, we want your webapp to also produce APIs so that clients could access the resources remotely.  
 Refactor your CLI client to act as a remote client to your webapp, using either Jax-RS or Jax-WS libraries.
 
 ####4.6.2. Jackson
 Finally, to allow the creation of AngularJS, Mobile (Android/iOS) or third party clients, you should expose the computer listing feature using Jackson and Spring RestController.
 
-####4.6.3. Final Code Review
+####4.6.3. Final Code Review (t0 + 24 days)
+
+##4.7. Final Presentation (t0 + 25 days)
 
