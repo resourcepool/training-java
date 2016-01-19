@@ -88,19 +88,19 @@ Implement both frontend (jQuery) and backend validation in the web-ui.
 Important Points: Maven structure? Library scopes? Architecture (daos, mappers, services, models, dtos, controllers, exceptions, validators)? Validation? Unit test coverage? What about selenium integration into maven?  JSTL Tags and HTML documents structure.  
 Prepare a point about Threading (Connections, concurrency), and Transactions.
 
-####4.3.5. Implement all other features in the web-ui
+####4.3.5. Connection pool, Transactions
+Add a connection pool (BoneCP), put your credentials in an external properties file.  
+Implement a solid transaction handling model.  
+
+####4.3.6. Implement all other features in the web-ui
 Implement Computer edit, delete, total count features.  
 Warning: All features will be implemented and tested using Selenium automated with maven  
 
-####4.3.6. Implement search and order by features
+####4.3.7. Implement search and order by features
 Search box can look for either computer or company objects.
 
-####4.3.7. Add Company deletion feature in cli
+####4.3.8. Add Company deletion feature in cli
 In the command line interface, add a feature which deletes a company, and all computers related to this company. Warning: Using SQL CASCADE is forbidden. This implies the use of a transaction.  
-
-####4.3.8. Connection pool, Transactions
-Add a connection pool (BoneCP), put your credentials in an external properties file.  
-Implement a solid transaction handling model.  
 
 ####4.3.9. Code review (t0 + 10 days)
 Important Points: Maven structure? Library scopes? Architecture (daos, mappers, services, models, dtos, controllers, exceptions, validators)? Validation? Unit test coverage? Search and order by design choices? JSTL Tags and HTML documents structure.  
