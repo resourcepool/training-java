@@ -170,7 +170,7 @@ Add the Hibernate ORM to your project (managed by spring). You can choose the fo
 
 ####4.6.2. Maven multi-module
 Now that your app is getting dense, it makes sense to split it into modules.  
-Split your maven app into 5 different modules (we recommend exiting your IDE and making those changes by hand).  
+Split your maven app into 6 different modules (we recommend exiting your IDE and making those changes by hand).  
 Warning: you need to also split your applicationContext files: indeed, each module should be able to work as a standalone.  
 Following modules can be created: core, persistence, service, binding, webapp, console.
 
