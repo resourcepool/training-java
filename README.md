@@ -67,7 +67,7 @@ Then, you can work on implementing all features on the provided static pages, us
 Refactor your project tree to match maven standards. (Tip: you should exit eclipse, move folders around, and reimport your project using File -> Import -> Existing maven projects).  
 Include necessary libraries such as mysql-connector, JUnit, Mockito, Slf4j, and create the test classes for the backend you have already developed (N.B.: This is against TDD best practices. You should always code your tests simulteanously while developing your features).  
 Creating test classes implies to take into account ALL possibilities: Illegal calls, legal calls with invalid data, and legal calls with valid data.  
-
+Add and configure the Maven checktyle plugin with the checkstyle.xml and suppressions.xml provided in config/checkstyle/
 
 ####4.3.2. Implement listing and computer add features in the web-ui
 Using the provided template https://github.com/loicortola/spec-cdb/tree/master/static, integrate the previous features using Servlets, JSPs, JSTL, and Tags.  
@@ -109,63 +109,93 @@ Point about Threading (Connections, concurrency), and Transactions.
 ####4.3.10. Threadlocal
 Replace existing connection logic with a ThreadLocal object. 
 
-###4.4. Embracing Spring Framework
+###4.4 Continuous Integration / Continuous Delivery
+We want to setup a continuous integration/delivery  system for our webapp with [Jenkins](https://jenkins-ci.org/), [Docker](https://www.docker.com) and Glazer. Each time we push on master we want jenkins to retrieve the changes, compile, test on a specific environment and if the tests pass deploy the new war to a staging server.
 
-####4.4.1. Spring
+####4.4.1 Jenkins & Docker
+Create a Docker image that contains a UT environment (jdk8 + maven).
+Setup a Jenkins to start a UT container each time a push on master is performed, then display the JUnits results.
+
+####4.4.2 Docker in Docker
+We now want to put our Jenkins in a Docker container. Create a Docker container with your previous Jenkins configuration. Jenkins must be able to run your UT container. To do that link your Jenkins container to a [docker:dind](https://hub.docker.com/_/docker/) container. 
+Warning: Sharing the host docker socket with the Jenkins container is forbidden.
+You can use [docker-compose](https://docs.docker.com/compose/) for better maintainability.
+
+####4.4.3 Glazer Container Agent
+The Glazer Container Agent is a simple webapp that allow us to manage Docker containers.
+
+Create a Docker container with a Glazer Container Agent. This container will be your staging server. Like the Jenkins container, this container must be able to start containers (Docker in Docker).
+
+Create two Docker images: one for the computer database webapp and one for the mysql. Once again use docker-compose to describe your services. Push them to DockerHub.
+
+Add another job in your Jenkins that updates the computer-database-webapp image with the latest successful war and pushes it to DockerHub. Then ask your Glazer Container Agent container to create a new container from the latest image. This job must be triggered only if the UT tests pass.
+
+####4.5.2. Point overview: Continuous Integration (t0 + 17 days)
+Jenkins + DinD: Which service actually starts the containers ? How to share directories between containers ?  
+Glazer Container Agent + DinD: How to handle container port mapping ? (2 solutions)  
+DockerHub: Automated builds limitations ?
+
+###4.5. Embracing Spring Framework
+
+####4.5.1. Spring
 Enable the use of Spring to manage your objects's lifecycle, and transactions.  
 Important: Be careful to use slf4j bridges to display spring logs. Do not forget to setup your logback configuration.  
 Replace your connection pool by a real datasource configured in the spring context.  
 Which problems did you encounter? Study and note all the possible ways of solving the dependency injection issue in servlets.  
 Warning: Do not replace your Servlets by another class. Your controllers should still extend HttpServlet.
 
-####4.4.2. Point overview: Spring integration (t0 + 11 days)
+####4.5.2. Point overview: Spring integration (t0 + 18 days)
 How a webapp is started, how spring initializes itself.  
 Explanation of the common problems encountered with the different contexts.  
 Roundtable of the solutions found, best practices.
 
-####4.4.3. JDBCTemplate
+####4.5.3. JDBCTemplate
 Change your DAO Implementation and use the JDBCTemplate from spring-jdbc to make your requests
 
-####4.4.4. Spring MVC
+####4.5.4. Spring MVC
 You can now forget about Servlets and use Spring MVC as Controller for your webapp.  
 Use Spring MVC validation annotations to validate your DTOs.  
 Add custom error pages.  
 
-####4.4.5. i18n
+####4.5.5. i18n
 Implement spring multilingual features (French/English).
 
-####4.4.6. Code Review (t0 + 14 days)
+####4.5.6. Code Review (t0 + 21 days)
 Important Points: How did you split your Spring / Spring MVC contexts? How to switch from a language to another? How about javascript translation? Did you use spring-mvc annotations, forms and models?
 
-###4.5. Multi module, ORM, and Security
+###4.6. Multi module, ORM, and Security
 
-####4.5.1. Hibernate
+####4.6.1. Hibernate
 Add the Hibernate ORM to your project (managed by spring). You can choose the following APIs to implement it. HQL, JPA/Criteria, QueryDSL, Spring data JPA. 
 
-####4.5.2. Maven multi-module
+####4.6.2. Maven multi-module
 Now that your app is getting dense, it makes sense to split it into modules.  
 Split your maven app into 5 different modules (we recommend exiting your IDE and making those changes by hand).  
 Warning: you need to also split your applicationContext files: indeed, each module should be able to work as a standalone.  
 Following modules can be created: core, persistence, service, binding, webapp, console.
 
-####4.5.3. Security
+####4.6.3. Security
 Add Spring Security to your project. Choose a stateless approach, and use an extra UserDAO and related SQL table to store and retrieve user login info.  
 Use Digest HTTP Auth.
 
-####4.5.4. Code Review (t0 + 20 days)
+####4.6.4. Code Review (t0 + 27 days)
 Important points: Which API was the most efficient for your queries? Limitations of those APIs.
 Maven and Spring contexts evaluation, unit tests evaluation.
 
-###4.6. Web Services, REST API
+###4.7. Web Services, REST API
 
-####4.6.1. Jax WS / Jax RS 
+####4.7.1. Jax WS / Jax RS 
 Now, we want your webapp to also produce APIs so that clients could access the resources remotely.  
 Refactor your CLI client to act as a remote client to your webapp, using either Jax-RS or Jax-WS libraries.
 
-####4.6.2. Jackson
+####4.7.2. Jackson
 Finally, to allow the creation of AngularJS, Mobile (Android/iOS) or third party clients, you should expose the computer listing feature using Jackson and Spring RestController.
 
-####4.6.3. Final Code Review (t0 + 24 days)
+####4.7.3. Final Code Review (t0 + 31 days)
 
-##4.7. Final Presentation (t0 + 25 days)
+##4.8. Final Presentation (t0 + 32 days)
+
+
+
+
 
