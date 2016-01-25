@@ -1,6 +1,20 @@
 Training: computer-database    
 ===========================  
 
+#Content
+This training material holds a sequence of steps and features to implement in a Computer Database webapp.  
+Here is the macro-planning and timeline of all milestones:
+t0    - Start of the project
+t0+2  - Base Architecture, CLI (Add / Edit features), Logging
+t0+8  - Web UI, Maven, Unit Tests, jQuery Validation, Backend Validation
+t0+11 - Search, OrderBy, Transactions, Connection-Pool
+t0+18 - Threadlocal, Continuous delivery (Jenkins, Docker, Dockerhub, Glazer)
+t0+19 - Spring integration
+t0+22 - Spring MVC integration, JDBC Template, i18n
+t0+28 - Maven Multi-modules, Spring Security, Hibernate ORM (JPA, Criteria, QueryDSL, Spring Data JPA)
+t0+30 - Web Services, end of project
+t0+33 - Project presentation to sales & tech audience
+
 #Installation
 
 ##1. Database
@@ -84,7 +98,7 @@ Warning: All features will be implemented and tested using Selenium automated wi
 ####4.3.3. Secure through validation
 Implement both frontend (jQuery) and backend validation in the web-ui.
 
-####4.3.4. Code review (t0 + 7 days)
+####4.3.4. Code review (t0 + 8 days)
 Important Points: Maven structure? Library scopes? Architecture (daos, mappers, services, models, dtos, controllers, exceptions, validators)? Validation? Unit test coverage? What about selenium integration into maven?  JSTL Tags and HTML documents structure.  
 Prepare a point about Threading (Connections, concurrency), and Transactions.
 
@@ -102,7 +116,7 @@ Search box can look for either computer or company objects.
 ####4.3.8. Add Company deletion feature in cli
 In the command line interface, add a feature which deletes a company, and all computers related to this company. Warning: Using SQL CASCADE is forbidden. This implies the use of a transaction.  
 
-####4.3.9. Code review (t0 + 10 days)
+####4.3.9. Code review (t0 + 11 days)
 Important Points: Maven structure? Library scopes? Architecture (daos, mappers, services, models, dtos, controllers, exceptions, validators)? Validation? Unit test coverage? Search and order by design choices? JSTL Tags and HTML documents structure.  
 Point about Threading (Connections, concurrency), and Transactions.
 
@@ -130,7 +144,7 @@ Create two Docker images: one for the computer database webapp and one for the m
 
 Add another job in your Jenkins that updates the computer-database-webapp image with the latest successful war and pushes it to DockerHub. Then ask your Glazer Container Agent container to create a new container from the latest image. This job must be triggered only if the UT tests pass.
 
-####4.5.2. Point overview: Continuous Integration (t0 + 17 days)
+####4.5.2. Point overview: Continuous Integration (t0 + 18 days)
 Jenkins + DinD: Which service actually starts the containers ? How to share directories between containers ?  
 Glazer Container Agent + DinD: How to handle container port mapping ? (2 solutions)  
 DockerHub: Automated builds limitations ?
@@ -144,7 +158,7 @@ Replace your connection pool by a real datasource configured in the spring conte
 Which problems did you encounter? Study and note all the possible ways of solving the dependency injection issue in servlets.  
 Warning: Do not replace your Servlets by another class. Your controllers should still extend HttpServlet.
 
-####4.5.2. Point overview: Spring integration (t0 + 18 days)
+####4.5.2. Point overview: Spring integration (t0 + 19 days)
 How a webapp is started, how spring initializes itself.  
 Explanation of the common problems encountered with the different contexts.  
 Roundtable of the solutions found, best practices.
@@ -160,7 +174,7 @@ Add custom error pages.
 ####4.5.5. i18n
 Implement spring multilingual features (French/English).
 
-####4.5.6. Code Review (t0 + 21 days)
+####4.5.6. Code Review (t0 + 22 days)
 Important Points: How did you split your Spring / Spring MVC contexts? How to switch from a language to another? How about javascript translation? Did you use spring-mvc annotations, forms and models?
 
 ###4.6. Multi module, ORM, and Security
@@ -178,7 +192,7 @@ Following modules can be created: core, persistence, service, binding, webapp, c
 Add Spring Security to your project. Choose a stateless approach, and use an extra UserDAO and related SQL table to store and retrieve user login info.  
 Use Digest HTTP Auth.
 
-####4.6.4. Code Review (t0 + 27 days)
+####4.6.4. Code Review (t0 + 29 days)
 Important points: Which API was the most efficient for your queries? Limitations of those APIs.
 Maven and Spring contexts evaluation, unit tests evaluation.
 
@@ -191,10 +205,21 @@ Refactor your CLI client to act as a remote client to your webapp, using either 
 ####4.7.2. Jackson
 Finally, to allow the creation of AngularJS, Mobile (Android/iOS) or third party clients, you should expose the computer listing feature using Jackson and Spring RestController.
 
-####4.7.3. Final Code Review (t0 + 31 days)
+####4.7.3. Final Code Review (t0 + 30 days)
+Steps to fix before final release, code quality overview and possible improvements. Point about UX
 
-##4.8. Final Presentation (t0 + 32 days)
+###4.8. Final refactoring, UX, and project presentation
+The final stage is your production release.  
 
+####4.8.1. UX
+This is where you will think UX first, challenge the technical choices of the base page template, and customize it to your standards.
+
+###4.8.2. Final Presentation (t0 + 33 days)
+The presentation will be made with the whole group, on one project of their choice.  
+It consists of 3 parts:  
+The product-presentation, from a user-centered perspective (non-technical). You are presenting your "Computer database" product, and telling us what it does and how it was made.  
+A live-demonstration. Be careful, the audience may interrupt your demo and ask you to try / show something else.  
+The technical-presentation, to the IT Director. This presentation should lay out how strong your architecture is, describe the libraries used and you should be prepared to answer any technical question or justify your technical choices to the audience.
 
 
 
