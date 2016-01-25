@@ -3,17 +3,17 @@ Training: computer-database
 
 #Content
 This training material holds a sequence of steps and features to implement in a Computer Database webapp.  
-Here is the macro-planning and timeline of all milestones:
-t0    - Start of the project
-t0+2  - Base Architecture, CLI (Add / Edit features), Logging
-t0+8  - Web UI, Maven, Unit Tests, jQuery Validation, Backend Validation
-t0+11 - Search, OrderBy, Transactions, Connection-Pool
-t0+18 - Threadlocal, Continuous delivery (Jenkins, Docker, Dockerhub, Glazer)
-t0+19 - Spring integration
-t0+22 - Spring MVC integration, JDBC Template, i18n
-t0+28 - Maven Multi-modules, Spring Security, Hibernate ORM (JPA, Criteria, QueryDSL, Spring Data JPA)
-t0+30 - Web Services, end of project
-t0+33 - Project presentation to sales & tech audience
+Here is the macro-planning and timeline of all milestones:  
+ * t0    - Start of the project
+ * t0+2  - Base Architecture, CLI (Add / Edit features), Logging
+ * t0+8  - Web UI, Maven, Unit Tests, jQuery Validation, Backend Validation
+ * t0+11 - Search, OrderBy, Transactions, Connection-Pool 
+ * t0+18 - Threadlocal, Continuous delivery (Jenkins, Docker, Dockerhub, Glazer)
+ * t0+19 - Spring integration
+ * t0+22 - Spring MVC integration, JDBC Template, i18n
+ * t0+28 - Maven Multi-modules, Spring Security, Hibernate ORM (JPA, Criteria, QueryDSL, Spring Data JPA)
+ * t0+30 - Web Services, end of project
+ * t0+33 - Project presentation to sales & tech audience
 
 #Installation
 
@@ -103,7 +103,7 @@ Important Points: Maven structure? Library scopes? Architecture (daos, mappers, 
 Prepare a point about Threading (Connections, concurrency), and Transactions.
 
 ####4.3.5. Connection pool, Transactions
-Add a connection pool (BoneCP), put your credentials in an external properties file.  
+Add a connection pool (HikariCP), put your credentials in an external properties file.  
 Implement a solid transaction handling model.  
 
 ####4.3.6. Implement all other features in the web-ui
