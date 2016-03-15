@@ -124,30 +124,34 @@ Point about Threading (Connections, concurrency), and Transactions.
 Replace existing connection logic with a ThreadLocal object. 
 
 ###4.4 Continuous Integration / Continuous Delivery
-We want to setup a continuous integration/delivery  system for our webapp with [Jenkins](https://jenkins-ci.org/), [Docker](https://www.docker.com) and Glazer. Each time we push on master we want jenkins to retrieve the changes, compile, test on a specific environment and if the tests pass deploy the new war to a staging server.
+We want to setup a continuous integration/delivery  system for our webapp with [Jenkins](https://jenkins-ci.org/) and [Docker](https://www.docker.com). Each time we push on master we want Jenkins to retrieve the changes, compile, test on a specific environment,  build and push the new image to a registry, then manually deploy the new image to a staging server.
 
 ####4.4.1 Jenkins & Docker
-Create a Docker image that contains a UT environment (jdk8 + maven).
-Setup a Jenkins to start a UT container each time a push on master is performed, then display the JUnits results.
+Create Docker images that contain a test environment: one with jdk8 + maven and another with a MySQL database. Use the [docker network](https://docs.docker.com/engine/userguide/networking/work-with-networks/) command to enable communication between your containers. Do not use [links](https://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/) since the feature will be deprecated.
+Setup a Jenkins to start your test containers each time a push on master is performed, then display the JUnits results.
 
 ####4.4.2 Docker in Docker
-We now want to put our Jenkins in a Docker container. Create a Docker container with your previous Jenkins configuration. Jenkins must be able to run your UT container. To do that link your Jenkins container to a [docker:dind](https://hub.docker.com/_/docker/) container. 
+We now want to put our Jenkins in a Docker container. Create a Docker container with your previous Jenkins configuration. Jenkins must be able to run your test containers. To do that start a [docker in docker](https://hub.docker.com/_/docker/) container.
 Warning: Sharing the host docker socket with the Jenkins container is forbidden.
-You can use [docker-compose](https://docs.docker.com/compose/) for better maintainability.
 
-####4.4.3 Glazer Container Agent
-The Glazer Container Agent is a simple webapp that allow us to manage Docker containers.
+####4.4.3 Continuous Delivery
+Create two Docker images: one for the computer database webapp and one for the mysql. Push them to DockerHub.
 
-Create a Docker container with a Glazer Container Agent. This container will be your staging server. Like the Jenkins container, this container must be able to start containers (Docker in Docker).
+Connect with ssh to your staging server kindergarten (login: student, password: student) and setup your staging environment:
 
-Create two Docker images: one for the computer database webapp and one for the mysql. Once again use docker-compose to describe your services. Push them to DockerHub.
+ - ``` $ mkdir $HOME/yourname ``` -- this will be your working directory for your conf files, launch scripts and data if any
+ - ``` $ docker network create yourname``` -- this will be your private network
+ - Choose a port to publish your webapp.
+ - Start your database and webapp containers and add them to your private network
 
-Add another job in your Jenkins that updates the computer-database-webapp image with the latest successful war and pushes it to DockerHub. Then ask your Glazer Container Agent container to create a new container from the latest image. This job must be triggered only if the UT tests pass.
+Update your Jenkins to rebuild your webapp image with the latest successful war and push it to DockerHub.
 
-####4.5.2. Point overview: Continuous Integration (t0 + 18 days)
-Jenkins + DinD: Which service actually starts the containers ? How to share directories between containers ?  
-Glazer Container Agent + DinD: How to handle container port mapping ? (2 solutions)  
-DockerHub: Automated builds limitations ?
+From now on, you must manually update your stagging environment after a success build.
+
+####4.4.4. Point overview: Continuous Integration (t0 + 18 days)
+Jenkins + DinD: which service actually starts the containers ?   
+Container communication ?   
+DockerHub: automated builds limitations ?
 
 ###4.5. Embracing Spring Framework
 
