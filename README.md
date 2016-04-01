@@ -204,12 +204,14 @@ Maven and Spring contexts evaluation, unit tests evaluation.
 
 ###4.7. Web Services, REST API
 
-####4.7.1. Jax WS / Jax RS 
+####4.7.1. Jackson
 Now, we want your webapp to also produce APIs so that clients could access the resources remotely.  
+To allow the creation of AngularJS, Mobile (Android/iOS) or third party clients, you should expose all features using Jackson and Spring RestController.
+
+
+####4.7.2. Jax WS / Jax RS 
 Refactor your CLI client to act as a remote client to your webapp, using either Jax-RS or Jax-WS libraries.
 
-####4.7.2. Jackson
-Finally, to allow the creation of AngularJS, Mobile (Android/iOS) or third party clients, you should expose the computer listing feature using Jackson and Spring RestController.
 
 ####4.7.3. Final Code Review (t0 + 30 days)
 Steps to fix before final release, code quality overview and possible improvements. Point about UX
@@ -219,6 +221,7 @@ The final stage is your production release.
 
 ####4.8.1. UX
 This is where you will think UX first, challenge the technical choices of the base page template, and customize it to your standards.
+
 
 ###4.8.2. Final Presentation (t0 + 33 days)
 The presentation will be made with the whole group, on one project of their choice.  
