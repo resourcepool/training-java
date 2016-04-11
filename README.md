@@ -123,6 +123,10 @@ Point about Threading (Connections, concurrency), and Transactions.
 ####4.3.10. Threadlocal
 Replace existing connection logic with a ThreadLocal object. 
 
+#### 4.3.11 Gatling Test of your application
+You can now stress-test your web application with the gatling test present in the folder gatling-test. See the README present in the gatling-test folder for more explanations. Choose the simulation without Spring Security.
+
+
 ###4.4 Continuous Integration / Continuous Delivery
 We want to setup a continuous integration/delivery  system for our webapp with [Jenkins](https://jenkins-ci.org/) and [Docker](https://www.docker.com). Each time we push on master we want Jenkins to retrieve the changes, compile, test on a specific environment, build and push the new image to a registry, then automatically deploy the new image on the Cloud.
 
@@ -204,16 +208,17 @@ Maven and Spring contexts evaluation, unit tests evaluation.
 
 ###4.7. Web Services, REST API
 
-####4.7.1. Jackson
+#### 4.7.1 Gatling Test with Spring Security
+Now that you have enabled Spring Security, you can use the second Gatling Simulation with Spring Security. See the README present in the gatling-test folder for more explanations.
+
+####4.7.2. Jackson
 Now, we want your webapp to also produce APIs so that clients could access the resources remotely.  
 To allow the creation of AngularJS, Mobile (Android/iOS) or third party clients, you should expose all features using Jackson and Spring RestController.
 
-
-####4.7.2. Jax WS / Jax RS 
+####4.7.3. Jax WS / Jax RS
 Refactor your CLI client to act as a remote client to your webapp, using either Jax-RS or Jax-WS libraries.
 
-
-####4.7.3. Final Code Review (t0 + 30 days)
+####4.7.4. Final Code Review (t0 + 30 days)
 Steps to fix before final release, code quality overview and possible improvements. Point about UX
 
 ###4.8. Final refactoring, UX, and project presentation
@@ -221,7 +226,6 @@ The final stage is your production release.
 
 ####4.8.1. UX
 This is where you will think UX first, challenge the technical choices of the base page template, and customize it to your standards.
-
 
 ###4.8.2. Final Presentation (t0 + 33 days)
 The presentation will be made with the whole group, on one project of their choice.  
@@ -231,6 +235,5 @@ A live-demonstration. Be careful, the audience may interrupt your demo and ask y
 The technical-presentation, to the IT Director. This presentation should lay out how strong your architecture is, describe the libraries used and you should be prepared to answer any technical question or justify your technical choices to the audience.
 
 
-
-
+###4.9 Stress test of the webapp
 
