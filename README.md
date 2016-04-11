@@ -135,18 +135,18 @@ We now want to put our Jenkins in a Docker container. Create a Docker container 
 Warning: Sharing the host docker socket with the Jenkins container is forbidden.
 
 ####4.4.3 Continuous Delivery
-Create two Docker images: one for the computer database webapp and one for the mysql. Push them to DockerHub.
+Create four Docker images: one for jenkins, one for compilation and tests, one for production (tomcat) and one for the mysql. Push them to DockerHub.
 
-Connect with ssh to your staging server kindergarten (login: student, password: student) and setup your staging environment:
+- Connect with your login to [Docker Cloud](https://cloud.docker.com/) 
 
- - ``` $ mkdir $HOME/yourname ``` -- this will be your working directory for your conf files, launch scripts and data if any
- - ``` $ docker network create yourname``` -- this will be your private network
- - Choose a port to publish your webapp.
- - Start your database and webapp containers and add them to your private network
+- Create a [free account](https://aws.amazon.com/fr/free/) on Amazon Web Services.
 
-Update your Jenkins to rebuild your webapp image with the latest successful war and push it to DockerHub.
+- [Link](https://docs.docker.com/docker-cloud/getting-started/link-aws/) your Amazon Web Services account to deploy node clusters and nodes using Docker Cloud’s dashboard.
 
-From now on, you must manually update your stagging environment after a success build.
+- Observe the diagram below to properly configure the architecture of Docker containers to set up the continuous delivery:
+![image](http://s22.postimg.org/5fucnmun5/Continuous_delivery.png)
+
+Jenkins container run compilation and tests when a push is detected, and if all tests succeed, copy the .war project to the tomcat container.
 
 ####4.4.4. Point overview: Continuous Integration (t0 + 18 days)
 Jenkins + DinD: which service actually starts the containers ?   
@@ -224,6 +224,7 @@ It consists of 3 parts:
 The product-presentation, from a user-centered perspective (non-technical). You are presenting your "Computer database" product, and telling us what it does and how it was made.  
 A live-demonstration. Be careful, the audience may interrupt your demo and ask you to try / show something else.  
 The technical-presentation, to the IT Director. This presentation should lay out how strong your architecture is, describe the libraries used and you should be prepared to answer any technical question or justify your technical choices to the audience.
+
 
 
 
