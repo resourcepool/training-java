@@ -124,7 +124,7 @@ Point about Threading (Connections, concurrency), and Transactions.
 Replace existing connection logic with a ThreadLocal object. 
 
 ###4.4 Continuous Integration / Continuous Delivery
-We want to setup a continuous integration/delivery  system for our webapp with [Jenkins](https://jenkins-ci.org/) and [Docker](https://www.docker.com). Each time we push on master we want Jenkins to retrieve the changes, compile, test on a specific environment,  build and push the new image to a registry, then manually deploy the new image to a staging server.
+We want to setup a continuous integration/delivery  system for our webapp with [Jenkins](https://jenkins-ci.org/) and [Docker](https://www.docker.com). Each time we push on master we want Jenkins to retrieve the changes, compile, test on a specific environment, build and push the new image to a registry, then automatically deploy the new image on the Cloud.
 
 ####4.4.1 Jenkins & Docker
 Create Docker images that contain a test environment: one with jdk8 + maven and another with a MySQL database. Use the [docker network](https://docs.docker.com/engine/userguide/networking/work-with-networks/) command to enable communication between your containers. Do not use [links](https://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/) since the feature will be deprecated.
@@ -141,12 +141,14 @@ Create four Docker images: one for jenkins, one for compilation and tests, one f
 
 - Create a [free account](https://aws.amazon.com/fr/free/) on Amazon Web Services.
 
-- [Link](https://docs.docker.com/docker-cloud/getting-started/link-aws/) your Amazon Web Services account to deploy node clusters and nodes using Docker Cloud’s dashboard.
+- [Link](https://docs.docker.com/docker-cloud/getting-started/link-aws/) your Amazon Web Services account to deploy node clusters and nodes using Docker Cloud’s dashboard. Be careful when choosing the type of node on Docker Cloud, select 't2.micro' under the conditions of free AWS account.
 
 - Observe the diagram below to properly configure the architecture of Docker containers to set up the continuous delivery:
-![image](http://s22.postimg.org/5fucnmun5/Continuous_delivery.png)
+![image](http://s24.postimg.org/4hwvay1mt/Continuous_delivery_1.png)
 
-Jenkins container run compilation and tests when a push is detected, and if all tests succeed, copy the .war project to the tomcat container.
+- Below the activity diagram to figure out all the process:
+![image](http://s22.postimg.org/4sxvlgtw1/CDProcess_Diagram_1.png)
+
 
 ####4.4.4. Point overview: Continuous Integration (t0 + 18 days)
 Jenkins + DinD: which service actually starts the containers ?   
