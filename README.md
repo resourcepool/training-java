@@ -232,8 +232,3 @@ The presentation will be made with the whole group, on one project of their choi
 It consists of 3 parts:  
 The product-presentation, from a user-centered perspective (non-technical). You are presenting your "Computer database" product, and telling us what it does and how it was made.  
 A live-demonstration. Be careful, the audience may interrupt your demo and ask you to try / show something else.  
-The technical-presentation, to the IT Director. This presentation should lay out how strong your architecture is, describe the libraries used and you should be prepared to answer any technical question or justify your technical choices to the audience.
-
-
-###4.9 Stress test of the webapp
-
