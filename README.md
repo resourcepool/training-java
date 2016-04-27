@@ -123,6 +123,10 @@ Point about Threading (Connections, concurrency), and Transactions.
 ####4.3.10. Threadlocal
 Replace existing connection logic with a ThreadLocal object. 
 
+#### 4.3.11 Gatling Test of your application
+You can now stress-test your web application with the gatling test present in the folder gatling-test. See the README present in the gatling-test folder for more explanations. Choose the simulation without Spring Security.
+
+
 ###4.4 Continuous Integration / Continuous Delivery
 We want to setup a continuous integration/delivery  system for our webapp with [Jenkins](https://jenkins-ci.org/) and [Docker](https://www.docker.com). Each time we push on master we want Jenkins to retrieve the changes, compile, test on a specific environment, build and push the new image to a registry, then automatically deploy the new image on the Cloud.
 
@@ -204,14 +208,17 @@ Maven and Spring contexts evaluation, unit tests evaluation.
 
 ###4.7. Web Services, REST API
 
-####4.7.1. Jax WS / Jax RS 
-Now, we want your webapp to also produce APIs so that clients could access the resources remotely.  
-Refactor your CLI client to act as a remote client to your webapp, using either Jax-RS or Jax-WS libraries.
+#### 4.7.1 Gatling Test with Spring Security
+Now that you have enabled Spring Security, you can use the second Gatling Simulation with Spring Security. See the README present in the gatling-test folder for more explanations.
 
 ####4.7.2. Jackson
-Finally, to allow the creation of AngularJS, Mobile (Android/iOS) or third party clients, you should expose the computer listing feature using Jackson and Spring RestController.
+Now, we want your webapp to also produce APIs so that clients could access the resources remotely.  
+To allow the creation of AngularJS, Mobile (Android/iOS) or third party clients, you should expose all features using Jackson and Spring RestController.
 
-####4.7.3. Final Code Review (t0 + 30 days)
+####4.7.3. Jax WS / Jax RS
+Refactor your CLI client to act as a remote client to your webapp, using either Jax-RS or Jax-WS libraries.
+
+####4.7.4. Final Code Review (t0 + 30 days)
 Steps to fix before final release, code quality overview and possible improvements. Point about UX
 
 ###4.8. Final refactoring, UX, and project presentation
@@ -225,9 +232,3 @@ The presentation will be made with the whole group, on one project of their choi
 It consists of 3 parts:  
 The product-presentation, from a user-centered perspective (non-technical). You are presenting your "Computer database" product, and telling us what it does and how it was made.  
 A live-demonstration. Be careful, the audience may interrupt your demo and ask you to try / show something else.  
-The technical-presentation, to the IT Director. This presentation should lay out how strong your architecture is, describe the libraries used and you should be prepared to answer any technical question or justify your technical choices to the audience.
-
-
-
-
-
