@@ -139,9 +139,8 @@ We want to setup a continuous integration/delivery  system for our webapp with [
 Create Docker images that contain a test environment: one with jdk8 + maven and another with a MySQL database. Use the [docker network](https://docs.docker.com/engine/userguide/networking/work-with-networks/) command to enable communication between your containers. Do not use [links](https://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/) since the feature will be deprecated.
 Setup a Jenkins to start your test containers each time a push on master is performed, then display the JUnits results.
 
-####4.4.2 Docker in Docker
-We now want to put our Jenkins in a Docker container. Create a Docker container with your previous Jenkins configuration. Jenkins must be able to run your test containers. To do that start a [docker in docker](https://hub.docker.com/_/docker/) container.
-Warning: Sharing the host docker socket with the Jenkins container is forbidden.
+####4.4.2 Docker in Docker?
+We now want to put our Jenkins in a Docker container. Create a Docker container with your previous Jenkins configuration. Jenkins must be able to run your test containers. As Jenkins is already working inside a container, you need to find a way for it to run another one. Multiple solutions exist. Find the most relevant for your use case, and let us know what choices you made.
 
 ####4.4.3 Continuous Delivery
 Create four Docker images: one for jenkins, one for compilation and tests, one for production (tomcat) and one for the mysql. Push them to DockerHub.
