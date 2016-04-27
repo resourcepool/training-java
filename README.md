@@ -8,12 +8,13 @@ Here is the macro-planning and timeline of all milestones:
  * t0+2  - Base Architecture, CLI (Add / Edit features), Logging
  * t0+8  - Web UI, Maven, Unit Tests, jQuery Validation, Backend Validation
  * t0+11 - Search, OrderBy, Transactions, Connection-Pool 
- * t0+18 - Threadlocal, Continuous delivery (Jenkins, Docker, Dockerhub, Glazer)
- * t0+19 - Spring integration
- * t0+22 - Spring MVC integration, JDBC Template, i18n
- * t0+28 - Maven Multi-modules, Spring Security, Hibernate ORM (JPA, Criteria, QueryDSL, Spring Data JPA)
- * t0+30 - Web Services, end of project
- * t0+33 - Project presentation to sales & tech audience
+ * t0+12 - Threadlocal, Java Performance contest
+ * t0+18 - Continuous delivery (Jenkins, Docker, Dockerhub, Glazer)
+ * t0+20 - Spring integration
+ * t0+23 - Spring MVC integration, JDBC Template, i18n
+ * t0+29 - Maven Multi-modules, Spring Security, Hibernate ORM (JPA, Criteria, QueryDSL, Spring Data JPA)
+ * t0+31 - Web Services, end of project
+ * t0+34 - Project presentation to sales & tech audience
 
 #Installation
 
@@ -123,9 +124,13 @@ Point about Threading (Connections, concurrency), and Transactions.
 ####4.3.10. Threadlocal
 Replace existing connection logic with a ThreadLocal object. 
 
-#### 4.3.11 Gatling Test of your application
-You can now stress-test your web application with the gatling test present in the folder gatling-test. See the README present in the gatling-test folder for more explanations. Choose the simulation without Spring Security.
+#### 4.3.11 Performance Challenge with Gatling
+Now is the time to start evaluating your global application performance with a stress-test campain.
+Using Gatling, you have one day to stress-test your web application (gatling test and directions present in the folder gatling-test). See the relevant README file for more explanations. For now, choose the simulation without Spring Security.
 
+
+####4.3.9. Code review (t0 + 12 days)
+Important Points: What were the bottlenecks, what optimizations were done, for how much performance gain, which scores were reached.
 
 ###4.4 Continuous Integration / Continuous Delivery
 We want to setup a continuous integration/delivery  system for our webapp with [Jenkins](https://jenkins-ci.org/) and [Docker](https://www.docker.com). Each time we push on master we want Jenkins to retrieve the changes, compile, test on a specific environment, build and push the new image to a registry, then automatically deploy the new image on the Cloud.
@@ -168,7 +173,7 @@ Replace your connection pool by a real datasource configured in the spring conte
 Which problems did you encounter? Study and note all the possible ways of solving the dependency injection issue in servlets.  
 Warning: Do not replace your Servlets by another class. Your controllers should still extend HttpServlet.
 
-####4.5.2. Point overview: Spring integration (t0 + 19 days)
+####4.5.2. Point overview: Spring integration (t0 + 20 days)
 How a webapp is started, how spring initializes itself.  
 Explanation of the common problems encountered with the different contexts.  
 Roundtable of the solutions found, best practices.
@@ -184,7 +189,7 @@ Add custom error pages.
 ####4.5.5. i18n
 Implement spring multilingual features (French/English).
 
-####4.5.6. Code Review (t0 + 22 days)
+####4.5.6. Code Review (t0 + 23 days)
 Important Points: How did you split your Spring / Spring MVC contexts? How to switch from a language to another? How about javascript translation? Did you use spring-mvc annotations, forms and models?
 
 ###4.6. Multi module, ORM, and Security
@@ -208,8 +213,8 @@ Maven and Spring contexts evaluation, unit tests evaluation.
 
 ###4.7. Web Services, REST API
 
-#### 4.7.1 Gatling Test with Spring Security
-Now that you have enabled Spring Security, you can use the second Gatling Simulation with Spring Security. See the README present in the gatling-test folder for more explanations.
+#### 4.7.1 Performance review with Gatling
+Now that you have enabled Spring Security, you can use the second Gatling Simulation with Spring Security. See the README present in the gatling-test folder for more details.
 
 ####4.7.2. Jackson
 Now, we want your webapp to also produce APIs so that clients could access the resources remotely.  
@@ -218,7 +223,7 @@ To allow the creation of AngularJS, Mobile (Android/iOS) or third party clients,
 ####4.7.3. Jax WS / Jax RS
 Refactor your CLI client to act as a remote client to your webapp, using either Jax-RS or Jax-WS libraries.
 
-####4.7.4. Final Code Review (t0 + 30 days)
+####4.7.4. Final Code Review (t0 + 31 days)
 Steps to fix before final release, code quality overview and possible improvements. Point about UX
 
 ###4.8. Final refactoring, UX, and project presentation
@@ -227,7 +232,7 @@ The final stage is your production release.
 ####4.8.1. UX
 This is where you will think UX first, challenge the technical choices of the base page template, and customize it to your standards.
 
-###4.8.2. Final Presentation (t0 + 33 days)
+###4.8.2. Final Presentation (t0 + 34 days)
 The presentation will be made with the whole group, on one project of their choice.  
 It consists of 3 parts:  
 The product-presentation, from a user-centered perspective (non-technical). You are presenting your "Computer database" product, and telling us what it does and how it was made.  
