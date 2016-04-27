@@ -234,5 +234,9 @@ This is where you will think UX first, challenge the technical choices of the ba
 ###4.8.2. Final Presentation (t0 + 34 days)
 The presentation will be made with the whole group, on one project of their choice.  
 It consists of 3 parts:  
-The product-presentation, from a user-centered perspective (non-technical). You are presenting your "Computer database" product, and telling us what it does and how it was made.  
+The product-presentation, from a user-centered perspective (non-technical). 
+You are presenting your "Computer database" product, and telling us what it does and how it was made.  
 A live-demonstration. Be careful, the audience may interrupt your demo and ask you to try / show something else.  
+A technical review: you will reassure your client on what he paid for. Give him the necessary technical data and metrics which will allow him to think "they are competent and they did the job, and I am confident that it is maintainable and well coded".
+
+**Warning**: this presentation is not a restitution of what you have done. It is a **simulation** of the presentation of a project you would deliver to your customer.
