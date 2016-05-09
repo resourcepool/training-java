@@ -27,7 +27,7 @@ object Browse {
 
       val browseUrl = new StringBuilder().append(config.getString("application.urls.dashboardPage")).append("?").append(config.getString("application.urls.param.page")).append("=${pageSize}&").append(config.getString("application.urls.param.pageSize")).append("=${pageSize}&").append(config.getString("application.urls.param.column")).append("=${column}&").append(config.getString("application.urls.param.order")).append("=${order}").toString()
 
-      exec(http("Browse page: ${page},  pageSize: ${pageSize}, column: ${column}, order: ${order}")
+      exec(http("Browse: Browse page: ${page},  pageSize: ${pageSize}, column: ${column}, order: ${order}")
         .get(browseUrl))
         .pause(random.nextInt(7) + 3)
     }

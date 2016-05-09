@@ -6,10 +6,10 @@ Webapp stress-test with Gatling
 1. [Content](#content)
 2. [Installation](#installation)
 3. [Configuration](#configuration)
-4. [Pre-requisites on your webapp](#pre-requisites-on-your-webapp)
-5. [Utilisation](#utilisation)
-6. [Scenario Protocol](#scenario-protocol)
-7. [Key Performance Indicators](#key-performance-indicators)
+4. [Utilisation](#utilisation)
+5. [Scenario Protocol](#scenario-protocol)
+6. [Key Performance Indicators](#key-performance-indicators)
+7. [Fixing Errors](#fixing-errors)
 8. [Suggested Improvements](#suggested-improvements)
 9. [Table of results](#table-of-results)
 
@@ -42,15 +42,10 @@ The folder src/test/resources/data contains some csv feeders which are used in t
 
 You can add as many lines as you want in these csv feeders.
 
-If you want to modify the behavior of the test, you can modify the files in the folder src.scala.com.excilys.computerdatabase.gatling
+If you want to modify the behavior of the test, you can modify the files in the folder src/scala/com/excilys/computerdatabase/gatling
 
-#Pre-requisites on your webapp
-
-For the test to work, some elements in your webapp must have a specific id:
-* In the dashboard, the checkbox used to choose which computer to delete must have the id: {name computer}_id
-* In the dashboard, the href used to edit a computer must have the id: {name_computer}_name
-
-If you have too much trouble adapting your application to the test, test with only the browse process.
+If you have too much trouble adapting your application to the test, test with only the Search and Browse process (check the file in the folder src/scala/com/excilys/computerdatabase/gatling/simulation
+ ).
 
 #Utilisation
 
@@ -69,12 +64,15 @@ Even after those warmups runs, you can experience some differences between the t
 
 ##App Profiles
 
+If the gatling test works fine with 1000 users, you can increase the number of users, change the nbUsers configuration in application.conf.
+
 If the gatling test with your current database has good results, you can now test with a larger database. The scripts used to populate this database are in the folder sqlScripts.
 
 * Create a new database with the file 1-SCHEMA and 2-PRIVILEGES.
-* Create and fill your Spring Security table.
+* Create and fill your Spring Security table (if you have Spring Security enabled).
 * Change the value **max_allowed_packet** of the file /etc/mysql/my.cnf to 80M.
-* Run the insertCompany.sql and insertComputer.sql scripts, for example: **mysql -uroot -proot computer-database-db2 < insertCompany.sql** and **mysql -uroot -proot computer-database-db2 < insertComputer.sql**
+* Restart mysql: **sudo service mysql restart**
+* Run the insertCompany.sql and insertComputer.sql scripts, for example: **mysql -uUSER -p computer-database-db2 < insertCompany.sql** and **mysql -uUSER -p computer-database-db2 < insertComputer.sql**
 
 If you want to modify the insert scripts, modify the file **createComputerSql.sh**
 
@@ -83,6 +81,18 @@ If you want to modify the insert scripts, modify the file **createComputerSql.sh
 The scenario can be considered as performing and successful if all the following conditions are met:
 * No request has failed.
 * At least 95% of the requests response time (95th percentile) is under 1200ms.
+
+#Fixing Errors
+
+Gatling will display the results like this:
+> Authenticate: Login form                                 (OK=1010   KO=0     )
+
+The first word is the file where the request failed. If you have an error you can check the file in the folder src/scala/com/excilys/computerdatabase/gatling/simulation/process.
+
+The test executes a scenario (Search, Browse, Add, Edit added computer, Delete edited computer). An error may cause multiple errors (such as an error in the Add process), so try to solve the first one.
+
+If your webapp returns 200 when a request failed (for example if the edit doesn't work), Gatling won't see the test as failed. Always check if the computer has been added if there is an error in the Edit process, and check if the computer has been edited if there is an error in the Delete process.
+
 
 #Suggested Improvements
 
@@ -104,4 +114,4 @@ App Profile: Small-scale / Large-scale / Your custom profile
 | Optimization | Best number of users | Performance gain |
 | --- | --- | --- |
 | Improved XX. Changed number from XX to XX | YYY users | ZZ% |
-| Configured XX. Changed XX value to XX. | YYY users | ZZ % |
+| Configured XX. Changed XX value to XX. | YYY users | ZZ% |

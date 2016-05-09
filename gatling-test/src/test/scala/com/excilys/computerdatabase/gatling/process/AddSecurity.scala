@@ -16,17 +16,17 @@ object AddSecurity {
   )
   val feederAdd = csv("data/addComputer.csv").random
 
-  val add = exec(http("Add page")
+  val add = exec(http("AddSecurity: Add page")
     .get(config.getString("application.urls.addPage"))
     .check(
       css(config.getString("application.urls.idElement.add.csrf").get, "value").saveAs("csrf_token")
     )
-    .resources(http("Add js")
+    .resources(http("AddSecurity: Add js")
       .get(config.getString("application.urls.static.js.add"))))
     .pause(random.nextInt(7) + 3)
     .feed(feederName)
     .feed(feederAdd)
-    .exec(http("Add post")
+    .exec(http("AddSecurity: Add post")
       .post(config.getString("application.urls.addPost").get)
       .formParam(config.getString("application.urls.form.add.name").get, "${addComputerName}")
       .formParam(config.getString("application.urls.form.add.introduced").get, "${addComputerIntroduced}")
