@@ -19,29 +19,29 @@ class Authenticate(csvFile : String) {
     .check(
       css(config.getString("application.urls.idElement.authenticate.csrf").get, "value").saveAs("csrf_token")
     )
-    .resources(http("Login home")
+    .resources(http("Authenticate: Login home")
       .get(config.getString("application.urls.static.css.bootstrap")),
-      http("Login home")
+      http("Authenticate: Login home")
         .get(config.getString("application.urls.static.css.fontAwesome")),
-      http("Get css")
+      http("Authenticate: Get css")
         .get(config.getString("application.urls.static.css.main")),
-      http("Get jquery js")
+      http("Authenticate: Get jquery js")
         .get(config.getString("application.urls.static.js.jquery")),
-      http("Get bootstrap js")
+      http("Authenticate: Get bootstrap js")
         .get(config.getString("application.urls.static.js.bootstrap")),
-      http("Get jquery validate")
+      http("Authenticate: Get jquery validate")
         .get(config.getString("application.urls.static.js.jqueryValidate")),
-      http("Get login js")
+      http("Authenticate: Get login js")
         .get(config.getString("application.urls.static.js.login")),
-      http("Get uk png")
+      http("Authenticate: Get uk png")
         .get(config.getString("application.urls.static.font.ukFlag")),
-      http("Get fr png")
+      http("Authenticate: Get fr png")
         .get(config.getString("application.urls.static.font.frFlag")))
   )
     .pause(random.nextInt(7) + 3)
     .feed(feeder)
     // Login
-    .exec(http("Login form")
+    .exec(http("Authenticate: Login form")
     .post(config.getString("application.urls.loginPost").get)
     .formParam(config.getString("application.urls.form.authenticate.username").get, "${name}")
     .formParam(config.getString("application.urls.form.authenticate.password").get, "${password}")

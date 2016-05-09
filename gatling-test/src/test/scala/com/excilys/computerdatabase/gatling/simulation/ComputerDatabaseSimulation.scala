@@ -30,7 +30,7 @@ class ComputerDatabaseSimulation extends Simulation {
   val users = scenario("Users").exec(Browse.browse,Search.search, Add.add, Edit.edit, Delete.delete)
 
   setUp(
-    users.inject(rampUsers(1000) over (30 seconds))
+    users.inject(rampUsers(ConfigFactory.load().getInt("application.nbUsers")) over (30 seconds))
   ).protocols(httpConf)
 
   after {

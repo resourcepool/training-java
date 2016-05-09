@@ -12,19 +12,20 @@ object EditSecurity {
   val config = ConfigFactory.load()
   val random = new util.Random
 
-  val edit = exec(http("Search for edit")
+
+  val edit = exec(http("EditSecurity: Search for edit")
     .get(new StringBuilder().append(config.getString("application.urls.dashboardPage")).append("?").append(config.getString("application.urls.param.search")).append("=${addComputerName}").toString())
-    .check(css("#${addComputerName}_name", "href").saveAs("computerURL"))
+    .check(css("#results a", "href").saveAs("computerURL"))
   )
   .pause(random.nextInt(7) + 3)
-    .exec(http("Select for edit")
+    .exec(http("EditSecurity: Select for edit")
       .get("${computerURL}")
       .check(
         css(config.getString("application.urls.idElement.edit.csrf").get, "value").saveAs("csrf_token"),
         css(config.getString("application.urls.idElement.edit.id").get, "value").saveAs("computer_id")
       )
     )
-    .exec(http("Edit Post")
+    .exec(http("EditSecurity: Edit Post")
       .post(config.getString("application.urls.editPost").get)
       .formParam(config.getString("application.urls.form.edit.id").get, "${computer_id}")
       .formParam(config.getString("application.urls.form.edit.name").get, "${addComputerName}_edited")
