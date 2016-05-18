@@ -152,10 +152,10 @@ Create four Docker images: one for jenkins, one for compilation and tests, one f
 - [Link](https://docs.docker.com/docker-cloud/getting-started/link-aws/) your Amazon Web Services account to deploy node clusters and nodes using Docker Cloud’s dashboard. Be careful when choosing the type of node on Docker Cloud, select 't2.micro' under the conditions of free AWS account.
 
 - Observe the diagram below to properly configure the architecture of Docker containers to set up the continuous delivery:
-![image](http://s24.postimg.org/4hwvay1mt/Continuous_delivery_1.png)
+![image](http://s32.postimg.org/iio0ls66t/Continuous_delivery.png)
 
 - Below the activity diagram to figure out all the process:
-![image](http://s22.postimg.org/4sxvlgtw1/CDProcess_Diagram_1.png)
+![image](http://s32.postimg.org/ijyeykoyd/CDProcess_Diagram.png)
 
 
 ####4.4.4. Point overview: Continuous Integration (t0 + 18 days)
