@@ -10,17 +10,20 @@ import io.gatling.http.Predef._
   */
 object EditSecurity {
   val config = ConfigFactory.load()
-  val random = new util.Random
-
 
   val edit = exec(http("EditSecurity: Search for edit")
-    .get(new StringBuilder().append(config.getString("application.urls.dashboardPage")).append("?").append(config.getString("application.urls.param.search")).append("=${addComputerName}").toString())
-    .check(css("#results a", "href").saveAs("computerURL"))
+    .get(config.getString("application.urls.dashboardPage"))
+    .queryParam(config.getString("application.urls.param.search").toString(), "${addComputerName}")
+    .check(
+      status.is(200),
+      css("#results a", "href").saveAs("computerURL")
+    )
   )
-  .pause(random.nextInt(7) + 3)
+    .pause(3, 10)
     .exec(http("EditSecurity: Select for edit")
       .get("${computerURL}")
       .check(
+        status.is(200),
         css(config.getString("application.urls.idElement.edit.csrf").get, "value").saveAs("csrf_token"),
         css(config.getString("application.urls.idElement.edit.id").get, "value").saveAs("computer_id")
       )

@@ -9,13 +9,13 @@ import io.gatling.http.Predef._
   * Created by Cédric Cousseran on 29/03/16.
   * Authenticate an admin or a user.
   */
-class Authenticate(csvFile : String) {
+class Authenticate(csvFile: String) {
   val config = ConfigFactory.load()
   val feeder = csv(csvFile).random
-  val random = new util.Random
 
   val authenticate: ChainBuilder = exec(http("Login home")
     .get(config.getString("application.urls.loginPage"))
+    .check(status.is(200))
     .check(
       css(config.getString("application.urls.idElement.authenticate.csrf").get, "value").saveAs("csrf_token")
     )
@@ -38,7 +38,7 @@ class Authenticate(csvFile : String) {
       http("Authenticate: Get fr png")
         .get(config.getString("application.urls.static.font.frFlag")))
   )
-    .pause(random.nextInt(7) + 3)
+    .pause(3, 10)
     .feed(feeder)
     // Login
     .exec(http("Authenticate: Login form")
