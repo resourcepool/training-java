@@ -24,11 +24,14 @@ object Browse {
     .feed(feederPageSize)
     .feed(feederPage)
     .repeat(numberPage) {
-
-      val browseUrl = new StringBuilder().append(config.getString("application.urls.dashboardPage")).append("?").append(config.getString("application.urls.param.page")).append("=${pageSize}&").append(config.getString("application.urls.param.pageSize")).append("=${pageSize}&").append(config.getString("application.urls.param.column")).append("=${column}&").append(config.getString("application.urls.param.order")).append("=${order}").toString()
-
       exec(http("Browse: Browse page: ${page},  pageSize: ${pageSize}, column: ${column}, order: ${order}")
-        .get(browseUrl))
-        .pause(random.nextInt(7) + 3)
+        .get(config.getString("application.urls.dashboardPage"))
+        .queryParam(config.getString("application.urls.param.page").toString(), "${page}")
+        .queryParam(config.getString("application.urls.param.pageSize").toString(), "${pageSize}")
+        .queryParam(config.getString("application.urls.param.column").toString(), "${column}")
+        .queryParam(config.getString("application.urls.param.order").toString(), "${order}")
+        .check(status.is(200))
+      )
+        .pause(3, 10)
     }
 }

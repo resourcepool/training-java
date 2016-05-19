@@ -10,17 +10,17 @@ import io.gatling.http.Predef._
   */
 object Add {
   val config = ConfigFactory.load()
-
   val random = new util.Random
+
   val feederName = Iterator.continually(Map("addComputerName" -> (random.nextInt.toString() + random.nextInt.toString() + random.nextInt.toString()))
   )
   val feederAdd = csv("data/addComputer.csv").random
 
   val add = exec(http("Add: Add page")
-    .get(config.getString("application.urls.addPage"))
+    .get(config.getString("application.urls.addPage")).check(status.is(200))
     .resources(http("Add: Add js")
       .get(config.getString("application.urls.static.js.add"))))
-    .pause(random.nextInt(7) + 3)
+    .pause(3, 10)
     .feed(feederName)
     .feed(feederAdd)
     .exec(http("Add: Add post")
@@ -29,5 +29,5 @@ object Add {
       .formParam(config.getString("application.urls.form.add.introduced").get, "${addComputerIntroduced}")
       .formParam(config.getString("application.urls.form.add.discontinued").get, "${addComputerDiscontinued}")
       .formParam(config.getString("application.urls.form.add.companyId").get, "${addComputerCompany}"))
-    .pause(random.nextInt(7) + 3)
+    .pause(3, 10)
 }
