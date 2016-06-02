@@ -88,7 +88,7 @@ Add and configure the Maven checktyle plugin with the checkstyle.xml and suppres
 Using the provided template https://github.com/loicortola/spec-cdb/tree/master/static, integrate the previous features using Servlets, JSPs, JSTL, and Tags.  
 Use DTOs (Data Transfer Object) to transport only relevant data to the JSPs.  
 Implement Computer listing (paginated), and add features.  
-Create two tags (In your own Taglib): one for the pagination module, one for links.  
+Create two tags (In your own Taglib): one for the pagination module, one for links. Use the new JavaEE way with .tag files, not .java and .tld files. 
 Example: 
 ```
 <mylib:link target="dashboard" page="${requestScope.page.current + 1}" limit="${requestScope.page.limit}" ... />   
