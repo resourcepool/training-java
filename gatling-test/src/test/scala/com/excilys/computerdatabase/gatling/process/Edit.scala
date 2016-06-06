@@ -16,7 +16,7 @@ object Edit {
     .queryParam(config.getString("application.urls.param.search").toString(), "${addComputerName}")
     .check(
       status.is(200),
-      css("#results input", "href").saveAs("computerURL")
+      css("#results a", "href").saveAs("computerURL")
     )
   )
     .pause(3, 10)
