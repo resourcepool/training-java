@@ -114,14 +114,15 @@ VisualVM is bundled with the JDK. Launch it, select the tomcat process and start
 
 * The sampler & profiler utility will tell you how much time the application is spending in each methods. At the start, this is where you should focus your attention.
 
-* Jprofiler is another profiler, with a lot more features and information, but not free. If you are curious, you can try the 10 days evaluation.
+[JProfiler](https://www.ej-technologies.com/products/jprofiler/overview.html) and [YourKit](https://www.yourkit.com/) are other profilers, with a lot more features and information, but not free. If you are curious, they both have a fully functional free evaluation period.
 
 #### MySQL
 
- * Once you scale to a bigger database, you might start encountering database related problems. Try to monitor what mysql is doing. 
+Once you scale to a bigger database, you might start encountering database related problems. Try to monitor what mysql is doing.
 
  * It is possible to log queries that are too slow (using the property `slow_query_log` in `my.cnf`). If a request takes more than a second to execute, you should try to execute it manually in the mysql console and find a way to fix it.
-The mysql command `show processlist;` will show you what each connection in your connection pool is currently doing.
+
+ * The mysql command `show processlist;` will show you what each connection in your connection pool is currently doing.
 
 #### HTOP
 
