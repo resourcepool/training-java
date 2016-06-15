@@ -102,6 +102,32 @@ If your webapp returns 200 when a request failed (for example if the edit doesn'
 * Change your connection to the database.
 * Check if there is any memory leak.
 
+# Monitoring Tools
+
+#### VisualVM
+
+VisualVM is bundled with the JDK. Launch it, select the tomcat process and start a gatling test. 
+
+ * The heap graph can be used to understand how much memory is being used, how often the GC is called and to detect potential memory leaks. If the heap size after a garbage collection increases over time, it is a sign of a potential memory leak. In that case, comparing heap dump (with allocation traces) at multiple times can help pinpoint where those new objects come from.
+
+* The thread tab will tell you how many threads your application is using and in which state they are at any given time. A thread dump will tell you what the threads are doing. This is especially useful to understand why threads are in deadlock. 
+
+* The sampler & profiler utility will tell you how much time the application is spending in each methods. At the start, this is where you should focus your attention.
+
+[JProfiler](https://www.ej-technologies.com/products/jprofiler/overview.html) and [YourKit](https://www.yourkit.com/) are other profilers, with a lot more features and information, but not free. If you are curious, they both have a fully functional free evaluation period.
+
+#### MySQL
+
+Once you scale to a bigger database, you might start encountering database related problems. Try to monitor what mysql is doing.
+
+ * It is possible to log queries that are too slow (using the property `slow_query_log` in `my.cnf`). If a request takes more than a second to execute, you should try to execute it manually in the mysql console and find a way to fix it.
+
+ * The mysql command `show processlist;` will show you what each connection in your connection pool is currently doing.
+
+#### HTOP
+
+HTOP is a basic linux program which displays the CPU/RAM usages among with the running processes. It is a simple tool yet useful for some quick monitoring information. 
+
 #Table of results
 
 After each improvement you make, you will save the result in a markdown table to keep track of the different ways to optimize an application and a development environment.  
