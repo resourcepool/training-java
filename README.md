@@ -7,14 +7,14 @@ Here is the macro-planning and timeline of all milestones:
  * t0    - Start of the project
  * t0+2  - Base Architecture, CLI (Add / Edit features), Logging
  * t0+8  - Web UI, Maven, Unit Tests, jQuery Validation, Backend Validation
- * t0+11 - Search, OrderBy, Transactions, Connection-Pool 
- * t0+12 - Threadlocal, Java Performance contest
- * t0+18 - Continuous delivery (Jenkins, Docker, Dockerhub, Glazer)
- * t0+20 - Spring integration
- * t0+23 - Spring MVC integration, JDBC Template, i18n
- * t0+29 - Maven Multi-modules, Spring Security, Hibernate ORM (JPA, Criteria, QueryDSL, Spring Data JPA)
- * t0+31 - Web Services, end of project
- * t0+34 - Project presentation to sales & tech audience
+ * t0+11 - Search, OrderBy, Transactions, Connection-Pool
+ * t0+13 - Threadlocal, Java Performance contest
+ * t0+19 - Continuous delivery (Jenkins, Docker, Dockerhub, Glazer)
+ * t0+21 - Spring integration
+ * t0+24 - Spring MVC integration, JDBC Template, i18n
+ * t0+30 - Maven Multi-modules, Spring Security, Hibernate ORM (JPA, Criteria, QueryDSL, Spring Data JPA)
+ * t0+32 - Web Services, end of project
+ * t0+35 - Project presentation to sales & tech audience
 
 #Installation
 
@@ -26,6 +26,20 @@ Tables created: **company, computer**
 User created: `admincdb`
 with password: `qwerty1234`
 
+###Bonus
+If you already know about [Docker](https://docker.io):  
+Create a **Dockerfile** and wrap your mysql server instance inside a docker image.
+Create a container, and create a run script to load the database each time it runs (or use tmpfs).  
+Use the container instead of the local MySQL server instance.
+
+`
+NOTE: Docker containers are very useful when it comes to bootstrapping your development environment. 
+We entered the era of micro-services, 
+which means it is not uncommon to have multiple containers running at the same time 
+necessary to run your module.
+`
+
+
 ##2. IDE  
 ###2.1. Eclipse  
 - Add your project to the current workspace: **File** -> **Import** -> **Existing projects into workspace**    
@@ -35,24 +49,26 @@ with password: `qwerty1234`
 
 ###2.2. IntelliJ IDEA   
 - Add your project to the current workspace: **Import Project**, select **Create project from existing sources**
-- Create a new Tomcat 8.0 Server: **Run** -> **Edit Configurations** and point it to your local Tomcat directory (button **Configure...**) 
+- Create a new Tomcat 8.0 Server: **Run** -> **Edit Configurations** and point it to your local Tomcat directory (button **Configure...**)
 - Set project structure: In **File** -> **Project Structure**, add an Artifact with default options (Artifact tab)  
 
 ##3. Git repository
-- Create your own github account, and initialize a new git repository called "computer-database".  
-- After the initial commit, add and commit a meaningful .gitignore file. 
+- Create your own github account, and initialize a new git repository called "training-java".  
+- After the initial commit, add and commit a meaningful .gitignore file.
 
 You are ready to start coding.
 
 ##4. Start coding
 ####4.1. Layout
 Your customer requested to build a computer database application. He owns about 500+ computers made by different manufacturers (companies such as Apple, Acer, Asus...).  
-Ideally, each computer would contain the following: a name, the date when it was introduced, eventually the date when it was discontinued, and the manufacturer. Obviously, for some reasons, the existing data is incomplete, and he requested that only the name should remain mandatory when adding a computer, the other fields being filled when possible. Furthermore, the date it was discontinued must be greater than the one he was introduced.
+Ideally, each computer would contain the following: a name, the date when it was introduced, eventually the date when it was discontinued, and the manufacturer. 
+Obviously, for some reasons, the existing data is incomplete, and he requested that only the name should remain mandatory when adding a computer, the other fields being filled when possible. 
+Furthermore, the date it was discontinued must be greater than the one he was introduced.
 The list of computers can be modified, meaning your customer should be able to list, add, delete, and update computers. The list of computers should also be pageable.  
 The list of companies should be exhaustive, and therefore will not require any update, deletion etc...  
 
 ###4.2. Command line interface client
-The first iteration will be dedicated to implement a first working version of your computer database, with a CLI-UI.  
+The first iteration will be dedicated to implement a first working version of your computer database, with a Command-Line Interface.  
 The CLI will have the following features:
 
 - List computers  
@@ -73,28 +89,39 @@ Now that your app's main features work, implement the pageable feature. We recom
 Important Points: Architecture (daos, mappers, services, models, exceptions etc...)? Singleton, IOC patterns? Validation (dirty checking?)? Date API? Secure inputs?  
 Javadoc? Comments? Use Slf4j-api logging library, with the most common implementation: logback.  
 
-###4.3. CLI + Web interface client 
+###4.3. CLI + Web interface client
 Now that your backend skeleton is working, we want to add a second more user-friendly UI, such as a Web-UI.  
-As it will require more and more libraries (more JARs to include in the build path etc...), we should consider using a build manager. Moreover, testing is a very important aspect of QA, and testing libraries should be implemented before going any further, the same for logging.  
+As it will require more and more libraries (more JARs to include in the build path etc...), we should consider using a build manager. 
+Moreover, testing is a very important aspect of QA, and testing libraries should be implemented before going any further, the same for logging.  
 Then, you can work on implementing all features on the provided static pages, using JSTL, Tags, Servlets, JSPs...  
 
 ####4.3.1. Maven, Logging & Unit testing
 Refactor your project tree to match maven standards. (Tip: you should exit eclipse, move folders around, and reimport your project using File -> Import -> Existing maven projects).  
-Include necessary libraries such as mysql-connector, JUnit, Mockito, Slf4j, and create the test classes for the backend you have already developed (N.B.: This is against TDD best practices. You should always code your tests simulteanously while developing your features).  
+Include necessary libraries such as mysql-connector, JUnit, Mockito, Slf4j, and create the test classes for the backend you have already developed 
+(N.B.: This is against TDD best practices. You should always code your tests simulteanously while developing your features).  
 Creating test classes implies to take into account ALL possibilities: Illegal calls, legal calls with invalid data, and legal calls with valid data.  
 Add and configure the Maven checktyle plugin with the checkstyle.xml and suppressions.xml provided in config/checkstyle/
 
+`
+NOTE: You don't need to test your Persistence layer. However, you will have to think about your SQL Database and how your database gets reset for each test.
+You may want to mock some of it using Mockito, and have sql-scripts populated before each test.
+`
+
 ####4.3.2. Implement listing and computer add features in the web-ui
-Using the provided template https://github.com/loicortola/spec-cdb/tree/master/static, integrate the previous features using Servlets, JSPs, JSTL, and Tags.  
+Using the provided template https://github.com/resourcepool/training-java/tree/master/static, integrate the previous features using Servlets, JSPs, JSTL, and Tags.  
 Use DTOs (Data Transfer Object) to transport only relevant data to the JSPs.  
 Implement Computer listing (paginated), and add features.  
 Create two tags (In your own Taglib): one for the pagination module, one for links.  
-Example: 
+Example:
 ```
 <mylib:link target="dashboard" page="${requestScope.page.current + 1}" limit="${requestScope.page.limit}" ... />   
 <mylib:pagination page="${requestScope.page.current}" page-count="${requestScope.page.count}" ... />  
 ```
 Warning: All features will be implemented and tested using Selenium automated with maven.  
+
+####Bonus
+If you already know about Docker:
+Use Docker to launch two selenium environments (firefox & chrome) and integrate it within your maven test 
 
 ####4.3.3. Secure through validation
 Implement both frontend (jQuery) and backend validation in the web-ui.
@@ -122,21 +149,26 @@ Important Points: Maven structure? Library scopes? Architecture (daos, mappers, 
 Point about Threading (Connections, concurrency), and Transactions.
 
 ####4.3.10. Threadlocal
-Replace existing connection logic with a ThreadLocal object. 
+Replace existing connection logic with a ThreadLocal object.
 
-#### 4.3.11 Performance Challenge with Gatling
-Now is the time to start evaluating your global application performance with a stress-test campain.
-Using Gatling, you have one day to stress-test your web application (gatling test and directions present in the folder gatling-test). See the relevant README file for more explanations. For now, choose the simulation without Spring Security.
+#### 4.3.11. Performance Tuning Challenge
+Now is the time to start evaluating your global application performance with a stress-test campain.  
+How does my application behave under load?  
+What is the memory footprint of my app?  
+Using Gatling, you have two days to perform **ANY** kind of improvement of your web application (gatling test and directions present in the folder gatling-test). 
+The goal is to reach the highest score, see the relevant gatling-test/README file for more explanations.  
+For now, choose the simulation **without** Spring Security.
 
-
-####4.3.9. Code review (t0 + 12 days)
+####4.3.12. Code review (t0 + 13 days)
 Important Points: What were the bottlenecks, what optimizations were done, for how much performance gain, which scores were reached.
 
 ###4.4 Continuous Integration / Continuous Delivery
-We want to setup a continuous integration/delivery  system for our webapp with [Jenkins](https://jenkins-ci.org/) and [Docker](https://www.docker.com). Each time we push on master we want Jenkins to retrieve the changes, compile, test on a specific environment, build and push the new image to a registry, then automatically deploy the new image on the Cloud.
+We want to setup a continuous integration/delivery  system for our webapp with [Jenkins](https://jenkins-ci.org/) and [Docker](https://www.docker.com).  
+Each time we push on master we want Jenkins to retrieve the changes, compile, test on a specific environment, build and push the new image to a registry, then automatically deploy the new image on a Cloud.
 
 ####4.4.1 Jenkins & Docker
-Create Docker images that contain a test environment: one with jdk8 + maven and another with a MySQL database. Use the [docker network](https://docs.docker.com/engine/userguide/networking/work-with-networks/) command to enable communication between your containers. Do not use [links](https://docs.docker.com/engine/userguide/networking/default_network/dockerlinks/) since the feature will be deprecated.
+Create Docker images that contain a test environment: one with jdk8 + maven and another with a MySQL database. 
+Use the [docker network](https://docs.docker.com/engine/userguide/networking/work-with-networks/) command to enable communication between your containers.  
 Setup a Jenkins to start your test containers each time a push on master is performed, then display the JUnits results.
 
 ####4.4.2 Docker in Docker?
@@ -145,7 +177,7 @@ We now want to put our Jenkins in a Docker container. Create a Docker container 
 ####4.4.3 Continuous Delivery
 Create four Docker images: one for jenkins, one for compilation and tests, one for production (tomcat) and one for the mysql. Push them to DockerHub.
 
-- Connect with your login to [Docker Cloud](https://cloud.docker.com/) 
+- Connect with your login to [Docker Cloud](https://cloud.docker.com/)
 
 - Create a [free account](https://aws.amazon.com/fr/free/) on Amazon Web Services.
 
@@ -157,11 +189,21 @@ Create four Docker images: one for jenkins, one for compilation and tests, one f
 - Below the activity diagram to figure out all the process:
 ![image](http://s32.postimg.org/ijyeykoyd/CDProcess_Diagram.png)
 
+####Bonus: Pipeline
+Since Jenkins 1.6, a new configuration for your delivery pipeline appeared. The "plugin-workflow", later renamed "pipeline" in Jenkins 2.0, allows anyone to script your deployment pipeline from build to test, archive, and deploy.  
+<img src="https://wiki.jenkins-ci.org/download/attachments/102662163/who-broke-it.png?version=1&modificationDate=1478695629000" width="320" height="240"/>  
+You can use a JenkinsFile with your groovy pipeline script at the root of your repository.  
+Want to go further? Try Blue Ocean, the new UI for Jenkins.
 
-####4.4.4. Point overview: Continuous Integration (t0 + 18 days)
-Jenkins + DinD: which service actually starts the containers ?   
-Container communication ?   
-DockerHub: automated builds limitations ?
+####Bonus 2: Travis-CI / Gitlab-CI
+Try something else than Jenkins. Contrarily to Jenkins, Travis and Gitlab-CI were built with the concept of 'containers' in mind. In particular, Gitlab-CI has a dedicated Docker registry tied with your repositories.
+Integrate them in your own Continuous delivery pipeline.
+
+####4.4.4. Point overview: Continuous Integration (t0 + 19 days)
+Jenkins + DinD: which service actually starts the containers?   
+What about alternatives: DinD vs socket sharing. What are the pros/cons?
+What about communication between Containers?   
+DockerHub: automated build limitations?  
 
 ###4.5. Embracing Spring Framework
 
@@ -172,7 +214,7 @@ Replace your connection pool by a real datasource configured in the spring conte
 Which problems did you encounter? Study and note all the possible ways of solving the dependency injection issue in servlets.  
 Warning: Do not replace your Servlets by another class. Your controllers should still extend HttpServlet.
 
-####4.5.2. Point overview: Spring integration (t0 + 20 days)
+####4.5.2. Point overview: Spring integration (t0 + 21 days)
 How a webapp is started, how spring initializes itself.  
 Explanation of the common problems encountered with the different contexts.  
 Roundtable of the solutions found, best practices.
@@ -188,13 +230,13 @@ Add custom error pages.
 ####4.5.5. i18n
 Implement spring multilingual features (French/English).
 
-####4.5.6. Code Review (t0 + 23 days)
+####4.5.6. Code Review (t0 + 24 days)
 Important Points: How did you split your Spring / Spring MVC contexts? How to switch from a language to another? How about javascript translation? Did you use spring-mvc annotations, forms and models?
 
 ###4.6. Multi module, ORM, and Security
 
 ####4.6.1. Hibernate
-Add the Hibernate ORM to your project (managed by spring). You can choose the following APIs to implement it. HQL, JPA/Criteria, QueryDSL, Spring data JPA. 
+Add the Hibernate ORM to your project (managed by spring). You can choose the following APIs to implement it. HQL, JPA/Criteria, QueryDSL, Spring data JPA.
 
 ####4.6.2. Maven multi-module
 Now that your app is getting dense, it makes sense to split it into modules.  
@@ -206,7 +248,7 @@ Following modules can be created: core, persistence, service, binding, webapp, c
 Add Spring Security to your project. Choose a stateless approach, and use an extra UserDAO and related SQL table to store and retrieve user login info.  
 Use Digest HTTP Auth.
 
-####4.6.4. Code Review (t0 + 29 days)
+####4.6.4. Code Review (t0 + 30 days)
 Important points: Which API was the most efficient for your queries? Limitations of those APIs.
 Maven and Spring contexts evaluation, unit tests evaluation.
 
@@ -222,19 +264,31 @@ To allow the creation of AngularJS, Mobile (Android/iOS) or third party clients,
 ####4.7.3. Jax WS / Jax RS
 Refactor your CLI client to act as a remote client to your webapp, using either Jax-RS or Jax-WS libraries.
 
-####4.7.4. Final Code Review (t0 + 31 days)
+####4.7.4. Final Code Review (t0 + 32 days)
 Steps to fix before final release, code quality overview and possible improvements. Point about UX
 
-###4.8. Final refactoring, UX, and project presentation
-The final stage is your production release.  
+###4.8. Final refactoring of webapp, UX
+The final stage is your production release. 
+- Refactor and clean your project, make sure your REST API is valid.
+- Refactor your UI looking for a greater User eXperience, challenge the technical choices of the base page template, and customize it to your standards.
 
-####4.8.1. UX
-This is where you will think UX first, challenge the technical choices of the base page template, and customize it to your standards.
+**N.B.: This is when you need to think like a user, and not a developer. Look at what your favorite websites have. Take a look at design best practices, and be careful to facilitate the use of your product.**
 
-###4.8.2. Final Presentation (t0 + 34 days)
+### End of refactoring + UX (t0 + 35 days)
+
+###4.9. Static Website 
+More and more, webapps need to be developed for multiple devices. Smartphones, tablets, browsers, etc...
+The need for exposing data through an API has increased and allowed for the rebirth of client-server approaches.
+Thanks to the most recent javascript engine performance improvements, developing client-side applications is not possible.
+
+During this step, you will learn how to develop the computer-database static website with Angular.js
+
+**TODO**
+
+###4.10. Final Presentation (t0 + 40 days)
 The presentation will be made with the whole group, on one project of their choice.  
 It consists of 3 parts:  
-The product-presentation, from a user-centered perspective (non-technical). 
+The product-presentation, from a user-centered perspective (non-technical).
 You are presenting your "Computer database" product, and telling us what it does and how it was made.  
 A live-demonstration. Be careful, the audience may interrupt your demo and ask you to try / show something else.  
 A technical review: you will reassure your client on what he paid for. Give him the necessary technical data and metrics which will allow him to think "they are competent and they did the job, and I am confident that it is maintainable and well coded".
