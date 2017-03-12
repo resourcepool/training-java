@@ -292,8 +292,7 @@ The need for exposing data through an API has increased and allowed for the rebi
 Thanks to the most recent javascript engine performance improvements, developing client-side applications is not possible.
 
 During this step, you will learn how to develop the computer-database static website with Angular.js
-
-**TODO**
+(training-angular1-cdb)[https://github.com/resourcepool/training-angular1-cdb]
 
 ### 4.10. Final Presentation (t0 + 40 days)
 The presentation will be made with the whole group, on one project of their choice.  
