@@ -4,14 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.excilys</groupId>
+    <groupId>io.resourcepool</groupId>
     <artifactId>computer-database-gatling</artifactId>
     <version>1.0.0</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <gatling.version>2.1.7</gatling.version>
-        <gatling-plugin.version>2.1.7</gatling-plugin.version>
+        <gatling.version>2.2.4</gatling.version>
+        <gatling-plugin.version>2.2.4</gatling-plugin.version>
         <scala-maven-plugin.version>3.2.2</scala-maven-plugin.version>
     </properties>
 

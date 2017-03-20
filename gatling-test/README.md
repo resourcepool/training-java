@@ -23,7 +23,6 @@ The user simulation use the following scenario: authenticate, browse, and search
 
 The admin simulation use the following scenario: authenticate, browse, search, add, edition and deletion of a computer.
 
-
 #Installation
 You can copy the content of this folder in your existing maven project, or use it as a single project.
 
@@ -42,17 +41,16 @@ The folder src/test/resources/data contains some csv feeders which are used in t
 
 You can add as many lines as you want in these csv feeders.
 
-If you want to modify the behavior of the test, you can modify the files in the folder src/scala/com/excilys/computerdatabase/gatling
+If you want to modify the behavior of the test, you can modify the files in the folder src/scala/io/resourcepool/computerdatabase/gatling
 
-If you have too much trouble adapting your application to the test, test with only the Search and Browse process (check the file in the folder src/scala/com/excilys/computerdatabase/gatling/simulation
+If you have too much trouble adapting your application to the test, test with only the Search and Browse process (check the file in the folder src/scala/io/resourcepool/computerdatabase/gatling/simulation
  ).
 
 #Utilisation
 
-If you have enabled Spring Security, type the command **mvn gatling:execute -Dgatling.simulationClass=com.excilys.computerdatabase.gatling.simulation.ComputerDatabaseSimulationSecurity** to launch the test. You can view the results of the test in your browser, or in the folder target/gatling/results/
+If you have enabled Spring Security, type the command **mvn gatling:execute -Dgatling.simulationClass=io.resourcepool.computerdatabase.gatling.simulation.ComputerDatabaseSimulationSecurity** to launch the test. You can view the results of the test in your browser, or in the folder target/gatling/results/
 
-If you have not yet enabled Spring Security, type the command **mvn gatling:execute -Dgatling.simulationClass=com.excilys.computerdatabase.gatling.simulation.ComputerDatabaseSimulation** to launch the test.
-
+If you have not yet enabled Spring Security, type the command **mvn gatling:execute -Dgatling.simulationClass=io.resourcepool.computerdatabase.gatling.simulation.ComputerDatabaseSimulation** to launch the test.
 
 #Protocol
 
@@ -71,11 +69,10 @@ If the gatling test with your current database has good results, you can now tes
 * Create a new database with the file 1-SCHEMA and 2-PRIVILEGES.
 * Create and fill your Spring Security table (if you have Spring Security enabled).
 * Change the value **max_allowed_packet** of the file /etc/mysql/my.cnf to 80M.
-* Restart mysql: **sudo service mysql restart**
+* Restart mysql: **service mysql restart**
 * Run the insertCompany.sql and insertComputer.sql scripts, for example: **mysql -uUSER -p computer-database-db2 < insertCompany.sql** and **mysql -uUSER -p computer-database-db2 < insertComputer.sql**
 
 If you want to modify the insert scripts, modify the file **createComputerSql.sh**
-
 
 #Key Performance Indicators
 The scenario can be considered as performing and successful if all the following conditions are met:
@@ -87,12 +84,11 @@ The scenario can be considered as performing and successful if all the following
 Gatling will display the results like this:
 > Authenticate: Login form                                 (OK=1010   KO=0     )
 
-The first word is the file where the request failed. If you have an error you can check the file in the folder src/scala/com/excilys/computerdatabase/gatling/simulation/process.
+The first word is the file where the request failed. If you have an error you can check the file in the folder src/scala/io/resourcepool/computerdatabase/gatling/simulation/process.
 
 The test executes a scenario (Search, Browse, Add, Edit added computer, Delete edited computer). An error may cause multiple errors (such as an error in the Add process), so try to solve the first one.
 
 If your webapp returns 200 when a request failed (for example if the edit doesn't work), Gatling won't see the test as failed. Always check if the computer has been added if there is an error in the Edit process, and check if the computer has been edited if there is an error in the Delete process.
-
 
 #Suggested Improvements
 
@@ -132,7 +128,6 @@ HTOP is a basic linux program which displays the CPU/RAM usages among with the r
 
 After each improvement you make, you will save the result in a markdown table to keep track of the different ways to optimize an application and a development environment.  
 Your table will look like the following:
-
 
 Scenario: Basic / Security / Your custom simulation  
 App Profile: Small-scale / Large-scale / Your custom profile
