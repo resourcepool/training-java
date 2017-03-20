@@ -1,11 +1,11 @@
-package com.excilys.computerdatabase.gatling.simulation
+package io.resourcepool.computerdatabase.gatling.simulation
 
-import com.excilys.computerdatabase.gatling.process._
 import com.typesafe.config.ConfigFactory
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-
 import scala.concurrent.duration._
+
+import io.resourcepool.computerdatabase.gatling.process._
 
 /**
   * Created by Cédric Cousseran on 29/03/16.
@@ -16,7 +16,7 @@ class ComputerDatabaseSimulation extends Simulation {
     println("The computer database simulation is about to to start!")
   }
 
-  val config = ConfigFactory.load()
+  val config = ConfigFactory.load
 
   val httpConf = http
     .baseURL(config.getString("application.baseUrl")) // Here is the root for all relative URLs
@@ -26,8 +26,6 @@ class ComputerDatabaseSimulation extends Simulation {
     .acceptEncodingHeader("gzip, deflate")
     .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:16.0) Gecko/20100101 Firefox/16.0")
 
-  val headers_10 = Map("Content-Type" -> "application/x-www-form-urlencoded") // Note the headers specific to a given request
-
   val users = scenario("Users").exec(Browse.browse, Search.search, Add.add, Edit.edit, Delete.delete)
 
   setUp(
@@ -35,12 +33,11 @@ class ComputerDatabaseSimulation extends Simulation {
   ).protocols(httpConf)
     .assertions(
       global.failedRequests.count.is(0),
-      global.responseTime.percentile3.lessThan(1200), //check that 95% of the response time is under 1200ms
-      global.responseTime.percentile4.lessThan(800)
+      global.responseTime.percentile3.lte(1200), //check that 95% of the response time is under 1200ms
+      global.responseTime.percentile4.lte(800)
     )
 
   after {
     println("The simulation is finished, check the html file for more informations about the results.")
   }
-
 }
