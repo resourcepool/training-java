@@ -13,8 +13,9 @@ Here is the macro-planning and timeline of all milestones:
  * t0+21 - Spring integration
  * t0+24 - Spring MVC integration, JDBC Template, i18n
  * t0+30 - Maven Multi-modules, Spring Security, Hibernate ORM (JPA, Criteria, QueryDSL, Spring Data JPA)
- * t0+32 - Web Services, end of project
- * t0+35 - Project presentation to sales & tech audience
+ * t0+32 - Web Services, end of java project
+ * t0+37 - End of angular.js project
+ * t0+38 - Project presentation to sales & tech audience
 
 # Installation
 
@@ -218,7 +219,7 @@ DockerHub: automated build limitations ?
 ### 4.5. Embracing Spring Framework
 
 #### 4.5.1. Spring
-Enable the use of Spring to manage your objects's lifecycle, and transactions.  
+Enable the use of Spring to manage your objects's lifecycle, and transactions. You will use the XML declaration (applicationContext.xml) instead of programmative Java Configuration.  
 Important: Be careful to use slf4j bridges to display spring logs. Do not forget to setup your logback configuration.  
 Replace your connection pool by a real datasource configured in the spring context.  
 Which problems did you encounter? Study and note all the possible ways of solving the dependency injection issue in servlets.  
@@ -264,37 +265,37 @@ Maven and Spring contexts evaluation, unit tests evaluation.
 
 ### 4.7. Web Services, REST API
 
-#### 4.7.1 Performance review with Gatling
-Now that you have enabled Spring Security, you can use the second Gatling Simulation with Spring Security. See the README present in the gatling-test folder for more details.
-
-#### 4.7.2. Jackson
+#### 4.7.1. Jackson
 Now, we want your webapp to also produce APIs so that clients could access the resources remotely.  
 To allow the creation of AngularJS, Mobile (Android/iOS) or third party clients, you should expose all features using Jackson and Spring RestController.
 
-#### 4.7.3. Jax WS / Jax RS
+#### 4.7.2. Jax WS / Jax RS
 Refactor your CLI client to act as a remote client to your webapp, using either Jax-RS or Jax-WS libraries.
+
+#### BONUS: Performance review with Gatling
+Now that you have enabled Spring Security, you can use the second Gatling Simulation with Spring Security. See the README present in the gatling-test folder for more details.
 
 #### 4.7.4. Final Code Review (t0 + 32 days)
 Steps to fix before final release, code quality overview and possible improvements. Point about UX
 
-### 4.8. Final refactoring of webapp, UX
+### 4.8. Final refactoring of webapp, UX (t0 + 33 days)
 The final stage is your production release.
 - Refactor and clean your project, make sure your REST API is valid.
 - Refactor your UI looking for a greater User eXperience, challenge the technical choices of the base page template, and customize it to your standards.
 
-**N.B.: This is when you need to think like a user, and not a developer. Look at what your favorite websites have. Take a look at design best practices, and be careful to facilitate the use of your product.**
-
-### End of refactoring + UX (t0 + 35 days)
-
-### 4.9. Static Website
+### 4.9. Static Website with Angular.js
 More and more, webapps need to be developed for multiple devices. Smartphones, tablets, browsers, etc...
 The need for exposing data through an API has increased and allowed for the rebirth of client-server approaches.
 Thanks to the most recent javascript engine performance improvements, developing client-side applications is not possible.
 
 During this step, you will learn how to develop the computer-database static website with Angular.js
-(training-angular1-cdb)[https://github.com/resourcepool/training-angular1-cdb]
+(training-angularjs)[https://github.com/resourcepool/training-angularjs]
 
-### 4.10. Final Presentation (t0 + 40 days)
+**N.B.: This is when you need to think like a user, and not a developer. Look at what your favorite websites have. Take a look at design best practices, and be careful to facilitate the use of your product.**
+
+### End of refactoring + UX (t0 + 38 days)
+
+### 4.10. Final Presentation (t0 + 39 days)
 The presentation will be made with the whole group, on one project of their choice.  
 It consists of 3 parts:  
 The product-presentation, from a user-centered perspective (non-technical).
