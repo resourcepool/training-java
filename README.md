@@ -160,7 +160,7 @@ Using Gatling, you have two days to perform **ANY** kind of improvement of your 
 The goal is to reach the highest score, see the relevant gatling-test/README file for more explanations.  
 For now, choose the simulation **without** Spring Security.
 
-#### 4.3.12. Code review (t0 + 13 days)
+#### 4.3.12. Code review (t0 + 14 days)
 Important Points: What were the bottlenecks, what optimizations were done, for how much performance gain, which scores were reached.
 
 ### 4.4 Continuous Integration / Continuous Delivery
