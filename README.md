@@ -176,7 +176,7 @@ Here we are going to create a **build** environment for your application. To do 
 
 During the test phase, the webapp builder needs to communicate with the MySQL database in order to perform its integration tests. Find a way to enable communication between containers.
 
-Install and configure a Jenkins on your host. Create a job that starts the build process each time a push on master is performed, then display the JUnits results.
+Install and configure a Jenkins on your host. Create a job that starts the build process each time a push on master is performed, then display the JUnits results. Don't use Docker-in-Docker.
 
 #### 4.4.2 Continuous Delivery
 Now it's time to dockerize your application.
@@ -195,7 +195,7 @@ Adapt your Jenkins job to build and push to Docker Hub those two images.
 - [Link](https://docs.docker.com/docker-cloud/getting-started/link-aws/) your Amazon Web Services account to deploy node clusters and nodes using Docker Cloud’s dashboard. Be careful when choosing the type of node on Docker Cloud, select 't2.micro' under the conditions of free AWS account.
 
 - Observe the diagram below to properly configure the architecture of Docker containers to set up the continuous delivery:
-![image](http://s32.postimg.org/iio0ls66t/Continuous_delivery.png)
+![image](https://s7.postimg.org/qoqib8ktn/Continuous_delivery.png)
 
 - Below the activity diagram to figure out all the process:
 ![image](http://s32.postimg.org/ijyeykoyd/CDProcess_Diagram.png)
