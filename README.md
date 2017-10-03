@@ -1,21 +1,39 @@
 Training: computer-database    
 ===========================  
 
+# About
+This training material holds a sequence of steps and features to implement a Computer Database.
+The training program contains lots of good practices from philosophies such as Software Craftmanship, DevOps, and eXtreme programming.
+
+During the process, you will learn how to:
+ * Create a full delivery pipeline, provision servers, containerize your apps.
+ * Use Test-Driven-Development in your day-to-day coding habits.
+ * Perform fine-tuning on the whole stack of your app. Understand the profile of your app.
+ * Become better at isolating bottlenecks and tuning performance.
+ * Manipulate Java REST APIs, Spring, handle internationalization and security, modularize your apps, and consume your APIs in web clients.
+ * Develop a frontend webapp using React.js
+
 # Content
-This training material holds a sequence of steps and features to implement in a Computer Database webapp.  
-Here is the macro-planning and timeline of all milestones:  
- * t0    - Start of the project
- * t0+2  - Base Architecture, CLI (Add / Edit features), Logging
- * t0+8  - Web UI, Maven, Unit Tests, jQuery Validation, Backend Validation
- * t0+11 - Search, OrderBy, Transactions, Connection-Pool
- * t0+14 - Threadlocal, Java Performance contest
- * t0+19 - Continuous delivery (Jenkins, Docker, Dockerhub, Glazer)
- * t0+21 - Spring integration
- * t0+24 - Spring MVC integration, JDBC Template, i18n
- * t0+30 - Maven Multi-modules, Spring Security, Hibernate ORM (JPA, Criteria, QueryDSL, Spring Data JPA)
- * t0+32 - Web Services, end of java project
- * t0+37 - End of angular.js project
- * t0+38 - Project presentation to sales & tech audience
+Here is the macro-planning and timeline of all milestones:     
+ * t0    (1d) - **[EXT-Training]** Introduction to Agile
+ * t0+1  (3d) - Start of the project
+ * t0+4  (3d) - Continuous Delivery Pipeline, Production Server provisioning, Containers
+ * t0+7  (2d) - TDD, Basic CRUD, Database in Pipeline
+ * t0+9  (2.5d) - Maven, REST API, Backend Validation  
+ * t0+11 (.5d) - **[EXT-Training]** Introduction to ES
+ * t0+12 (2d) - **[EXT-Training]** Handson Android
+ * t0+14 (2d) - **[EXT-Training]** Handson Angular.js
+ * t0+16 (1d) - Setup codecov, sonarqube
+ * t0+17 (5d) - Development of a front using React.js
+ * t0+22 (3d) - Search, OrderBy, Transactions, Connection-Pool
+ * t0+25 (2d) - **[EXT-Training]** Handson Gatling
+ * t0+27 (3d) - Threadlocal, Java Performance contest
+ * t0+31 (2d) - Spring integration
+ * t0+33 (2d) - Spring MVC integration, JDBC Template, i18n
+ * t0+35 (5d) - Maven Multi-modules, Spring Security, Let's Encrypt, Hibernate ORM (JPA, Criteria, QueryDSL, Spring Data JPA)
+ * t0+39 (1d) - Finished project
+ * t0+40 (1d) - Project presentation to sales & tech audience
+ * t0+41 (.5d) - **[EXT-Training]** Handson Git
 
 # Installation
 
@@ -60,13 +78,17 @@ necessary to run your module.
 You are ready to start coding.
 
 ## 4. Start coding
-#### 4.1. Layout
+#### 4.1. Context
 Your customer requested to build a computer database application. He owns about 500+ computers made by different manufacturers (companies such as Apple, Acer, Asus...).  
 Ideally, each computer would contain the following: a name, the date when it was introduced, eventually the date when it was discontinued, and the manufacturer.
 Obviously, for some reasons, the existing data is incomplete, and he requested that only the name should remain mandatory when adding a computer, the other fields being filled when possible.
 Furthermore, the date it was discontinued must be greater than the one he was introduced.
 The list of computers can be modified, meaning your customer should be able to list, add, delete, and update computers. The list of computers should also be pageable.  
 The list of companies should be exhaustive, and therefore will not require any update, deletion etc...  
+Satisfied with your offer, although you seem very young, your client decides to trust you with the development of his solution.
+
+**WIP**
+All content below needs rework
 
 ### 4.2. Command line interface client
 The first iteration will be dedicated to implement a first working version of your computer database, with a Command-Line Interface.  
