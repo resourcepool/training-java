@@ -1,6 +1,6 @@
-package client.Commands;
+package client.commands;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import model.ComputerModelPreview;
 import service.ICompanyHandlerService;
@@ -11,7 +11,7 @@ public class ComputersListHandler implements IClientInputHandler {
 	@Override
 	public boolean runCommand(ICompanyHandlerService service, UiConsole ui, String input) {
 		
-		ArrayList<ComputerModelPreview> computerList = service.getComputersList();
+		List<ComputerModelPreview> computerList = service.getComputersList();
 		
 		ui.write("Id, Name");
 		for (ComputerModelPreview c : computerList) {

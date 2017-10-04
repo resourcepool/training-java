@@ -44,6 +44,11 @@ public class UiConsole {
 		System.out.println(e.getMessage());
 		System.out.println(e.getStackTrace());
 	}
+	
+	public void writeFatal(Exception e) {
+		System.out.println("Critical Error, the program will stop : " + e.getMessage());
+		System.out.println(e.getStackTrace());
+	}
 
 	public void destroy() 
 	{
@@ -54,4 +59,5 @@ public class UiConsole {
 		scanner.close();
 		scanner = null;
 	}
+
 }

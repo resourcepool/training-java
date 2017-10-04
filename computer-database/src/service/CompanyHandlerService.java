@@ -2,25 +2,26 @@ package service;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import model.CompanyModel;
 import model.ComputerModel;
 import model.ComputerModelPreview;
-import persistence.ComputersDao;
+import persistence.ComputerDao;
 import ui.UiConsole;
 
 public class CompanyHandlerService implements ICompanyHandlerService {
 
-	private ComputersDao dao;
+	private ComputerDao dao;
 	private UiConsole console;
 
-	public CompanyHandlerService(ComputersDao dao, UiConsole console) {
+	public CompanyHandlerService(ComputerDao dao, UiConsole console) {
 		this.dao = dao;
 		this.console = console;
 	}
 
 	@Override
-	public ArrayList<ComputerModelPreview> getComputersList() {
+	public List<ComputerModelPreview> getComputersList() {
 		try 
 		{
 			return dao.getComputersList();
@@ -34,7 +35,7 @@ public class CompanyHandlerService implements ICompanyHandlerService {
 	}
 
 	@Override
-	public ArrayList<CompanyModel> getCompaniesList() {
+	public List<CompanyModel> getCompaniesList() {
 		try
 		{
 			return dao.getCompaniesList();
@@ -48,7 +49,7 @@ public class CompanyHandlerService implements ICompanyHandlerService {
 	}
 
 	@Override
-	public ComputerModel getComputerDetail(long id) {
+	public ComputerModel getComputerDetail(Long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -60,22 +61,19 @@ public class CompanyHandlerService implements ICompanyHandlerService {
 	}
 	
 	@Override
-	public long CreateComputer(ComputerModel newComputer) {
-			
-		
-			return dao.createComputer(newComputer);
+	public Long createComputer(ComputerModel newComputer) {
+		return dao.createComputer(newComputer);
 	}
 
 	@Override
-	public void UpdateComputer(ComputerModel c) {
+	public void updateComputer(ComputerModel c) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void DeleteComputer(ComputerModel c) {
+	public void deleteComputer(ComputerModel c) {
 		// TODO Auto-generated method stub
-
 	}
 
 

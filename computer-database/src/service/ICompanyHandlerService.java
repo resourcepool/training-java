@@ -1,6 +1,6 @@
 package service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import model.CompanyModel;
 import model.ComputerModel;
@@ -8,17 +8,17 @@ import model.ComputerModelPreview;
 
 public interface ICompanyHandlerService {
 
-	ArrayList<ComputerModelPreview> getComputersList();
+	List<ComputerModelPreview> getComputersList();
 
-	ArrayList<CompanyModel> getCompaniesList();
+	List<CompanyModel> getCompaniesList();
 
-	ComputerModel getComputerDetail(long id);
+	ComputerModel getComputerDetail(Long id);
 	
 	ComputerModel getComputerDetail(String name);
 	
-	long CreateComputer(ComputerModel newComputer);
+	Long createComputer(ComputerModel newComputer);
 
-	void UpdateComputer(ComputerModel c);
+	void updateComputer(ComputerModel c);
 
-	void DeleteComputer(ComputerModel c);
+	void deleteComputer(ComputerModel c);
 }

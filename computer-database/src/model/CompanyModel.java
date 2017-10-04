@@ -1,11 +1,10 @@
 package model;
 
 public class CompanyModel {
-	private long id;
+	private Long id;
 	private String name;
 	
 	public CompanyModel(String name) {
-		this.id = RandomStatic.nextLong();
 		this.name = name;
 	}
 

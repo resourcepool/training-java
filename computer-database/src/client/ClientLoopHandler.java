@@ -1,7 +1,7 @@
 package client;
 import java.util.NoSuchElementException;
 
-import client.Commands.IClientInputHandler;
+import client.commands.IClientInputHandler;
 import service.ICompanyHandlerService;
 import ui.UiConsole;
 

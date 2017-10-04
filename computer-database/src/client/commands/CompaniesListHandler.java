@@ -1,5 +1,5 @@
-package client.Commands;
-import java.util.ArrayList;
+package client.commands;
+import java.util.List;
 
 import model.CompanyModel;
 import service.ICompanyHandlerService;
@@ -10,7 +10,7 @@ public class CompaniesListHandler implements IClientInputHandler {
 	@Override
 	public boolean runCommand(ICompanyHandlerService service, UiConsole ui, String input) {
 		
-		ArrayList<CompanyModel> companiesList = service.getCompaniesList();
+		List<CompanyModel> companiesList = service.getCompaniesList();
 		
 		for (CompanyModel c : companiesList) {
 			ui.write(c);

@@ -1,15 +1,14 @@
 package model;
 
 public class ComputerModelPreview {
-	private long id;
+	private Long id;
 	private String name;
 	
 	public ComputerModelPreview(String name) {
-		this.id = RandomStatic.nextLong();
 		this.name = name;
 	}
 	
-	public ComputerModelPreview(long id, String name) {
+	public ComputerModelPreview(Long id, String name) {
 		this.id = id;
 		this.name = name;
 	}
@@ -18,7 +17,7 @@ public class ComputerModelPreview {
 		return id;
 	}
 	
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	

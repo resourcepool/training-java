@@ -1,4 +1,4 @@
-package client.Commands;
+package client.commands;
 import java.util.Set;
 
 import client.CommandsCollection;

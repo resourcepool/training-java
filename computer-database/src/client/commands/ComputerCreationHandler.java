@@ -1,4 +1,4 @@
-package client.Commands;
+package client.commands;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,20 +27,20 @@ public class ComputerCreationHandler implements IClientInputHandler {
 		long id_company = Long.parseLong(parameters[3]);
 		
 		ComputerModel model = new ComputerModel(name, introduced, discontinued, id_company);
-		service.CreateComputer(model);
+		service.createComputer(model);
 		
 		return true;
 	}
 
 	private String[] extractParameters(String input) {
 		
-		String parameters = input.replace(getCommands(), "").trim();
+		String parameters = input.replace(getCommand(), "").trim();
 		
 		Pattern pattern = Pattern.compile("(\"[^\"]+\")|\\S+");
         return pattern.split(parameters);
 	}
 
-	public String getCommands() {
+	public String getCommand() {
 		return "create new computer";
 	}
 }
