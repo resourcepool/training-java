@@ -1,4 +1,4 @@
-package client;
+package client.Commands;
 import service.ICompanyHandlerService;
 import ui.UiConsole;
 

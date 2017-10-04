@@ -1,6 +1,7 @@
-package client;
+package client.Commands;
 import java.util.Set;
 
+import client.CommandsCollection;
 import service.ICompanyHandlerService;
 import ui.UiConsole;
 

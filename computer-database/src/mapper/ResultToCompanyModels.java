@@ -13,7 +13,7 @@ public class ResultToCompanyModels {
 		while (rs.next())
 		{
 			String name = rs.getString("name");
-			long id = rs.getLong("id");
+			Long id = rs.getLong("id");
 			list.add(new CompanyModel(id, name));
 		}
 		return list;

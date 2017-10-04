@@ -1,4 +1,4 @@
-package client;
+package client.Commands;
 import java.util.ArrayList;
 
 import model.CompanyModel;

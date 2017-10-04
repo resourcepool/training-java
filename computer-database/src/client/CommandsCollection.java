@@ -2,6 +2,14 @@ package client;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import client.Commands.CompaniesListHandler;
+import client.Commands.ComputerCreationHandler;
+import client.Commands.ComputersListHandler;
+import client.Commands.ExitHandler;
+import client.Commands.HelpHandler;
+import client.Commands.IClientInputHandler;
+
 import java.util.Set;
 
 import service.ICompanyHandlerService;
@@ -42,6 +50,7 @@ public class CommandsCollection {
 		
 		return commands;
 	}
+
 
 	public static Map<String, IClientInputHandler> getCommands() {
 		return INSTANCE;
