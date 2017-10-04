@@ -81,4 +81,18 @@ public class ComputersDao {
 				});
 			return result;
 	}
+
+	public void createComputer(ComputerModel newComputer) {
+//		boolean result = executeQuery(
+//				new QueryCommands<boolean>() 
+//				{
+//					@Override
+//					public boolean execute(Statement s) throws SQLException {
+//						s.
+//						s.executeQuery()
+//						ResultSet set = s.executeQuery("select id, name from computer");
+//						return ResultToComputersPreview.Process(set);				
+//					}
+//				});
+	}
 }

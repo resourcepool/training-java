@@ -16,7 +16,7 @@ public interface ICompanyHandlerService {
 	
 	ComputerModel getComputerDetail(String name);
 	
-	void CreateComputer(ComputerModel newComputer);
+	long CreateComputer(ComputerModel newComputer);
 
 	void UpdateComputer(ComputerModel c);
 

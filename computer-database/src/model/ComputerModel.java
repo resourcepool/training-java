@@ -9,8 +9,14 @@ public class ComputerModel {
 	private Date discontinued;
 	private long company_id;
 	
-	public ComputerModel(String name, Date introduced, Date discontinued, int company_id) {
-		this.id = RandomStatic.nextLong();
+	public ComputerModel(String name, Date introduced, Date discontinued, long company_id)
+	{
+		this(-1, name, introduced, discontinued, company_id);
+	}
+	
+	public ComputerModel(long id, String name, Date introduced, Date discontinued, long company_id)
+	{
+		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
 		this.discontinued = discontinued;

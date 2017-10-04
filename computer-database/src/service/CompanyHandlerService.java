@@ -60,8 +60,11 @@ public class CompanyHandlerService implements ICompanyHandlerService {
 	}
 	
 	@Override
-	public void CreateComputer(ComputerModel newComputer) {
-		// TODO Auto-generated method stub
+	public long CreateComputer(ComputerModel newComputer) {
+		try
+		{
+			dao.createComputer(newComputer);
+		}
 
 	}
 
