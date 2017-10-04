@@ -82,7 +82,7 @@ public class ComputersDao {
 			return result;
 	}
 
-	public void createComputer(ComputerModel newComputer) {
+	public long createComputer(ComputerModel newComputer) {
 //		boolean result = executeQuery(
 //				new QueryCommands<boolean>() 
 //				{
@@ -94,5 +94,6 @@ public class ComputersDao {
 //						return ResultToComputersPreview.Process(set);				
 //					}
 //				});
+		return 1l; //TODO
 	}
 }

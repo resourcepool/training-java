@@ -61,11 +61,9 @@ public class CompanyHandlerService implements ICompanyHandlerService {
 	
 	@Override
 	public long CreateComputer(ComputerModel newComputer) {
-		try
-		{
-			dao.createComputer(newComputer);
-		}
-
+			
+		
+			return dao.createComputer(newComputer);
 	}
 
 	@Override
