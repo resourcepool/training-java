@@ -1,8 +1,5 @@
 package client;
-import persistence.ComputerDao;
-import persistence.exceptions.DaoException;
-import service.CompanyServiceImpl;
-import service.CompanyService;
+import service.Services;
 import ui.UiConsole;
 
 public class Program {
@@ -12,7 +9,7 @@ public class Program {
 		UiConsole ui = new UiConsole();
 		try
 		{
-			CompanyService service = new CompanyServiceImpl(ui);
+			Services service = new Services();
 			ClientLoop client = new ClientLoop(service, ui);
 
 			client.runLoop();

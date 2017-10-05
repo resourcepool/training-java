@@ -7,7 +7,7 @@ import java.util.List;
 
 import model.Company;
 
-public class ResultToCompanyModels implements ResultMapper<List<Company>>
+public class ResultToCompany implements ResultMapper<List<Company>>
 {
 	@Override
 	public List<Company> process(ResultSet rs) throws SQLException {

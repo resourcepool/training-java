@@ -42,12 +42,19 @@ public class UiConsole {
 	public void write(Exception e)
 	{
 		System.out.println(e.getMessage());
-		System.out.println(e.getStackTrace());
+		write(e.getStackTrace());
 	}
 	
 	public void writeFatal(Exception e) {
 		System.out.println("Critical Error, the program will stop : " + e.getMessage());
-		System.out.println(e.getStackTrace());
+		write(e.getStackTrace());
+	}
+	
+	public void write(StackTraceElement[] st)
+	{
+		for (StackTraceElement elem : st) {
+			System.out.println(elem.toString());
+		}
 	}
 
 	public void destroy() 

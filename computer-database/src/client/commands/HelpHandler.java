@@ -2,13 +2,13 @@ package client.commands;
 import java.util.Set;
 
 import client.CommandsCollection;
-import service.CompanyService;
+import service.Services;
 import ui.UiConsole;
 
-public class HelpHandler implements ClientCommands {
+public class HelpHandler implements ClientCommand {
 
 	@Override
-	public boolean runCommand(CompanyService service, UiConsole ui, String[] args) {
+	public boolean runCommand(Services service, UiConsole ui, String[] args) {
 		
 		Set<String> names = CommandsCollection.getCommands().keySet();
 		

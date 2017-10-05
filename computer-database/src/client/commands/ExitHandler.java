@@ -1,11 +1,11 @@
 package client.commands;
-import service.CompanyService;
+import service.Services;
 import ui.UiConsole;
 
-public class ExitHandler implements ClientCommands {
+public class ExitHandler implements ClientCommand {
 
 	@Override
-	public boolean runCommand(CompanyService service, UiConsole ui, String[] args) {
+	public boolean runCommand(Services service, UiConsole ui, String[] args) {
 		
 		ui.write("ok bye");
 		return false;

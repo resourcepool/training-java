@@ -11,75 +11,14 @@ import persistence.CompanyDao;
 import persistence.ComputerDao;
 import ui.UiConsole;
 
-public class CompanyServiceImpl implements CompanyService {
+public class CompanyServiceImpl {
 
-	private UiConsole console;
-
-	public CompanyServiceImpl(UiConsole console) {
-		this.console = console;
+	public List<Company> getCompanyList() throws SQLException {
+		return CompanyDao.getInstance().getCompanyList();
 	}
 
-	@Override
-	public List<ComputerPreview> getComputersList() {
-		try 
-		{
-			return ComputerDao.getInstance().getComputersList();
-		} 
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
-			console.write(e);
-			return null;
-		}
+	public boolean companyExists(Long idCompany) throws SQLException {
+		return CompanyDao.getInstance().companyExists(idCompany);
 	}
-
-	@Override
-	public List<Company> getCompaniesList() {
-		try
-		{
-			return CompanyDao.getInstance().getCompanyList();
-		}
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-			console.write(e);
-		}
-		return null;
-	}
-
-	@Override
-	public Computer getComputerDetail(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Computer getComputerDetail(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public void createComputer(Computer newComputer) {
-		try {
-			Long id = ComputerDao.getInstance().createComputer(newComputer);
-			console.write("Success : generated id = " + id);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void updateComputer(Computer c) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void deleteComputer(Computer c) {
-		// TODO Auto-generated method stub
-	}
-
 
 }

@@ -6,16 +6,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.NoSuchElementException;
 
-import client.commands.ClientCommands;
-import service.CompanyService;
+import client.commands.ClientCommand;
+import service.Services;
 import ui.UiConsole;
 
 public class ClientLoop {
 
-	private CompanyService service;
+	private Services service;
 	private UiConsole ui;
 	
-	public ClientLoop(CompanyService service, UiConsole ui) {
+	public ClientLoop(Services service, UiConsole ui) {
 		this.service = service;
 		this.ui = ui;
 	}
@@ -36,17 +36,19 @@ public class ClientLoop {
 		}
 	}
 
-	private boolean handleInput(CompanyService service, UiConsole ui, String input) {
+	private boolean handleInput(Services service, UiConsole ui, String input) {
+		String key = null;
+		
 		try
 		{
-			Entry<String, ClientCommands> matchingCommand = CommandsCollection.getMatchingCommand(input);
+			Entry<String, ClientCommand> matchingCommand = CommandsCollection.getMatchingCommand(input);
 			if (matchingCommand == null)
 			{
 				throw new NoSuchElementException();
 			}
 			
-			String key = matchingCommand.getKey();
-			ClientCommands handler = matchingCommand.getValue();
+			key = matchingCommand.getKey();
+			ClientCommand handler = matchingCommand.getValue();
 			
 			return handler.runCommand(service, ui, splitArgs(key, input));
 		}
@@ -56,7 +58,8 @@ public class ClientLoop {
 		}
 		catch (Exception ex)
 		{
-			ui.write(String.format("The command \"%s\" failed (reason \"%s\")", input, ex.getMessage()));
+			ui.write(String.format("The command \"%s\" failed (reason \"%s\")", key, ex.getMessage()));
+			
 		}
 		return true;
 	}
@@ -69,8 +72,11 @@ public class ClientLoop {
 
         List<String> l = new ArrayList<>();
         while (m.find())
-        	l.add(m.group());
-        
+        {
+        	String s = m.group();
+			l.add(s.replaceAll("^\"|\"$", ""));
+        }
+        	
 		return l.toArray(new String[0]);
 	}
 }
