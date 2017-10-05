@@ -4,27 +4,26 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.CompanyModel;
-import model.ComputerModel;
-import model.ComputerModelPreview;
+import model.Company;
+import model.Computer;
+import model.ComputerPreview;
+import persistence.CompanyDao;
 import persistence.ComputerDao;
 import ui.UiConsole;
 
 public class CompanyHandlerService implements ICompanyHandlerService {
 
-	private ComputerDao dao;
 	private UiConsole console;
 
-	public CompanyHandlerService(ComputerDao dao, UiConsole console) {
-		this.dao = dao;
+	public CompanyHandlerService(UiConsole console) {
 		this.console = console;
 	}
 
 	@Override
-	public List<ComputerModelPreview> getComputersList() {
+	public List<ComputerPreview> getComputersList() {
 		try 
 		{
-			return dao.getComputersList();
+			return ComputerDao.getInstance().getComputersList();
 		} 
 		catch (SQLException e) 
 		{
@@ -35,10 +34,10 @@ public class CompanyHandlerService implements ICompanyHandlerService {
 	}
 
 	@Override
-	public List<CompanyModel> getCompaniesList() {
+	public List<Company> getCompaniesList() {
 		try
 		{
-			return dao.getCompaniesList();
+			return CompanyDao.getInstance().getCompanyList();
 		}
 		catch (SQLException e)
 		{
@@ -49,30 +48,35 @@ public class CompanyHandlerService implements ICompanyHandlerService {
 	}
 
 	@Override
-	public ComputerModel getComputerDetail(Long id) {
+	public Computer getComputerDetail(Long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ComputerModel getComputerDetail(String name) {
+	public Computer getComputerDetail(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
-	public Long createComputer(ComputerModel newComputer) {
-		return dao.createComputer(newComputer);
+	public void createComputer(Computer newComputer) {
+		try {
+			ComputerDao.getInstance().createComputer(newComputer);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
-	public void updateComputer(ComputerModel c) {
+	public void updateComputer(Computer c) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void deleteComputer(ComputerModel c) {
+	public void deleteComputer(Computer c) {
 		// TODO Auto-generated method stub
 	}
 

@@ -1,10 +1,11 @@
 package client.commands;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Pattern;
 
-import model.ComputerModel;
+import client.exceptions.ClientDataFormatException;
+import model.Computer;
 import service.ICompanyHandlerService;
 import ui.UiConsole;
 
@@ -16,19 +17,19 @@ public class ComputerCreationHandler implements IClientInputHandler {
 		String[] parameters = extractParameters(input);
 		if (parameters.length < 4)
 		{
-			throw new Exception("Missing parameter"); //@to see
+			throw new ClientDataFormatException("Missing parameter (name, introduced, discontinued, idCompany)"); //@to see
 		}
 		
-		SimpleDateFormat dateformat = new SimpleDateFormat("dd-mm-yyyy");
+		DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-YYYY");
 		
+		//TODO Dirty Validation
 		String name = parameters[0];
-		Date introduced = dateformat.parse(parameters[1]);
-		Date discontinued = parameters[2] == "null" ? null : dateformat.parse(parameters[3]);
-		long id_company = Long.parseLong(parameters[3]);
+		LocalDate introduced = LocalDate.parse(parameters[1], dateFormat);
+		LocalDate discontinued = parameters[2] == "null" ? null : LocalDate.parse(parameters[2], dateFormat);
+		Long idCompany = Long.parseLong(parameters[3]);
 		
-		ComputerModel model = new ComputerModel(name, introduced, discontinued, id_company);
+		Computer model = new Computer(name, introduced, discontinued, idCompany);
 		service.createComputer(model);
-		
 		return true;
 	}
 

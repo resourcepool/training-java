@@ -3,19 +3,20 @@ package mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
-import model.ComputerModelPreview;
+import model.ComputerPreview;
 
-public class ResultToComputersPreview {
+public class ResultToComputersPreview implements ResultMapper<List<ComputerPreview>>{
 
-	public static ArrayList<ComputerModelPreview> Process(ResultSet rs) throws SQLException {
-		ArrayList<ComputerModelPreview> list = new ArrayList<>();
+	public List<ComputerPreview> process(ResultSet rs) throws SQLException {
+		List<ComputerPreview> list = new ArrayList<>();
 		
 		while (rs.next())
 		{
 			String name = rs.getString("name");
-			long id = rs.getLong("id");
-			list.add(new ComputerModelPreview(id, name));
+			String id = rs.getString("id");
+			list.add(new ComputerPreview(id, name));
 		}
 		return list;
 	}

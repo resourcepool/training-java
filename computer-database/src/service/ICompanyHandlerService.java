@@ -2,23 +2,23 @@ package service;
 
 import java.util.List;
 
-import model.CompanyModel;
-import model.ComputerModel;
-import model.ComputerModelPreview;
+import model.Company;
+import model.Computer;
+import model.ComputerPreview;
 
 public interface ICompanyHandlerService {
 
-	List<ComputerModelPreview> getComputersList();
+	List<ComputerPreview> getComputersList();
 
-	List<CompanyModel> getCompaniesList();
+	List<Company> getCompaniesList();
 
-	ComputerModel getComputerDetail(Long id);
+	Computer getComputerDetail(Long id);
 	
-	ComputerModel getComputerDetail(String name);
+	Computer getComputerDetail(String name);
 	
-	Long createComputer(ComputerModel newComputer);
+	void createComputer(Computer newComputer);
 
-	void updateComputer(ComputerModel c);
+	void updateComputer(Computer c);
 
-	void deleteComputer(ComputerModel c);
+	void deleteComputer(Computer c);
 }

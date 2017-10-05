@@ -12,9 +12,7 @@ public class Program {
 		UiConsole ui = new UiConsole();
 		try
 		{
-			//CompanyDao companyDao = new CompanyDao(); //TODO
-			ComputerDao computerDao = new ComputerDao();
-			ICompanyHandlerService service = new CompanyHandlerService(computerDao, ui);
+			ICompanyHandlerService service = new CompanyHandlerService(ui);
 			ClientLoopHandler client = new ClientLoopHandler(service, ui);
 
 			client.runLoop();
