@@ -2,13 +2,13 @@ package client.commands;
 import java.util.List;
 
 import model.Company;
-import service.ICompanyHandlerService;
+import service.CompanyService;
 import ui.UiConsole;
 
-public class CompaniesListHandler implements IClientInputHandler {
+public class CompaniesListHandler implements ClientCommands {
 
 	@Override
-	public boolean runCommand(ICompanyHandlerService service, UiConsole ui, String input) {
+	public boolean runCommand(CompanyService service, UiConsole ui, String[] args) {
 		
 		List<Company> companiesList = service.getCompaniesList();
 		

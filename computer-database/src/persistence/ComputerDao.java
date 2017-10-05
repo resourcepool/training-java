@@ -3,7 +3,9 @@ package persistence;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import mapper.ResultToComputersPreview;
@@ -34,19 +36,23 @@ public class ComputerDao {
 				new ResultToComputersPreview());
 	}
 
-	public void createComputer(Computer newComputer) throws SQLException 
+	public Long createComputer(Computer newComputer) throws SQLException 
 	{
-		DaoConnection.executeQuery((Connection c) ->
+		return DaoConnection.executeQuery((Connection c) ->
 		{
-			PreparedStatement s = c.prepareStatement(INSERT_INTO_COMPUTER_VALUES);
+			PreparedStatement s = c.prepareStatement(INSERT_INTO_COMPUTER_VALUES, Statement.RETURN_GENERATED_KEYS);
 			
 			s.setString(1, newComputer.getName());
 			s.setDate(2, Date.valueOf(newComputer.getIntroduced()));
 			s.setDate(3, Date.valueOf(newComputer.getDiscontinued()));
 			s.setLong(4, newComputer.getCompanyId());
 			
-			s.execute();
-			return true;		
+			s.executeUpdate();
+			ResultSet keys = s.getGeneratedKeys();
+			Long id = keys.next() ? keys.getLong(1) : null;
+			
+			s.close();
+			return id;		
 		});
 	}
 }

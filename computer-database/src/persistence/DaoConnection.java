@@ -22,8 +22,11 @@ public class DaoConnection {
 	{
 		return executeQuery((Connection c) -> {
 			 Statement s = c.createStatement();
-			 ResultSet set = s.executeQuery(sql);
-			 return m.process(set);
+			 ResultSet r = s.executeQuery(sql);
+			 T result = m.process(r);
+			 r.close();
+			 s.close();
+			return result;
 		});
 	}
 	

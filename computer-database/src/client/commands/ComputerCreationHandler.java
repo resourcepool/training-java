@@ -6,40 +6,32 @@ import java.util.regex.Pattern;
 
 import client.exceptions.ClientDataFormatException;
 import model.Computer;
-import service.ICompanyHandlerService;
+import service.CompanyService;
 import ui.UiConsole;
 
-public class ComputerCreationHandler implements IClientInputHandler {
+public class ComputerCreationHandler implements ClientCommands {
 
 	@Override
-	public boolean runCommand(ICompanyHandlerService service, UiConsole ui, String input) throws Exception {
+	public boolean runCommand(CompanyService service, UiConsole ui, String[] args) throws Exception {
 		
-		String[] parameters = extractParameters(input);
-		if (parameters.length < 4)
+		if (args.length < 5)
 		{
 			throw new ClientDataFormatException("Missing parameter (name, introduced, discontinued, idCompany)"); //@to see
 		}
 		
 		DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-YYYY");
 		
-		//TODO Dirty Validation
-		String name = parameters[0];
-		LocalDate introduced = LocalDate.parse(parameters[1], dateFormat);
-		LocalDate discontinued = parameters[2] == "null" ? null : LocalDate.parse(parameters[2], dateFormat);
-		Long idCompany = Long.parseLong(parameters[3]);
+		//TODO Dirty Validation, to clean
+		String name = args[1];
+		LocalDate introduced = LocalDate.parse(args[1], dateFormat);
+		LocalDate discontinued = args[2] == "null" ? null : LocalDate.parse(args[2], dateFormat);
+		Long idCompany = Long.parseLong(args[3]);
 		
 		Computer model = new Computer(name, introduced, discontinued, idCompany);
 		service.createComputer(model);
 		return true;
 	}
 
-	private String[] extractParameters(String input) {
-		
-		String parameters = input.replace(getCommand(), "").trim();
-		
-		Pattern pattern = Pattern.compile("(\"[^\"]+\")|\\S+");
-        return pattern.split(parameters);
-	}
 
 	public String getCommand() {
 		return "create new computer";

@@ -6,7 +6,7 @@ import model.Company;
 import model.Computer;
 import model.ComputerPreview;
 
-public interface ICompanyHandlerService {
+public interface CompanyService {
 
 	List<ComputerPreview> getComputersList();
 

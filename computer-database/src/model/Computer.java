@@ -10,7 +10,7 @@ public class Computer {
 	private String name;
 	private LocalDate introduced;
 	private LocalDate discontinued;
-	private Long company_id;
+	private Long companyId;
 	
 	public Computer(String name, LocalDate introduced, LocalDate discontinued, Long company_id)
 	{
@@ -23,13 +23,13 @@ public class Computer {
 		this.name = name;
 		this.introduced = introduced;
 		this.discontinued = discontinued;
-		this.company_id = company_id;
+		this.companyId = company_id;
 	}
 	
 	@Override
 	public String toString() {
 		return "id=" + id + ", name=\"" + name + "\", introduced=" + introduced + ", discontinued="
-				+ discontinued + ", company_id=" + company_id ;
+				+ discontinued + ", company_id=" + companyId ;
 	}
 
 	public String getName() {
@@ -57,11 +57,11 @@ public class Computer {
 	}
 
 	public Long getCompanyId() {
-		return company_id;
+		return companyId;
 	}
 
 	public void setCompanyId(Long company_id) {
-		this.company_id = company_id;
+		this.companyId = company_id;
 	}
 }
 

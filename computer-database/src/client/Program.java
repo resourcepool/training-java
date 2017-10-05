@@ -1,8 +1,8 @@
 package client;
 import persistence.ComputerDao;
 import persistence.exceptions.DaoException;
-import service.CompanyHandlerService;
-import service.ICompanyHandlerService;
+import service.CompanyServiceImpl;
+import service.CompanyService;
 import ui.UiConsole;
 
 public class Program {
@@ -12,8 +12,8 @@ public class Program {
 		UiConsole ui = new UiConsole();
 		try
 		{
-			ICompanyHandlerService service = new CompanyHandlerService(ui);
-			ClientLoopHandler client = new ClientLoopHandler(service, ui);
+			CompanyService service = new CompanyServiceImpl(ui);
+			ClientLoop client = new ClientLoop(service, ui);
 
 			client.runLoop();
 		} 

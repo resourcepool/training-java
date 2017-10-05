@@ -11,11 +11,11 @@ import persistence.CompanyDao;
 import persistence.ComputerDao;
 import ui.UiConsole;
 
-public class CompanyHandlerService implements ICompanyHandlerService {
+public class CompanyServiceImpl implements CompanyService {
 
 	private UiConsole console;
 
-	public CompanyHandlerService(UiConsole console) {
+	public CompanyServiceImpl(UiConsole console) {
 		this.console = console;
 	}
 
@@ -62,7 +62,8 @@ public class CompanyHandlerService implements ICompanyHandlerService {
 	@Override
 	public void createComputer(Computer newComputer) {
 		try {
-			ComputerDao.getInstance().createComputer(newComputer);
+			Long id = ComputerDao.getInstance().createComputer(newComputer);
+			console.write("Success : generated id = " + id);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
