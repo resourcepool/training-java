@@ -31,15 +31,17 @@ public class CommandsCollection {
 		ComputerCreationHandler computerCreationHandler = new ComputerCreationHandler();
 		ExitHandler exitHandler = new ExitHandler();
 		HelpHandler helpHandler = new HelpHandler();
-		ComputerDetailsHandler detailHanlder = new ComputerDetailsHandler();
+		ComputerDetailsHandler detailHandler = new ComputerDetailsHandler();
 		ComputerUpdateHandler updateHandler = new ComputerUpdateHandler();
 		ComputerDeleteHandler deleteHandler = new ComputerDeleteHandler();
 		
 		commands.put("list computers", computerListHandler);
+		commands.put("computers", computerListHandler);
 		commands.put("list companies", companiesListHandler);
-		commands.put("computer details", detailHanlder);
-		commands.put("get computer details", detailHanlder);
-		commands.put("get details", detailHanlder);
+		commands.put("companies", companiesListHandler);
+		commands.put("computer details", detailHandler);
+		commands.put("get computer details", detailHandler);
+		commands.put("get details", detailHandler);
 		
 		commands.put("create computer", computerCreationHandler);
 		commands.put("create new computer", computerCreationHandler);
@@ -51,27 +53,6 @@ public class CommandsCollection {
 		commands.put("quit", exitHandler);
 		commands.put("bye", exitHandler);
 		commands.put("help", helpHandler);
-		
-		ClientCommand testCmd = new ClientCommand() {
-			@Override
-			public boolean runCommand(Services service, UiConsole ui, String[] args) {
-				ui.write("test anonymous type");
-				for (String s : args) {
-					ui.write(s);
-				}
-				return true;
-			}
-		};
-		commands.put("testing multiple args", testCmd);
-		commands.put("test multiple args", testCmd);
-		commands.put("test multiple", testCmd);
-		commands.put("test", testCmd);
-		commands.put("test lambda", 
-			(Services service, UiConsole ui, String[] args) -> {
-				ui.write("test lambda");
-				return true;
-			}
-		);
 		
 		return commands;
 	}

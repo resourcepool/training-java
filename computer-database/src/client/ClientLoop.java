@@ -12,7 +12,8 @@ import java.util.NoSuchElementException;
 
 import client.commands.ClientCommand;
 import client.exceptions.ClientDataFormatException;
-import persistence.DbProperties;
+import client.exceptions.CommandsNotExistsException;
+import persistence.exceptions.DaoException;
 import service.Services;
 import ui.UiConsole;
 
@@ -51,7 +52,7 @@ public class ClientLoop {
 			Entry<String, ClientCommand> matchingCommand = CommandsCollection.getMatchingCommand(input);
 			if (matchingCommand == null)
 			{
-				throw new NoSuchElementException();
+				throw new CommandsNotExistsException();
 			}
 			
 			key = matchingCommand.getKey();
@@ -59,9 +60,14 @@ public class ClientLoop {
 			
 			return handler.runCommand(service, ui, splitArgs(key, input));
 		}
-		catch (NoSuchElementException ex)
+		catch (CommandsNotExistsException ex)
 		{
 			ui.write(String.format("Command not found : \"%s\"", input));
+		}
+		catch (DaoException ex)
+		{
+			ui.write(ex.getMessage());
+			logger.error(ex.getMessage() + System.lineSeparator() + ex.getStackTrace());
 		}
 		catch (ClientDataFormatException ex)
 		{
@@ -70,9 +76,10 @@ public class ClientLoop {
 		catch (Exception ex)
 		{
 			logger.error(ex.getMessage() + System.lineSeparator() + ex.getStackTrace());
-			ui.write(String.format("The command \"%s\" failed (reason \"%s\")", key, ex.getMessage()));
+			ui.write(String.format("Unexpected error, \"%s\" failed (reason \"%s\")", key, ex.getMessage()));
 			ui.write(ex.getStackTrace());
 		}
+
 		return true;
 	}
 	
@@ -82,13 +89,13 @@ public class ClientLoop {
 		Pattern pattern = Pattern.compile(patternString);
         Matcher m = pattern.matcher(input);
 
-        List<String> l = new ArrayList<>();
+        List<String> list = new ArrayList<>();
         while (m.find())
         {
         	String s = m.group();
-			l.add(s.replaceAll("^\"|\"$|^'|'$", ""));
+			list.add(s.replaceAll("^\"|\"$|^'|'$", ""));
         }
         	
-		return l.toArray(new String[0]);
+		return list.toArray(new String[0]);
 	}
 }

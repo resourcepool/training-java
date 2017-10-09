@@ -3,6 +3,7 @@ package client.commands;
 import java.sql.SQLException;
 import java.util.List;
 
+import client.tools.Page;
 import model.ComputerPreview;
 import service.Services;
 import ui.UiConsole;
@@ -15,11 +16,7 @@ public class ComputerListHandler implements ClientCommand {
 		List<ComputerPreview> computerList;
 		try {
 			computerList = service.getComputerService().getComputersList();
-
-			ui.write("Id, Name");
-			for (ComputerPreview c : computerList) {
-				ui.write(c);
-			}
+			new Page<ComputerPreview>(ui, computerList).paginate(10);
 		} catch (SQLException e) {
 			ui.write(e);
 		}

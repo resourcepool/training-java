@@ -32,6 +32,11 @@ public class UiConsole {
 	public String getInput()
 	{
 		System.out.println("> Read input (press enter) : ");
+		return getLine();
+	}
+	
+	public String getLine()
+	{
 		return scanner.nextLine();
 	}
 
@@ -65,6 +70,11 @@ public class UiConsole {
 		}
 		scanner.close();
 		scanner = null;
+	}
+
+	public void clean() {
+		while (scanner.hasNext())
+			scanner.next();
 	}
 
 }

@@ -1,7 +1,7 @@
 package client.commands;
 
 import client.exceptions.CompanyDontExistException;
-import mapper.ArgsToComputer;
+import client.tools.ArgsToComputer;
 import model.Computer;
 import service.Services;
 import ui.UiConsole;

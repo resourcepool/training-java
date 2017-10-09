@@ -1,6 +1,7 @@
 package client.commands;
 
 import client.exceptions.ClientDataFormatException;
+import client.tools.ConsoleConfirm;
 import model.Computer;
 import service.ComputerServiceImpl;
 import service.Services;
@@ -25,30 +26,17 @@ public class ComputerDeleteHandler implements ClientCommand {
 			throw new ClientDataFormatException("No computer possess this Id");
 		}
 		
-		Boolean valid = false;
-		while (!valid)
+		if (!ConsoleConfirm.loop(ui, "> Are you sure you want to delete this entry ? (y/N)" +
+				System.lineSeparator() + c.toString(), false))
 		{
-			ui.write("> Are you sure you want to delete this entry ? (y/N)");
-			ui.write(c);
-			String choice = ui.getInput().trim().toLowerCase();
-			if (choice.equals("") || choice.equals("n"))
-			{
-				ui.write("Canceled");
-				return true;
-			}
-			else if (choice.equals("y"))
-			{
-				valid = true;
-			}
-			else
-			{
-				ui.write("> Please choose a valid answer Y or N");	
-			}	
+			ui.write("Canceled");
+			return true;
 		}
 		
 		computerService.deleteComputer(id);
-		ui.write(String.format("Computer %d (\"%s\") has been deleted", 
-				id, c.getName()));
+		ui.write(String.format("Computer %d (\"%s\") has been deleted", id, c.getName()));
 		return true;
 	}
+
+	
 }

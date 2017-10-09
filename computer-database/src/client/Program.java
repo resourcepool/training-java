@@ -7,7 +7,7 @@ public class Program {
 	public static void main(String[] args)  
 	{
 		UiConsole ui = new UiConsole();
-		ui.write("Welcome");
+		ui.write("Welcome, press \"help\" to see available commands");
 		
 		try
 		{

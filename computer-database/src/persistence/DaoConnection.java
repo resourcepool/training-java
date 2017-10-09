@@ -17,7 +17,7 @@ public class DaoConnection {
 	private static final String port = DbProperties.getConfig("port");
 	private static final String hostAddress = DbProperties.getConfig("hostAddress");
 	 
-	private static final String url = String.format("jdbc:mysql://%s:%s/%s", hostAddress, port, database);;
+	private static final String url = String.format("jdbc:mysql://%s:%s/%s?autoReconnect=true&useSSL=false", hostAddress, port, database);;
 	private static final String password = DbProperties.getConfig("dbpassword");;
 	private static final String user = DbProperties.getConfig("dbuser");
 	
@@ -39,19 +39,12 @@ public class DaoConnection {
 	{
 		Connection conn = null;
 		
-		try 
-		{
+		try {
 		    conn = DriverManager.getConnection( url, user, password );
 		    return q.execute(conn);		    
+		} catch (SQLException e) {
+			throw new DaoException(e);
 		}
-		catch ( DaoException e )
-		{
-			throw e;
-		}
-		catch ( SQLException e ) 
-		{
-		    throw e;
-		} 
 		finally 
 		{
 		    if ( conn != null )
