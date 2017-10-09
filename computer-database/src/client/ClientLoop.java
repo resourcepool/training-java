@@ -64,6 +64,7 @@ public class ClientLoop {
 		catch (Exception ex)
 		{
 			ui.write(String.format("The command \"%s\" failed (reason \"%s\")", key, ex.getMessage()));
+			ui.write(ex.getStackTrace());
 		}
 		return true;
 	}

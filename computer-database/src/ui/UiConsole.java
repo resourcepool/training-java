@@ -31,7 +31,7 @@ public class UiConsole {
 	
 	public String getInput()
 	{
-		System.out.println("Read input (press enter) : ");
+		System.out.println("> Read input (press enter) : ");
 		return scanner.nextLine();
 	}
 

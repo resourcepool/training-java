@@ -20,11 +20,15 @@ public class ComputerDeleteHandler implements ClientCommand {
 		
 		ComputerServiceImpl computerService = service.getComputerService();
 		Computer c = computerService.getComputerDetail(id);
+		if (c == null)
+		{
+			throw new ClientDataFormatException("No computer possess this Id");
+		}
 		
 		Boolean valid = false;
 		while (!valid)
 		{
-			ui.write("Are you sure you want to delete this entry ? (y/N)");
+			ui.write("> Are you sure you want to delete this entry ? (y/N)");
 			ui.write(c);
 			String choice = ui.getInput().trim().toLowerCase();
 			if (choice.equals("") || choice.equals("n"))
@@ -38,7 +42,7 @@ public class ComputerDeleteHandler implements ClientCommand {
 			}
 			else
 			{
-				ui.write("Please choose a valid answer Y or N");	
+				ui.write("> Please choose a valid answer Y or N");	
 			}	
 		}
 		

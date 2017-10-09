@@ -13,7 +13,7 @@ public class HelpHandler implements ClientCommand {
 		Set<String> names = CommandsCollection.getCommands().keySet();
 		
 		for (String name : names) {
-			ui.write(String.format("> %s", name));
+			ui.write(name);
 		}
 		return true;
 	}

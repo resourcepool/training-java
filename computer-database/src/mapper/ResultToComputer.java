@@ -32,7 +32,10 @@ public class ResultToComputer implements ResultMapper<List<ComputerPreview>>{
 
 	public Computer MapComputer(ResultSet rs) throws SQLException {
 		
-		rs.next();
+		if (!rs.next())
+		{
+			return null;
+		}
 		
 		Long id = rs.getLong(ID_FIELD);
 		String name = rs.getString(NAME_FIELD);
@@ -43,5 +46,4 @@ public class ResultToComputer implements ResultMapper<List<ComputerPreview>>{
 		
 		return new Computer(id, name, introduced, discontinued, idCompany);
 	}
-
 }
