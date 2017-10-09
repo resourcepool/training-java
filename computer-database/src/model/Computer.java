@@ -1,8 +1,5 @@
 package model;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 
 public class Computer {
 	
@@ -62,6 +59,10 @@ public class Computer {
 
 	public void setCompanyId(Long company_id) {
 		this.companyId = company_id;
+	}
+
+	public Long getId() {
+		return id;
 	}
 }
 

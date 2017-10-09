@@ -53,8 +53,8 @@ public class DaoConnection {
 		    {
 		    	try {
 		            conn.close();
-		        } catch (SQLException ignore ) { 
-		        	//TODO log
+		        } catch (SQLException e ) { 
+		        	//TODO logs
 		        }
 		    }
 		}

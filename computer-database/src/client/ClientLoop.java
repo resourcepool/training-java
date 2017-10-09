@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import java.util.NoSuchElementException;
 
 import client.commands.ClientCommand;
+import client.exceptions.ClientDataFormatException;
 import service.Services;
 import ui.UiConsole;
 
@@ -56,10 +57,13 @@ public class ClientLoop {
 		{
 			ui.write(String.format("Command not found : \"%s\"", input));
 		}
+		catch (ClientDataFormatException ex)
+		{
+			ui.write(ex.getMessage());
+		}
 		catch (Exception ex)
 		{
 			ui.write(String.format("The command \"%s\" failed (reason \"%s\")", key, ex.getMessage()));
-			
 		}
 		return true;
 	}
@@ -74,7 +78,7 @@ public class ClientLoop {
         while (m.find())
         {
         	String s = m.group();
-			l.add(s.replaceAll("^\"|\"$", ""));
+			l.add(s.replaceAll("^\"|\"$|^'|'$", ""));
         }
         	
 		return l.toArray(new String[0]);

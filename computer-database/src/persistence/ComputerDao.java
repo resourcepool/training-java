@@ -14,13 +14,14 @@ import model.ComputerPreview;
 
 public class ComputerDao {
 	
-	private static final String SELECT_COMPUTER_WHERE_ID = "select * from computer where id = ?";
+	private static final String ID_FILTER = "id = ?";
+	private static final String NAME_FILTER = "name = \"?\"";
+	private static final String SELECT_COMPUTER_WHERE = "select * from computer where ";
 	private static final String SELECT_ID_NAME_FROM_COMPUTER = "select id, name from computer";
 	private static final String INSERT_INTO_COMPUTER_VALUES = "insert into computer values (null, ?, ?, ?, ?)";
+	
 	private static ComputerDao INSTANCE;
-	
 	private ComputerDao() { }
-	
 	public static ComputerDao getInstance()
 	{
 		if (INSTANCE == null)
@@ -37,22 +38,6 @@ public class ComputerDao {
 				new ResultToComputer());
 	}
 	
-	public Computer getComputerDetail(Long id) throws SQLException 
-	{
-		return DaoConnection.executeQuery((Connection conn) -> 
-		{
-			PreparedStatement s = conn.prepareStatement(SELECT_COMPUTER_WHERE_ID);
-			s.setLong(1, id);
-			
-			ResultSet r = s.executeQuery();
-			Computer c = new ResultToComputer().MapComputer(r);
-			
-			s.close();
-			return c;
-		});
-			
-	}
-
 	public Long createComputer(Computer newComputer) throws SQLException 
 	{
 		return DaoConnection.executeQuery((Connection c) ->
@@ -73,8 +58,48 @@ public class ComputerDao {
 		});
 	}
 
-	public Computer getComputerDetail(String name) {
-		// TODO Auto-generated method stub
-		return null;
+	public Computer getComputerDetail(String name) throws SQLException {
+		return getComputerDetail(NAME_FILTER, name);
+	}
+	
+	public Computer getComputerDetail(Long id) throws SQLException 
+	{
+		return getComputerDetail(ID_FILTER, id.toString());
+	}
+
+	private Computer getComputerDetail(String queryFilter, String param) throws SQLException {
+		return DaoConnection.executeQuery((Connection conn) -> 
+		{
+			PreparedStatement s = conn.prepareStatement(SELECT_COMPUTER_WHERE + queryFilter);
+			s.setString(1, param);
+			ResultSet r = s.executeQuery();
+			
+			Computer c = new ResultToComputer().MapComputer(r);
+			
+			s.close();
+			return c;
+		});
+	}
+	
+	public void updateComputer(Computer c) throws SQLException {
+		DaoConnection.executeQuery((Connection conn) -> 
+		{
+			PreparedStatement s = conn.prepareStatement("update computer set name = ?, introduced = ? discontinued = ?, company_id = ?");
+			s.setString(1, c.getName());
+			s.setDate(2, Date.valueOf(c.getIntroduced()));
+			s.setDate(3, c.getDiscontinued() == null ? null : Date.valueOf(c.getDiscontinued()));
+			s.setLong(4, c.getCompanyId());
+			s.executeUpdate();
+			
+			return true;
+		});
+	}
+	public void deleteComputer(Long id) throws SQLException {
+		DaoConnection.executeQuery((Connection conn) -> 
+		{
+			Statement s = conn.createStatement();
+			return s.execute("delete from computer where id = " + id);
+		});
+		
 	}
 }

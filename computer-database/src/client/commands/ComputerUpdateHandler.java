@@ -6,11 +6,11 @@ import model.Computer;
 import service.Services;
 import ui.UiConsole;
 
-public class ComputerCreationHandler implements ClientCommand {
+public class ComputerUpdateHandler implements ClientCommand {
 
+	
 	@Override
 	public boolean runCommand(Services service, UiConsole ui, String[] args) throws Exception {
-		
 		Computer model = new ArgsToComputer().createComputerFromArgs(args);
 		
 		Long idCompany = model.getCompanyId();
@@ -19,10 +19,10 @@ public class ComputerCreationHandler implements ClientCommand {
 			throw new CompanyDontExistException(idCompany);
 		} 
 		
-		Long id = service.getComputerService().createComputer(model);
-		ui.write(String.format("Computer \"%s\" has been created (id: %d)", 
-				model.getName(), id));
+		service.getComputerService().updateComputer(model);
 		
+		ui.write(String.format("Computer \"%s\" has been updated (id: %d)", 
+			model.getName(), model.getId()));
 		return true;
 	}
 }

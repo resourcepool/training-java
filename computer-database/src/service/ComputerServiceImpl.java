@@ -25,13 +25,12 @@ public class ComputerServiceImpl {
 		return ComputerDao.getInstance().createComputer(newComputer);
 	}
 
-	public void updateComputer(Computer c) {
-		// TODO Auto-generated method stub
-
+	public void updateComputer(Computer c) throws SQLException {
+		ComputerDao.getInstance().updateComputer(c);
 	}
 
-	public void deleteComputer(Computer c) {
-		// TODO Auto-generated method stub
+	public void deleteComputer(Long id) throws SQLException {
+		ComputerDao.getInstance().deleteComputer(id);
 	}
 
 }

@@ -1,15 +1,10 @@
 package service;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import model.Company;
-import model.Computer;
-import model.ComputerPreview;
 import persistence.CompanyDao;
-import persistence.ComputerDao;
-import ui.UiConsole;
 
 public class CompanyServiceImpl {
 

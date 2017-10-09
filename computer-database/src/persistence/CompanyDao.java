@@ -7,9 +7,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import mapper.ResultToCompany;
-import mapper.ResultToComputer;
 import model.Company;
-import model.Computer;
 
 public class CompanyDao {
 	private static final String SELECT_ID_NAME_FROM_COMPANY = "select id, name from company";
