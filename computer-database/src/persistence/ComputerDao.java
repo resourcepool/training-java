@@ -1,103 +1,104 @@
 package persistence;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
-import mapper.ResultToCompanyModels;
-import mapper.ResultToComputersPreview;
-import model.CompanyModel;
-import model.ComputerModel;
-import model.ComputerModelPreview;
-import persistence.exceptions.DaoException;
+import mapper.ResultToComputer;
+import model.Computer;
+import model.ComputerPreview;
 
 public class ComputerDao {
 	
-	private String url;
-	private String password;
-	private String user;
+	private static final String ID_FILTER = "id = ?";
+	private static final String NAME_FILTER = "name = \"?\"";
+	private static final String SELECT_COMPUTER_WHERE = "select * from computer where ";
+	private static final String SELECT_ID_NAME_FROM_COMPUTER = "select id, name from computer";
+	private static final String INSERT_INTO_COMPUTER_VALUES = "insert into computer values (null, ?, ?, ?, ?)";
 	
-	//TODO Singleton DAO x2
-	public ComputerDao() throws DaoException {
-		String database = DbProperties.getConfig("database");
-		String port = DbProperties.getConfig("port");
-		String hostAddress = DbProperties.getConfig("hostAddress");
-		
-		url = String.format("jdbc:mysql://%s:%s/%s", hostAddress, port, database);
-		password = DbProperties.getConfig("dbpassword");
-		user = DbProperties.getConfig("dbuser");
-	}
-	
-	public <T> T executeQuery(QueryCommands<T> p) throws SQLException
+	private static ComputerDao INSTANCE;
+	private ComputerDao() { }
+	public static ComputerDao getInstance()
 	{
-		Connection conn = null;
-		
-		try 
+		if (INSTANCE == null)
 		{
-		    conn = DriverManager.getConnection( url, user, password );
-		    Statement query = conn.createStatement();
-			return p.execute(query);		    
-		} 
-		catch ( SQLException e ) 
-		{
-		    throw e;
-		} 
-		finally 
-		{
-		    if ( conn != null )
-		    {
-		    	try {
-		            conn.close();
-		        } catch (SQLException ignore ) { }
-		    }
+			INSTANCE = new ComputerDao();
 		}
+		return INSTANCE;
 	}
 	
-	public List<ComputerModelPreview> getComputersList() throws SQLException 
+	public List<ComputerPreview> getComputersList() throws SQLException 
 	{
-		List<ComputerModelPreview> result = executeQuery(
-			new QueryCommands<List<ComputerModelPreview>>() 
-			{
-				@Override
-				public List<ComputerModelPreview> execute(Statement s) throws SQLException {
-					ResultSet set = s.executeQuery("select id, name from computer");
-					return ResultToComputersPreview.Process(set);				
-				}
-			});
-		return result;
+		return DaoConnection.executeSelectQuery(
+				SELECT_ID_NAME_FROM_COMPUTER, 
+				new ResultToComputer());
+	}
+	
+	public Long createComputer(Computer newComputer) throws SQLException 
+	{
+		return DaoConnection.executeQuery((Connection c) ->
+		{
+			PreparedStatement s = c.prepareStatement(INSERT_INTO_COMPUTER_VALUES, Statement.RETURN_GENERATED_KEYS);
+			
+			s.setString(1, newComputer.getName());
+			s.setDate(2, Date.valueOf(newComputer.getIntroduced()));
+			s.setDate(3, newComputer.getDiscontinued() == null ? null : Date.valueOf(newComputer.getDiscontinued()));
+			s.setLong(4, newComputer.getCompanyId());
+
+			s.executeUpdate();
+			ResultSet keys = s.getGeneratedKeys();
+			Long id = keys.next() ? keys.getLong(1) : null;
+			
+			s.close();
+			return id;		
+		});
 	}
 
-	public List<CompanyModel> getCompaniesList() throws SQLException 
+	public Computer getComputerDetail(String name) throws SQLException {
+		return getComputerDetail(NAME_FILTER, name);
+	}
+	
+	public Computer getComputerDetail(Long id) throws SQLException 
 	{
-		List<CompanyModel> result = executeQuery(
-			new QueryCommands<List<CompanyModel>>() 
-			{
-				@Override
-				public List<CompanyModel> execute(Statement s) throws SQLException {
-					ResultSet set = s.executeQuery("select id, name from company");
-					return ResultToCompanyModels.Process(set);				
-				}
-			});
-		return result;
+		return getComputerDetail(ID_FILTER, id.toString());
 	}
 
-	public long createComputer(ComputerModel newComputer) 
-	{
-//		boolean result = executeQuery(
-//				new QueryCommands<boolean>() 
-//				{
-//					@Override
-//					public boolean execute(Statement s) throws SQLException {
-//						s.
-//						s.executeQuery()
-//						ResultSet set = s.executeQuery("select id, name from computer");
-//						return ResultToComputersPreview.Process(set);				
-//					}
-//				});
-		return 1l; //TODO
+	private Computer getComputerDetail(String queryFilter, String param) throws SQLException {
+		return DaoConnection.executeQuery((Connection conn) -> 
+		{
+			PreparedStatement s = conn.prepareStatement(SELECT_COMPUTER_WHERE + queryFilter);
+			s.setString(1, param);
+			ResultSet r = s.executeQuery();
+			
+			Computer c = new ResultToComputer().MapComputer(r);
+			
+			s.close();
+			return c;
+		});
+	}
+	
+	public void updateComputer(Computer c) throws SQLException {
+		DaoConnection.executeQuery((Connection conn) -> 
+		{
+			PreparedStatement s = conn.prepareStatement("update computer set name = ?, introduced = ? discontinued = ?, company_id = ?");
+			s.setString(1, c.getName());
+			s.setDate(2, Date.valueOf(c.getIntroduced()));
+			s.setDate(3, c.getDiscontinued() == null ? null : Date.valueOf(c.getDiscontinued()));
+			s.setLong(4, c.getCompanyId());
+			s.executeUpdate();
+			
+			return true;
+		});
+	}
+	public void deleteComputer(Long id) throws SQLException {
+		DaoConnection.executeQuery((Connection conn) -> 
+		{
+			Statement s = conn.createStatement();
+			return s.execute("delete from computer where id = " + id);
+		});
 	}
 }

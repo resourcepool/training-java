@@ -1,37 +1,36 @@
 package model;
 
-public class ComputerModelPreview {
+public class Company {
 	private Long id;
 	private String name;
 	
-	public ComputerModelPreview(String name) {
+	public Company(String name) {
 		this.name = name;
 	}
-	
-	public ComputerModelPreview(Long id, String name) {
+
+	public Company(long id, String name) {
 		this.id = id;
 		this.name = name;
 	}
-	
+
 	public long getId() {
 		return id;
 	}
-	
-	public void setId(Long id) {
+
+	public void setId(long id) {
 		this.id = id;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
 
 	@Override
 	public String toString() {
-		return "ComputerModelPreview [id=" + id + ", name=" + name + "]";
+		return "CompanyModel [id=" + id + ", name=" + name + "]";
 	}
-
 }

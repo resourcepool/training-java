@@ -1,11 +1,11 @@
 package client.commands;
-import service.ICompanyHandlerService;
+import service.Services;
 import ui.UiConsole;
 
-public class ExitHandler implements IClientInputHandler {
+public class ExitHandler implements ClientCommand {
 
 	@Override
-	public boolean runCommand(ICompanyHandlerService service, UiConsole ui, String input) {
+	public boolean runCommand(Services service, UiConsole ui, String[] args) {
 		
 		ui.write("ok bye");
 		return false;

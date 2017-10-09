@@ -1,8 +1,5 @@
 package client;
-import persistence.ComputerDao;
-import persistence.exceptions.DaoException;
-import service.CompanyHandlerService;
-import service.ICompanyHandlerService;
+import service.Services;
 import ui.UiConsole;
 
 public class Program {
@@ -10,12 +7,12 @@ public class Program {
 	public static void main(String[] args)  
 	{
 		UiConsole ui = new UiConsole();
+		ui.write("Welcome, press \"help\" to see available commands");
+		
 		try
 		{
-			//CompanyDao companyDao = new CompanyDao(); //TODO
-			ComputerDao computerDao = new ComputerDao();
-			ICompanyHandlerService service = new CompanyHandlerService(computerDao, ui);
-			ClientLoopHandler client = new ClientLoopHandler(service, ui);
+			Services service = new Services();
+			ClientLoop client = new ClientLoop(service, ui);
 
 			client.runLoop();
 		} 

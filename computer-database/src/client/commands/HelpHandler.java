@@ -2,18 +2,18 @@ package client.commands;
 import java.util.Set;
 
 import client.CommandsCollection;
-import service.ICompanyHandlerService;
+import service.Services;
 import ui.UiConsole;
 
-public class HelpHandler implements IClientInputHandler {
+public class HelpHandler implements ClientCommand {
 
 	@Override
-	public boolean runCommand(ICompanyHandlerService service, UiConsole ui, String input) {
+	public boolean runCommand(Services service, UiConsole ui, String[] args) {
 		
 		Set<String> names = CommandsCollection.getCommands().keySet();
 		
 		for (String name : names) {
-			ui.write(String.format("> %s", name));
+			ui.write(name);
 		}
 		return true;
 	}
