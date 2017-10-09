@@ -2,9 +2,9 @@ package ui;
 
 import java.util.Scanner;
 
-import model.CompanyModel;
-import model.ComputerModel;
-import model.ComputerModelPreview;
+import model.Company;
+import model.Computer;
+import model.ComputerPreview;
 
 public class UiConsole {
 				
@@ -19,30 +19,47 @@ public class UiConsole {
 		System.out.println(msg);
 	}
 	
-	public void write(ComputerModel c)
+	public void write(Computer c)
 	{
 		System.out.println(c.toString());
 	}
 	
-	public void write(CompanyModel m)
+	public void write(Company m)
 	{
 		System.out.println(m.toString());
 	}
 	
 	public String getInput()
 	{
-		System.out.println("Read input (press enter) : ");
+		System.out.println("> Read input (press enter) : ");
+		return getLine();
+	}
+	
+	public String getLine()
+	{
 		return scanner.nextLine();
 	}
 
-	public void write(ComputerModelPreview c) {
+	public void write(ComputerPreview c) {
 		System.out.println(c.toString());
 	}
 	
 	public void write(Exception e)
 	{
 		System.out.println(e.getMessage());
-		System.out.println(e.getStackTrace());
+		write(e.getStackTrace());
+	}
+	
+	public void writeFatal(Exception e) {
+		System.out.println("Critical Error, the program will stop : " + e.getMessage());
+		write(e.getStackTrace());
+	}
+	
+	public void write(StackTraceElement[] st)
+	{
+		for (StackTraceElement elem : st) {
+			System.out.println(elem.toString());
+		}
 	}
 
 	public void destroy() 
@@ -54,4 +71,10 @@ public class UiConsole {
 		scanner.close();
 		scanner = null;
 	}
+
+	public void clean() {
+		while (scanner.hasNext())
+			scanner.next();
+	}
+
 }

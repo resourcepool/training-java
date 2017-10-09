@@ -1,24 +1,25 @@
 package client;
-import persistence.ComputersDao;
-import service.CompanyHandlerService;
-import service.CompanyHandlerServiceDummy;
-import service.ICompanyHandlerService;
+import service.Services;
 import ui.UiConsole;
 
-@SuppressWarnings("unused")
 public class Program {
 	
-	
-	public static void main(String[] args) throws Exception {
-		ComputersDao dao = new ComputersDao();
+	public static void main(String[] args)  
+	{
 		UiConsole ui = new UiConsole();
-		ICompanyHandlerService service = new CompanyHandlerService(dao, ui);
-
-//		ICompanyHandlerService service = new CompanyHandlerServiceDummy();
-
-		ClientLoopHandler client = new ClientLoopHandler(service, ui);
-		client.runLoop();
+		ui.write("Welcome, press \"help\" to see available commands");
 		
+		try
+		{
+			Services service = new Services();
+			ClientLoop client = new ClientLoop(service, ui);
+
+			client.runLoop();
+		} 
+		catch (Exception e)
+		{
+			ui.writeFatal(e);
+		}
 		ui.destroy();
 	}
 	
