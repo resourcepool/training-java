@@ -4,15 +4,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class DbProperties {
 	private static final String CONFIG_PATH = "config.properties";
 	private static final Properties INSTANCE = loadProperties();
 	
-	private DbProperties() {
+	private final static Logger logger = LoggerFactory.getLogger(DbProperties.class);
+	private DbProperties() 
+	{
 		loadProperties();
 	}
 
-	private static Properties loadProperties() {
+	private static Properties loadProperties() 
+	{
 		Properties prop = new Properties();
 		InputStream input = null;
 		
@@ -23,25 +29,21 @@ public class DbProperties {
 		} 
 		catch (IOException e) 
 		{
-			e.printStackTrace(); //TODO replace by logs
+			logger.error("Properties failed to load");
 		} 
 		finally 
 		{
 			if (input != null)
 			{
-				try 
-				{
+				try {
 					input.close();
-				} 
-				catch (IOException io) 
-				{
-					io.printStackTrace(); //TODO replace by logs
+				} catch (IOException io) {
+					logger.error("Properties io failed to load");
 				}
 			}
 		}
 		return prop;
 	}
-	
 	
 	public static String getConfig(String key)
 	{

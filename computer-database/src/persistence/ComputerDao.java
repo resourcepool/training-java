@@ -100,6 +100,5 @@ public class ComputerDao {
 			Statement s = conn.createStatement();
 			return s.execute("delete from computer where id = " + id);
 		});
-		
 	}
 }

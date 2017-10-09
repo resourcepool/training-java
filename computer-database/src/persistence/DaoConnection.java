@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import mapper.ResultMapper;
 import persistence.exceptions.DaoException;
 
@@ -17,6 +20,8 @@ public class DaoConnection {
 	private static final String url = String.format("jdbc:mysql://%s:%s/%s", hostAddress, port, database);;
 	private static final String password = DbProperties.getConfig("dbpassword");;
 	private static final String user = DbProperties.getConfig("dbuser");
+	
+	private static final Logger logger = LoggerFactory.getLogger(DaoConnection.class);
 	
 	public static <T> T executeSelectQuery(String sql, ResultMapper<T> m) throws SQLException
 	{
@@ -54,7 +59,7 @@ public class DaoConnection {
 		    	try {
 		            conn.close();
 		        } catch (SQLException e ) { 
-		        	//TODO logs
+		        	logger.error("Connection failed to close");
 		        }
 		    }
 		}

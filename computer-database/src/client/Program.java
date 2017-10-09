@@ -7,6 +7,8 @@ public class Program {
 	public static void main(String[] args)  
 	{
 		UiConsole ui = new UiConsole();
+		ui.write("Welcome");
+		
 		try
 		{
 			Services service = new Services();
