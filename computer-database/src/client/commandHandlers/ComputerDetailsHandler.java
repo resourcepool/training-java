@@ -1,4 +1,4 @@
-package client.commands;
+package client.commandHandlers;
 
 import java.sql.SQLException;
 import client.exceptions.ClientDataFormatException;
@@ -7,7 +7,7 @@ import service.ComputerServiceImpl;
 import service.Services;
 import ui.UiConsole;
 
-public class ComputerDetailsHandler implements ClientCommand {
+public class ComputerDetailsHandler implements ClientHandler {
 
 	@Override
 	public boolean runCommand(Services service, UiConsole ui, String[] args) {

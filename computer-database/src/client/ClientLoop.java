@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.NoSuchElementException;
 
-import client.commands.ClientCommand;
+import client.commandHandlers.ClientHandler;
 import client.exceptions.ClientDataFormatException;
 import client.exceptions.CommandsNotExistsException;
 import persistence.exceptions.DaoException;
@@ -49,14 +49,14 @@ public class ClientLoop {
 		
 		try
 		{
-			Entry<String, ClientCommand> matchingCommand = CommandsCollection.getMatchingCommand(input);
+			Entry<String, ClientHandler> matchingCommand = CommandsCollection.getMatchingCommand(input);
 			if (matchingCommand == null)
 			{
 				throw new CommandsNotExistsException();
 			}
 			
 			key = matchingCommand.getKey();
-			ClientCommand handler = matchingCommand.getValue();
+			ClientHandler handler = matchingCommand.getValue();
 			
 			return handler.runCommand(service, ui, splitArgs(key, input));
 		}

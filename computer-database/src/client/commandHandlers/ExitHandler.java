@@ -1,8 +1,8 @@
-package client.commands;
+package client.commandHandlers;
 import service.Services;
 import ui.UiConsole;
 
-public class ExitHandler implements ClientCommand {
+public class ExitHandler implements ClientHandler {
 
 	@Override
 	public boolean runCommand(Services service, UiConsole ui, String[] args) {

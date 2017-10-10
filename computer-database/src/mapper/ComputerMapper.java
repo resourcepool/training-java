@@ -10,7 +10,7 @@ import java.util.List;
 import model.Computer;
 import model.ComputerPreview;
 
-public class ResultToComputer implements ResultMapper<List<ComputerPreview>>{
+public class ComputerMapper implements ResultMapper<List<ComputerPreview>>{
 
 	private static final String COMPANY_ID_FIELD = "company_id";
 	private static final String DISCONTINUED_FIELD = "discontinued";

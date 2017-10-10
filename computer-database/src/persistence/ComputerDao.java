@@ -8,17 +8,22 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-import mapper.ResultToComputer;
+import mapper.ComputerMapper;
+import mapper.pages.Page;
+import mapper.pages.Page;
 import model.Computer;
 import model.ComputerPreview;
+import persistence.querycommands.PageQueryCommand;
 
 public class ComputerDao {
 	
+	private static final String SELECT_COUNT_FROM_COMPUTER = "select count(*) from computer";
+	private static final String SELECT_ID_NAME_FROM_COMPUTER = "select id, name from computer";
+	private static final String SELECT_COMPUTER_WHERE = "select * from computer where ";
+	private static final String INSERT_INTO_COMPUTER_VALUES = "insert into computer values (null, ?, ?, ?, ?)";
+	
 	private static final String ID_FILTER = "id = ?";
 	private static final String NAME_FILTER = "name = \"?\"";
-	private static final String SELECT_COMPUTER_WHERE = "select * from computer where ";
-	private static final String SELECT_ID_NAME_FROM_COMPUTER = "select id, name from computer";
-	private static final String INSERT_INTO_COMPUTER_VALUES = "insert into computer values (null, ?, ?, ?, ?)";
 	
 	private static ComputerDao INSTANCE;
 	private ComputerDao() { }
@@ -35,7 +40,31 @@ public class ComputerDao {
 	{
 		return DaoConnection.executeSelectQuery(
 				SELECT_ID_NAME_FROM_COMPUTER, 
-				new ResultToComputer());
+				new ComputerMapper());
+	}
+	
+	public Page<ComputerPreview> getComputerPage() throws SQLException
+	{
+		Long size = DaoConnection.executeSelectQuery(SELECT_COUNT_FROM_COMPUTER, 
+			(ResultSet r) -> {
+				return (r.next() ? r.getLong(1) : null);
+			});
+		
+		PageQueryCommand<ComputerPreview> command = 
+			(Long start, Long splitSize) ->  
+			{
+				return getComputerPageContent(start, splitSize);
+			};
+			
+		return new Page<ComputerPreview>(command , size);
+	}
+	
+	private List<ComputerPreview> getComputerPageContent(Long start, Long split) throws SQLException
+	{
+		String filter = String.format(" ORDER BY id LIMIT %d,%d", start, split);
+		return DaoConnection.executeSelectQuery(
+				SELECT_ID_NAME_FROM_COMPUTER + filter, 
+				new ComputerMapper());
 	}
 	
 	public Long createComputer(Computer newComputer) throws SQLException 
@@ -50,9 +79,10 @@ public class ComputerDao {
 			s.setLong(4, newComputer.getCompanyId());
 
 			s.executeUpdate();
-			ResultSet keys = s.getGeneratedKeys();
-			Long id = keys.next() ? keys.getLong(1) : null;
+			ResultSet r = s.getGeneratedKeys();
+			Long id = r.next() ? r.getLong(1) : null;
 			
+			r.close();
 			s.close();
 			return id;		
 		});
@@ -74,8 +104,9 @@ public class ComputerDao {
 			s.setString(1, param);
 			ResultSet r = s.executeQuery();
 			
-			Computer c = new ResultToComputer().MapComputer(r);
+			Computer c = new ComputerMapper().MapComputer(r);
 			
+			r.close();
 			s.close();
 			return c;
 		});
@@ -91,14 +122,18 @@ public class ComputerDao {
 			s.setLong(4, c.getCompanyId());
 			s.executeUpdate();
 			
+			s.close();
 			return true;
 		});
 	}
 	public void deleteComputer(Long id) throws SQLException {
 		DaoConnection.executeQuery((Connection conn) -> 
 		{
-			Statement s = conn.createStatement();
-			return s.execute("delete from computer where id = " + id);
+			try (Statement s = conn.createStatement())
+			{
+				s.execute("delete from computer where id = " + id);	
+			}
+			return true;
 		});
 	}
 }

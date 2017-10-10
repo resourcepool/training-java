@@ -1,4 +1,4 @@
-package client.commands;
+package client.commandHandlers;
 
 import client.exceptions.ClientDataFormatException;
 import client.tools.ConsoleConfirm;
@@ -7,7 +7,7 @@ import service.ComputerServiceImpl;
 import service.Services;
 import ui.UiConsole;
 
-public class ComputerDeleteHandler implements ClientCommand {
+public class ComputerDeleteHandler implements ClientHandler {
 	
 	@Override
 	public boolean runCommand(Services service, UiConsole ui, String[] args) throws Exception {

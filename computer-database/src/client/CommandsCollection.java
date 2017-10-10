@@ -3,28 +3,27 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import client.commands.CompanyListHandler;
-import client.commands.ComputerCreationHandler;
-import client.commands.ComputerDeleteHandler;
-import client.commands.ComputerDetailsHandler;
-import client.commands.ComputerListHandler;
-import client.commands.ComputerUpdateHandler;
-import client.commands.ExitHandler;
-import client.commands.HelpHandler;
+import client.commandHandlers.ClientHandler;
+import client.commandHandlers.CompanyListHandler;
+import client.commandHandlers.ComputerCreationHandler;
+import client.commandHandlers.ComputerDeleteHandler;
+import client.commandHandlers.ComputerDetailsHandler;
+import client.commandHandlers.ComputerListHandler;
+import client.commandHandlers.ComputerUpdateHandler;
+import client.commandHandlers.ExitHandler;
+import client.commandHandlers.HelpHandler;
 import service.Services;
-import client.commands.ClientCommand;
-
 import ui.UiConsole;
 
 public class CommandsCollection {
 	
 	private CommandsCollection() {	}
 	
-	private static Map<String, ClientCommand> INSTANCE = createCommands();
+	private static Map<String, ClientHandler> INSTANCE = createCommands();
 
-	private static Map<String, ClientCommand> createCommands()
+	private static Map<String, ClientHandler> createCommands()
 	{
-		Map<String, ClientCommand> commands = new LinkedHashMap<String, ClientCommand>();
+		Map<String, ClientHandler> commands = new LinkedHashMap<String, ClientHandler>();
 		
 		CompanyListHandler companiesListHandler = new CompanyListHandler();
 		ComputerListHandler computerListHandler = new ComputerListHandler();
@@ -60,14 +59,14 @@ public class CommandsCollection {
 	/**
 	 * @return the map containing each commands, used for HelpHandler for instance
 	 */
-	public static Map<String, ClientCommand> getCommands() {
+	public static Map<String, ClientHandler> getCommands() {
 		return INSTANCE;
 	}
 	
-	public static Entry<String, ClientCommand> getMatchingCommand(String inputCommands) {
+	public static Entry<String, ClientHandler> getMatchingCommand(String inputCommands) {
 		inputCommands = inputCommands.trim().toLowerCase();
 		
-		for (Entry<String, ClientCommand> entry : INSTANCE.entrySet()) 
+		for (Entry<String, ClientHandler> entry : INSTANCE.entrySet()) 
 		{
 			if (inputCommands.startsWith( entry.getKey()))
 			{
