@@ -1,8 +1,8 @@
-package persistence;
+package persistence.querycommands;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public interface QueryCommands <T> {
+public interface QueryCommand <T> {
 	T execute(Connection s) throws SQLException;
 }

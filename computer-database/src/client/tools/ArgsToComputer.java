@@ -10,6 +10,7 @@ import model.Computer;
 
 public class ArgsToComputer {
 	private static final String DATE_FORMAT = "dd-MM-yyyy";
+	private static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(DATE_FORMAT);
 
 	public Computer createComputerFromArgsWithId(String[] args)
 	{
@@ -39,27 +40,56 @@ public class ArgsToComputer {
 	}
 
 	private Computer extractComputer(Long id, String[] args) {
-		DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(DATE_FORMAT);
 		String name = args[0];
 		LocalDate introduced;
 		LocalDate discontinued;
 		Long idCompany;
 		
 		try {
-			introduced = LocalDate.parse(args[1], dateFormat);
-			discontinued = args[2].equals("null") ? null : LocalDate.parse(args[2], dateFormat);
+			introduced = extractDate(args[1]);
+			discontinued = extractDate(args[2]);
 		} 
 		catch (DateTimeParseException e) {
 			throw new ClientDataFormatException("date format is " + DATE_FORMAT);
 		}
 		
-		try {
-			idCompany = Long.parseLong(args[3]);	
-		} 
-		catch (NumberFormatException e) {
+		if (isLong(args[3]))
+		{
+			idCompany = Long.parseLong(args[3]);
+		}
+		else
+		{
 			throw new ClientDataFormatException("idCompany should be an integer corresponding to an existing company");
 		}
 		
 		return new Computer(id, name, introduced, discontinued, idCompany);
+	}
+	
+	private boolean isLong(String s) {
+		if (s == null) 
+		{
+		    return false;
+		}
+		int size = s.length();
+		for (int i = 0; i < size; i++) 
+		{
+		    if (Character.isDigit(s.charAt(i)) == false) 
+		    {
+		        return false;
+		    }
+		}
+	    return true;
+	}
+
+	private LocalDate extractDate(String s)
+	{
+		if (s.isEmpty() || s.equals("null"))
+		{
+			return null;
+		}
+		else
+		{
+			return LocalDate.parse(s, dateFormat);	
+		}
 	}
 }

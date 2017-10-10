@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import mapper.ResultMapper;
 import persistence.exceptions.DaoException;
+import persistence.querycommands.QueryCommand;
 
 public class DaoConnection {
 	private static final String database = DbProperties.getConfig("database");
@@ -26,16 +27,17 @@ public class DaoConnection {
 	public static <T> T executeSelectQuery(String sql, ResultMapper<T> m) throws SQLException
 	{
 		return executeQuery((Connection c) -> {
-			 Statement s = c.createStatement();
-			 ResultSet r = s.executeQuery(sql);
-			 T result = m.process(r);
-			 r.close();
-			 s.close();
-			return result;
+			 try (Statement s = c.createStatement();)
+			 {
+				 try (ResultSet r = s.executeQuery(sql))
+				 {
+					 return m.process(r);	 
+				 }
+			 }
 		});
 	}
 	
-	public static <T> T executeQuery(QueryCommands<T> q) throws SQLException
+	public static <T> T executeQuery(QueryCommand<T> q) throws SQLException
 	{
 		Connection conn = null;
 		

@@ -3,17 +3,25 @@ package service;
 import java.sql.SQLException;
 import java.util.List;
 
+import mapper.pages.Page;
 import model.Company;
 import persistence.CompanyDao;
 
 public class CompanyServiceImpl {
 
+	private static final CompanyDao companyDao = CompanyDao.getInstance();
+
 	public List<Company> getCompanyList() throws SQLException {
-		return CompanyDao.getInstance().getCompanyList();
+		return companyDao.getCompanyList();
 	}
 
 	public boolean companyExists(Long idCompany) throws SQLException {
-		return CompanyDao.getInstance().companyExists(idCompany);
+		return companyDao.companyExists(idCompany);
+	}
+
+	public Page<Company> getCompanyPage() throws SQLException {
+		
+		return companyDao.getCompanyPage();
 	}
 
 }
