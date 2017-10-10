@@ -10,7 +10,6 @@ import java.util.List;
 
 import mapper.ComputerMapper;
 import mapper.pages.Page;
-import mapper.pages.Page;
 import model.Computer;
 import model.ComputerPreview;
 import persistence.querycommands.PageQueryCommand;

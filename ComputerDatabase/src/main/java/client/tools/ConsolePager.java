@@ -32,7 +32,7 @@ public class ConsolePager <T> {
 				ui.write("> Finished");
 				return ;
 			}
-			String msg = String.format("> continue Y/n (%d/%d) ?", p.getCurrentCount(), p.getTotalCount());
+			String msg = String.format("> continue Y/n (%d/%d) ?", p.getCurrentCount() + p.getPageSize(), p.getTotalCount());
 			if (!ConsoleConfirm.loop(ui, msg, true)) return ;
 		}
 	}

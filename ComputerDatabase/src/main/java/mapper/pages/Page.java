@@ -79,4 +79,8 @@ public class Page<T> {
 		return content != null;
 	}
 
+	public Long getPageSize() {
+		return content == null ? splitSize : content.size();
+	}
+
 }

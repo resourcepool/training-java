@@ -7,10 +7,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 import mapper.CompanyMapper;
-import mapper.ComputerMapper;
 import mapper.pages.Page;
 import model.Company;
-import model.ComputerPreview;
 import persistence.querycommands.PageQueryCommand;
 
 public class CompanyDao {

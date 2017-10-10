@@ -12,8 +12,6 @@ import client.commandHandlers.ComputerListHandler;
 import client.commandHandlers.ComputerUpdateHandler;
 import client.commandHandlers.ExitHandler;
 import client.commandHandlers.HelpHandler;
-import service.Services;
-import ui.UiConsole;
 
 public class CommandsCollection {
 	

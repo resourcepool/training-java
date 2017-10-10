@@ -1,22 +1,19 @@
 package client.commandHandlers;
-
 import java.sql.SQLException;
-import java.util.List;
-
 import client.tools.ConsolePager;
 import mapper.pages.Page;
-import model.ComputerPreview;
+import model.Company;
 import service.Services;
 import ui.UiConsole;
 
-public class ComputerListHandler implements ClientHandler {
+public class CompanyListHandler implements ClientHandler {
 
 	@Override
 	public boolean runCommand(Services service, UiConsole ui, String[] args) {
-		
 		try {
-			Page<ComputerPreview> page = service.getComputerService().getComputerPage();
-			new ConsolePager<ComputerPreview>(ui).paginate(page);
+			Page<Company> page = service.getCompanyService().getCompanyPage();
+			new ConsolePager<Company>(ui).paginate(page);
+			
 		} catch (SQLException e) {
 			ui.write(e);
 		}
