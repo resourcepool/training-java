@@ -9,19 +9,32 @@ import persistence.CompanyDao;
 
 public class CompanyServiceImpl {
 
-	private static final CompanyDao companyDao = CompanyDao.getInstance();
+    private static CompanyDao companyDao = CompanyDao.getInstance();
 
-	public List<Company> getCompanyList() throws SQLException {
-		return companyDao.getCompanyList();
-	}
+    /**
+     * @return Full company list from DB
+     * @throws SQLException content couldn't be loaded
+     */
+    public List<Company> getCompanyList() throws SQLException {
+        return companyDao.getCompanyList();
+    }
 
-	public boolean companyExists(Long idCompany) throws SQLException {
-		return companyDao.companyExists(idCompany);
-	}
+    /**
+     * @param idCompany idCompany the id to check
+     * @return true is company id is present in DB
+     * @throws SQLException content couldn't be loaded
+     */
+    public boolean companyExists(Long idCompany) throws SQLException {
+        return companyDao.companyExists(idCompany);
+    }
 
-	public Page<Company> getCompanyPage() throws SQLException {
-		
-		return companyDao.getCompanyPage();
-	}
+    /**
+     * @return the first page of the full company list from DB
+     * @throws SQLException content couldn't be loaded
+     */
+    public Page<Company> getCompanyPage() throws SQLException {
+
+        return companyDao.getCompanyPage();
+    }
 
 }
