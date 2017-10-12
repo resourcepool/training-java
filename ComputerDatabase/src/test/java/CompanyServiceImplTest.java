@@ -25,7 +25,7 @@ public class CompanyServiceImplTest {
     private CompanyServiceImpl service;
 
     /**
-     * Init mock.
+     * Init mock, mostly Dao.
      * @throws DaoException never thrown
      */
     @Before
@@ -47,7 +47,7 @@ public class CompanyServiceImplTest {
      */
     @Test(expected = NullPointerException.class)
     public void testCompanyExistsWithNullObject() throws DaoException {
-        Boolean result = service.companyExists(null);
+        service.companyExists(null);
         fail("should have thrown");
     }
 

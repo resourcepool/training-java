@@ -87,7 +87,6 @@ public class ComputerServiceImpl {
      * @throws DaoException content couldn't be loaded
      */
     public Page<ComputerPreview> getComputerPage() throws DaoException {
-
         return computerDao.getComputerPage();
     }
 
