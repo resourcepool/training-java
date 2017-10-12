@@ -63,12 +63,7 @@ public class Page<T> {
      * @throws PageException PageException page couldn't be loaded
      */
     private void load() throws PageException {
-
-        try {
-            content = command.getContent(start, splitSize);
-        } catch (Exception e) {
-            throw new PageException(e);
-        }
+        content = command.getContent(start, splitSize);
     }
 
     /**

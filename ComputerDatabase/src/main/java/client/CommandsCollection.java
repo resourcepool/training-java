@@ -53,6 +53,7 @@ public class CommandsCollection {
 
         commands.put("create computer", computerCreationHandler);
         commands.put("create new computer", computerCreationHandler);
+        commands.put("new computer", computerCreationHandler);
         commands.put("update computer", updateHandler);
         commands.put("delete computer", deleteHandler);
         commands.put("remove computer", deleteHandler);
@@ -77,8 +78,11 @@ public class CommandsCollection {
      * @return get the corresponding pair where input starts with key
      */
     public static Entry<String, ClientHandler> getMatchingCommand(String inputCommands) {
-        inputCommands = inputCommands.trim().toLowerCase();
+        if (inputCommands == null) {
+            return null;
+        }
 
+        inputCommands = inputCommands.trim().toLowerCase();
         for (Entry<String, ClientHandler> entry : INSTANCE.entrySet()) {
             if (inputCommands.startsWith(entry.getKey())) {
                 return entry;

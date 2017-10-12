@@ -15,14 +15,17 @@ public class ConsolePager<T> {
     }
 
     /**
-     * @param p first Page
+     * @param p first page
      */
     public void paginate(Page<T> p) {
         while (p.hasNext()) {
             try {
+
                 p = p.next();
                 ui.write(p.dump());
+
             } catch (PageException ex) {
+
                 ui.write("> Page couldn't be loaded");
                 ui.write(ex);
                 return;
@@ -32,8 +35,11 @@ public class ConsolePager<T> {
                 ui.write("> Finished");
                 return;
             }
-            String msg = String.format("> continue Y/n (%d/%d) ?", p.getCurrentCount() + p.getPageSize(),
+
+            String msg = String.format("> continue Y/n (%d/%d) ?",
+                    p.getCurrentCount() + p.getPageSize(),
                     p.getTotalCount());
+
             if (!ConsoleConfirm.loop(ui, msg, true)) {
                 return;
             }

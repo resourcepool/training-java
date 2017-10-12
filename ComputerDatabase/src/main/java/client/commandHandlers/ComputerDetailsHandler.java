@@ -1,38 +1,29 @@
 package client.commandHandlers;
 
-import java.sql.SQLException;
-
 import client.exceptions.ClientDataFormatException;
 import model.Computer;
+import persistence.exceptions.DaoException;
 import service.ComputerServiceImpl;
-import service.Services;
 import ui.UiConsole;
 
 public class ComputerDetailsHandler implements ClientHandler {
 
     /**
-     * @param service Data Access
      * @param ui Console user interface
      * @param args commands lines params (args[0] is the command key)
      * @return false if user wants to end the program
-     * @throws Exception an unexpected error occur, handled by clientLoop
+     * @throws DaoException an unexpected error occur, handled by clientLoop
      */
     @Override
-    public boolean runCommand(Services service, UiConsole ui, String[] args) {
+    public boolean runCommand(UiConsole ui, String[] args) throws DaoException {
 
-        ComputerServiceImpl computerService = service.getComputerService();
+        ComputerServiceImpl computerService = ComputerServiceImpl.getInstance();
         Computer c;
 
-        try {
-            c = tryGetComputerById(computerService, ui, args[1]);
+        c = tryGetComputerById(computerService, ui, args[1]);
 
-            if (c == null) {
-                c = computerService.getComputerDetail(args[1]);
-            }
-
-        } catch (SQLException e) {
-            ui.write(e);
-            return true;
+        if (c == null) {
+            c = computerService.getComputerDetail(args[1]);
         }
 
         if (c == null) {
@@ -48,9 +39,10 @@ public class ComputerDetailsHandler implements ClientHandler {
      * @param ui Console user interface
      * @param search id to parse
      * @return false if user wants to end the program
-     * @throws SQLException computer couldn't be loaded
+     * @throws DaoException computer couldn't be loaded
      */
-    private Computer tryGetComputerById(ComputerServiceImpl service, UiConsole ui, String search) throws SQLException {
+    private Computer tryGetComputerById(ComputerServiceImpl service, UiConsole ui, String search)
+            throws DaoException {
         try {
             Long id = Long.parseLong(search);
             return service.getComputerDetail(id);

@@ -1,6 +1,6 @@
 package client.exceptions;
 
-public class CompanyDontExistException extends Exception {
+public class CompanyDontExistException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 

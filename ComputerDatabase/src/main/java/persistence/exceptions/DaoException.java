@@ -1,6 +1,6 @@
 package persistence.exceptions;
 
-public class DaoException extends Error {
+public class DaoException extends Exception {
 
     private static final long serialVersionUID = -2067133414903576948L;
 

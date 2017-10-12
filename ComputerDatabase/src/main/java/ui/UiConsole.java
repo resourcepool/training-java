@@ -18,24 +18,14 @@ public class UiConsole {
     }
 
     /**
-     * @param msg common string to display as is
+     * close completely standard input (System.in) and close input scanner.
      */
-    public void write(String msg) {
-        System.out.println(msg);
-    }
-
-    /**
-     * @param c computer to display
-     */
-    public void write(Computer c) {
-        System.out.println(c.toString());
-    }
-
-    /**
-     * @param m company to display
-     */
-    public void write(Company m) {
-        System.out.println(m.toString());
+    public void destroy() {
+        if (scanner == null) {
+            return;
+        }
+        scanner.close();
+        scanner = null;
     }
 
     /**
@@ -48,6 +38,20 @@ public class UiConsole {
 
     public String getLine() {
         return scanner.nextLine();
+    }
+
+    /**
+     * @param m company to display
+     */
+    public void write(Company m) {
+        System.out.println(m.toString());
+    }
+
+    /**
+     * @param c computer to display
+     */
+    public void write(Computer c) {
+        System.out.println(c.toString());
     }
 
     /**
@@ -66,14 +70,6 @@ public class UiConsole {
     }
 
     /**
-     * @param e exception to write before closing completly
-     */
-    public void writeFatal(Exception e) {
-        System.out.println("Critical Error, the program will stop : " + e.getMessage());
-        write(e.getStackTrace());
-    }
-
-    /**
      * @param st stack trace to write
      */
     public void write(StackTraceElement[] st) {
@@ -83,13 +79,17 @@ public class UiConsole {
     }
 
     /**
-     * close completely standard input (System.in) and close input scanner.
+     * @param msg common string to display as is
      */
-    public void destroy() {
-        if (scanner == null) {
-            return;
-        }
-        scanner.close();
-        scanner = null;
+    public void write(String msg) {
+        System.out.println(msg);
+    }
+
+    /**
+     * @param e exception to write before closing completly
+     */
+    public void writeFatal(Exception e) {
+        System.out.println("Critical Error, the program will stop : " + e.getMessage());
+        write(e.getStackTrace());
     }
 }

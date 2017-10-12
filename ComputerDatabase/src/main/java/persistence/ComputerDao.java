@@ -4,14 +4,15 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
 import mapper.ComputerMapper;
+import mapper.exceptions.PageException;
 import mapper.pages.Page;
 import model.Computer;
 import model.ComputerPreview;
+import persistence.exceptions.DaoException;
 import persistence.querycommands.PageQueryCommand;
 
 public class ComputerDao {
@@ -44,23 +45,27 @@ public class ComputerDao {
 
     /**
      * @return the full list of computer, only name and id preview
-     * @throws SQLException content couldn't be loaded
+     * @throws DaoException content couldn't be loaded
      */
-    public List<ComputerPreview> getComputersList() throws SQLException {
+    public List<ComputerPreview> getComputersList() throws DaoException {
         return DaoConnection.executeSelectQuery(SELECT_ID_NAME_FROM_COMPUTER, new ComputerMapper());
     }
 
     /**
      * @return the first page of the full computer preview list from DB
-     * @throws SQLException content couldn't be loaded
+     * @throws DaoException content couldn't be loaded
      */
-    public Page<ComputerPreview> getComputerPage() throws SQLException {
+    public Page<ComputerPreview> getComputerPage() throws DaoException {
         Long size = DaoConnection.executeSelectQuery(SELECT_COUNT_FROM_COMPUTER, (ResultSet r) -> {
             return (r.next() ? r.getLong(1) : null);
         });
 
         PageQueryCommand<ComputerPreview> command = (Long start, Long splitSize) -> {
-            return getComputerPageContent(start, splitSize);
+            try {
+                return getComputerPageContent(start, splitSize);
+            } catch (DaoException e) {
+                throw new PageException(e);
+            }
         };
 
         return new Page<ComputerPreview>(command, size);
@@ -70,9 +75,9 @@ public class ComputerDao {
      * @param start start index to query
      * @param split number of elements to return
      * @return the content resulting of the query with @split elements
-     * @throws SQLException content couldn't be loaded
+     * @throws DaoException content couldn't be loaded
      */
-    private List<ComputerPreview> getComputerPageContent(Long start, Long split) throws SQLException {
+    private List<ComputerPreview> getComputerPageContent(Long start, Long split) throws DaoException {
         String filter = String.format(" ORDER BY id LIMIT %d,%d", start, split);
         return DaoConnection.executeSelectQuery(SELECT_ID_NAME_FROM_COMPUTER + filter, new ComputerMapper());
     }
@@ -80,9 +85,9 @@ public class ComputerDao {
     /**
      * @param newComputer complete computer to create, without id
      * @return the id of the created computer
-     * @throws SQLException content couldn't be loaded
+     * @throws DaoException content couldn't be loaded
      */
-    public Long createComputer(Computer newComputer) throws SQLException {
+    public Long createComputer(Computer newComputer) throws DaoException {
         return DaoConnection.executeQuery((Connection c) -> {
             PreparedStatement s = c.prepareStatement(INSERT_INTO_COMPUTER_VALUES, Statement.RETURN_GENERATED_KEYS);
 
@@ -104,18 +109,18 @@ public class ComputerDao {
     /**
      * @param name the name to search
      * @return the first computer corresponding exactly to @name
-     * @throws SQLException content couldn't be loaded
+     * @throws DaoException content couldn't be loaded
      */
-    public Computer getComputerDetail(String name) throws SQLException {
+    public Computer getComputerDetail(String name) throws DaoException {
         return getComputerDetail(NAME_FILTER, name);
     }
 
     /**
      * @param id the computer id to search
      * @return the first computer corresponding exactly to @id
-     * @throws SQLException content couldn't be loaded
+     * @throws DaoException content couldn't be loaded
      */
-    public Computer getComputerDetail(Long id) throws SQLException {
+    public Computer getComputerDetail(Long id) throws DaoException {
         return getComputerDetail(ID_FILTER, id.toString());
     }
 
@@ -124,9 +129,9 @@ public class ComputerDao {
      * @param param the string connection the param to fill the @queryfilter with, escaping the content in a
      *        preparedStatement
      * @return the first computer corresponding to filter
-     * @throws SQLException content couldn't be loaded
+     * @throws DaoException content couldn't be loaded
      */
-    private Computer getComputerDetail(String queryFilter, String param) throws SQLException {
+    private Computer getComputerDetail(String queryFilter, String param) throws DaoException {
         return DaoConnection.executeQuery((Connection conn) -> {
             PreparedStatement s = conn.prepareStatement(SELECT_COMPUTER_WHERE + queryFilter);
             s.setString(1, param);
@@ -142,9 +147,9 @@ public class ComputerDao {
 
     /**
      * @param c full computer to update with id != null
-     * @throws SQLException content couldn't be loaded
+     * @throws DaoException content couldn't be loaded
      */
-    public void updateComputer(Computer c) throws SQLException {
+    public void updateComputer(Computer c) throws DaoException {
         DaoConnection.executeQuery((Connection conn) -> {
             PreparedStatement s = conn
                     .prepareStatement(
@@ -163,9 +168,9 @@ public class ComputerDao {
 
     /**
      * @param id id of the computer to delete
-     * @throws SQLException content couldn't be loaded
+     * @throws DaoException content couldn't be loaded
      */
-    public void deleteComputer(Long id) throws SQLException {
+    public void deleteComputer(Long id) throws DaoException {
         DaoConnection.executeQuery((Connection conn) -> {
             try (Statement s = conn.createStatement()) {
                 s.execute("delete from computer where id = " + id);
