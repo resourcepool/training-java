@@ -10,26 +10,26 @@ import mapper.exceptions.PageException;
 import mapper.pages.Page;
 import model.Company;
 import persistence.exceptions.DaoException;
-import persistence.querycommands.PageQueryCommand;
+import persistence.querycommands.PageQuery;
 
-public class CompanyDao {
+public class CompanyDaoImpl {
     private static final String SELECT_COUNT_FROM_COMPANY          = "select count(*) from company";
     private static final String SELECT_COUNT_FROM_COMPANY_WHERE_ID = "select count(*) from company where id = ?";
     private static final String SELECT_ID_NAME_FROM_COMPANY        = "select id, name from company";
-    private static CompanyDao   instance;
+    private static CompanyDaoImpl   instance;
 
     /**
      * private ctor.
      */
-    private CompanyDao() {
+    private CompanyDaoImpl() {
     }
 
     /**
      * @return unique dao instance.
      */
-    public static CompanyDao getInstance() {
+    public static CompanyDaoImpl getInstance() {
         if (instance == null) {
-            instance = new CompanyDao();
+            instance = new CompanyDaoImpl();
         }
         return instance;
     }
@@ -66,7 +66,7 @@ public class CompanyDao {
     public Page<Company> getCompanyPage() throws DaoException {
         Long size = getCompanyCount();
 
-        PageQueryCommand<Company> command = (Long start, Long splitSize) -> {
+        PageQuery<Company> command = (Long start, Long splitSize) -> {
             String filter = String.format(" ORDER BY id LIMIT %d,%d", start, splitSize);
             try {
                 return DaoConnection.executeSelectQuery(SELECT_ID_NAME_FROM_COMPANY + filter, new CompanyMapper());

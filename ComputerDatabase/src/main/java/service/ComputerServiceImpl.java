@@ -4,20 +4,19 @@ import java.util.List;
 
 import mapper.pages.Page;
 import model.Computer;
-import model.ComputerPreview;
-import persistence.ComputerDao;
+import persistence.ComputerDaoImpl;
 import persistence.exceptions.DaoException;
 
 public class ComputerServiceImpl {
 
     private static ComputerServiceImpl instance;
-    private ComputerDao                computerDao;
+    private ComputerDaoImpl            computerDao;
 
     /**
      * Private ctor.
      * @param dao CompanyDao to access Data
      */
-    private ComputerServiceImpl(ComputerDao dao) {
+    private ComputerServiceImpl(ComputerDaoImpl dao) {
         computerDao = dao;
     }
 
@@ -26,17 +25,9 @@ public class ComputerServiceImpl {
      */
     public static ComputerServiceImpl getInstance() {
         if (instance == null) {
-            instance = new ComputerServiceImpl(ComputerDao.getInstance());
+            instance = new ComputerServiceImpl(ComputerDaoImpl.getInstance());
         }
         return instance;
-    }
-
-    /**
-     * @return the full list of computer, only name and id preview
-     * @throws DaoException content couldn't be loaded
-     */
-    public List<ComputerPreview> getComputersList() throws DaoException {
-        return computerDao.getComputersList();
     }
 
     /**
@@ -83,11 +74,21 @@ public class ComputerServiceImpl {
     }
 
     /**
+     * @param start index entities to start at (start at 0)
+     * @param size number of elements
      * @return the first page of the full computer preview list from DB
      * @throws DaoException content couldn't be loaded
      */
-    public Page<ComputerPreview> getComputerPage() throws DaoException {
-        return computerDao.getComputerPage();
+    public Page<Computer> getComputerPage(Long start, Long size) throws DaoException {
+        return computerDao.getComputerPage(start, size);
+    }
+
+    /**
+     * @return the full list of computer, only name and id preview
+     * @throws DaoException content couldn't be loaded
+     */
+    public List<Computer> getComputersList() throws DaoException {
+        return computerDao.getComputersList();
     }
 
 }

@@ -4,19 +4,19 @@ import java.util.List;
 
 import mapper.pages.Page;
 import model.Company;
-import persistence.CompanyDao;
+import persistence.CompanyDaoImpl;
 import persistence.exceptions.DaoException;
 
 public class CompanyServiceImpl {
 
     private static CompanyServiceImpl instance;
-    private CompanyDao companyDao;
+    private CompanyDaoImpl companyDao;
 
     /**
      * Private ctor.
      * @param dao CompanyDao to access Data
      */
-    private CompanyServiceImpl(CompanyDao dao) {
+    private CompanyServiceImpl(CompanyDaoImpl dao) {
         companyDao = dao;
     }
 
@@ -25,7 +25,7 @@ public class CompanyServiceImpl {
      */
     public static CompanyServiceImpl getInstance() {
         if (instance == null) {
-            instance = new CompanyServiceImpl(CompanyDao.getInstance());
+            instance = new CompanyServiceImpl(CompanyDaoImpl.getInstance());
         }
         return instance;
     }

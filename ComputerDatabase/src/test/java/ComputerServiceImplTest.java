@@ -6,19 +6,22 @@ import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import model.ComputerPreview;
-import persistence.ComputerDao;
+import model.Computer;
+import persistence.ComputerDaoImpl;
 import persistence.exceptions.DaoException;
 import service.ComputerServiceImpl;
 
+@RunWith(MockitoJUnitRunner.class)
 public class ComputerServiceImplTest {
 
     @Mock
-    private static ComputerDao computerDao;
+    private static ComputerDaoImpl computerDao;
 
     @InjectMocks
     private ComputerServiceImpl service;
@@ -29,7 +32,7 @@ public class ComputerServiceImplTest {
      */
     @Before
     public void setUp() throws DaoException {
-        Mockito.when(computerDao.getComputersList()).thenReturn(new ArrayList<ComputerPreview>());
+        Mockito.when(computerDao.getComputersList()).thenReturn(new ArrayList<Computer>());
     }
 
     /**

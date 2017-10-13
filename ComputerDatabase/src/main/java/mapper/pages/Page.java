@@ -3,12 +3,12 @@ package mapper.pages;
 import java.util.List;
 
 import mapper.exceptions.PageException;
-import persistence.querycommands.PageQueryCommand;
+import persistence.querycommands.PageQuery;
 
 public class Page<T> {
 
     private List<T>             content;
-    private PageQueryCommand<T> command;
+    private PageQuery<T> command;
     private Long                start;
     private Long                size;
     private Long                splitSize;
@@ -17,7 +17,7 @@ public class Page<T> {
      * @param command query used to fill pages content, either dababase or cached entities
      * @param size number of total elements than can be loaded
      */
-    public Page(PageQueryCommand<T> command, Long size) {
+    public Page(PageQuery<T> command, Long size) {
         this(command, size, 10L);
     }
 
@@ -26,7 +26,7 @@ public class Page<T> {
      * @param size number of total elements than can be loaded
      * @param splitSize number of elements by page
      */
-    public Page(PageQueryCommand<T> command, Long size, Long splitSize) {
+    public Page(PageQuery<T> command, Long size, Long splitSize) {
         this(command, 0L, size, splitSize);
     }
 
@@ -36,7 +36,7 @@ public class Page<T> {
      * @param size number of total elements than can be loaded
      * @param splitSize number of elements by page
      */
-    public Page(PageQueryCommand<T> command, Long start, Long size, Long splitSize) {
+    public Page(PageQuery<T> command, Long start, Long size, Long splitSize) {
         this.splitSize = splitSize;
         this.content = null;
         this.start = start;
@@ -103,6 +103,10 @@ public class Page<T> {
 
     public Long getPageSize() {
         return content == null ? splitSize : content.size();
+    }
+
+    public Long getPageNumber() {
+        return (start + splitSize) / splitSize;
     }
 
 }

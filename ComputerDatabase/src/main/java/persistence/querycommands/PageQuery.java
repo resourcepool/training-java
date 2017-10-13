@@ -4,7 +4,7 @@ import java.util.List;
 
 import mapper.exceptions.PageException;
 
-public interface PageQueryCommand<T> {
+public interface PageQuery<T> {
 
     /**
      * @param start start index to query

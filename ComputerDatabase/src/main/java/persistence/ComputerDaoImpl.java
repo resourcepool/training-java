@@ -11,11 +11,10 @@ import mapper.ComputerMapper;
 import mapper.exceptions.PageException;
 import mapper.pages.Page;
 import model.Computer;
-import model.ComputerPreview;
 import persistence.exceptions.DaoException;
-import persistence.querycommands.PageQueryCommand;
+import persistence.querycommands.PageQuery;
 
-public class ComputerDao {
+public class ComputerDaoImpl {
 
     private static final String SELECT_COUNT_FROM_COMPUTER   = "select count(*) from computer";
     private static final String SELECT_ID_NAME_FROM_COMPUTER = "select id, name from computer";
@@ -25,20 +24,20 @@ public class ComputerDao {
     private static final String ID_FILTER   = "id = ?";
     private static final String NAME_FILTER = "name = \"?\"";
 
-    private static ComputerDao instance;
+    private static ComputerDaoImpl instance;
 
     /**
      * private ctor.
      */
-    private ComputerDao() {
+    private ComputerDaoImpl() {
     }
 
     /**
      * @return unique instance of this dao
      */
-    public static ComputerDao getInstance() {
+    public static ComputerDaoImpl getInstance() {
         if (instance == null) {
-            instance = new ComputerDao();
+            instance = new ComputerDaoImpl();
         }
         return instance;
     }
@@ -47,39 +46,37 @@ public class ComputerDao {
      * @return the full list of computer, only name and id preview
      * @throws DaoException content couldn't be loaded
      */
-    public List<ComputerPreview> getComputersList() throws DaoException {
+    public List<Computer> getComputersList() throws DaoException {
         return DaoConnection.executeSelectQuery(SELECT_ID_NAME_FROM_COMPUTER, new ComputerMapper());
     }
 
     /**
+     * @param start element index to start
+     * @param splitSize number of total elements than can be loaded
      * @return the first page of the full computer preview list from DB
      * @throws DaoException content couldn't be loaded
      */
-    public Page<ComputerPreview> getComputerPage() throws DaoException {
+    public Page<Computer> getComputerPage(Long start, Long splitSize) throws DaoException {
         Long size = DaoConnection.executeSelectQuery(SELECT_COUNT_FROM_COMPUTER, (ResultSet r) -> {
             return (r.next() ? r.getLong(1) : null);
         });
 
-        PageQueryCommand<ComputerPreview> command = (Long start, Long splitSize) -> {
+        return new Page<Computer>(getPageQuery(), start, size, splitSize);
+    }
+
+    /**
+     * @return generate the query to select pages
+     */
+    private PageQuery<Computer> getPageQuery() {
+        PageQuery<Computer> command = (Long start, Long splitSize) -> {
             try {
-                return getComputerPageContent(start, splitSize);
+                String filter = String.format(" ORDER BY id LIMIT %d,%d", start, splitSize);
+                return DaoConnection.executeSelectQuery(SELECT_ID_NAME_FROM_COMPUTER + filter, new ComputerMapper());
             } catch (DaoException e) {
                 throw new PageException(e);
             }
         };
-
-        return new Page<ComputerPreview>(command, size);
-    }
-
-    /**
-     * @param start start index to query
-     * @param split number of elements to return
-     * @return the content resulting of the query with @split elements
-     * @throws DaoException content couldn't be loaded
-     */
-    private List<ComputerPreview> getComputerPageContent(Long start, Long split) throws DaoException {
-        String filter = String.format(" ORDER BY id LIMIT %d,%d", start, split);
-        return DaoConnection.executeSelectQuery(SELECT_ID_NAME_FROM_COMPUTER + filter, new ComputerMapper());
+        return command;
     }
 
     /**

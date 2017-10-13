@@ -8,9 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Computer;
-import model.ComputerPreview;
 
-public class ComputerMapper implements ResultMapper<List<ComputerPreview>> {
+public class ComputerMapper implements ResultMapper<List<Computer>> {
 
     private static final String COMPANY_ID_FIELD   = "company_id";
     private static final String DISCONTINUED_FIELD = "discontinued";
@@ -24,13 +23,11 @@ public class ComputerMapper implements ResultMapper<List<ComputerPreview>> {
      * @throws SQLException an unexpected error occur while accessing datas
      */
     @Override
-    public List<ComputerPreview> process(ResultSet rs) throws SQLException {
-        List<ComputerPreview> list = new ArrayList<>();
+    public List<Computer> process(ResultSet rs) throws SQLException {
+        List<Computer> list = new ArrayList<>();
 
         while (rs.next()) {
-            String name = rs.getString(NAME_FIELD);
-            String id = rs.getString(ID_FIELD);
-            list.add(new ComputerPreview(id, name));
+            list.add(mapOneComputer(rs));
         }
         return list;
     }
@@ -46,9 +43,19 @@ public class ComputerMapper implements ResultMapper<List<ComputerPreview>> {
             return null;
         }
 
+        return mapOneComputer(rs);
+    }
+
+    /**
+     * @param rs Already loaded ResultSet (next() have already been called)
+     * @return a computer with each fields filled
+     * @throws SQLException One value couldn't be loaded
+     */
+    private Computer mapOneComputer(ResultSet rs) throws SQLException {
         Long id = rs.getLong(ID_FIELD);
         String name = rs.getString(NAME_FIELD);
-        LocalDate introduced = rs.getDate(INTRODUCED_FIELD).toLocalDate();
+        Date introducedDate = rs.getDate(INTRODUCED_FIELD);
+        LocalDate introduced = introducedDate != null ? introducedDate.toLocalDate() : null;
         Date discontinuedDate = rs.getDate(DISCONTINUED_FIELD);
         LocalDate discontinued = discontinuedDate != null ? discontinuedDate.toLocalDate() : null;
         Long idCompany = rs.getLong(COMPANY_ID_FIELD);
