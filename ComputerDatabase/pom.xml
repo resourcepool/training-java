@@ -22,6 +22,10 @@
   <logback.version>1.0.1</logback.version>
   <junit.version>4.8.1</junit.version>
   <mockito.version>1.9.5</mockito.version>
+  <jstl.version>1.2</jstl.version>
+  <servlet.version>3.1.0</servlet.version>
+  <jsp.version>2.2</jsp.version>
+  <taglib.version>1.1.2</taglib.version>
   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
  </properties>
 
@@ -46,7 +50,29 @@
    <artifactId>logback-classic</artifactId>
    <version>${logback.version}</version>
   </dependency>
-  
+  <dependency>
+   <groupId>javax.servlet</groupId>
+   <artifactId>javax.servlet-api</artifactId>
+   <version>${servlet.version}</version>
+   <scope>provided</scope>
+  </dependency>
+  <dependency>
+   <groupId>javax.servlet.jsp</groupId>
+   <artifactId>jsp-api</artifactId>
+   <version>${jsp.version}</version>
+   <scope>provided</scope>
+  </dependency>
+  <dependency>
+   <groupId>javax.servlet</groupId>
+   <artifactId>jstl</artifactId>
+   <version>${jstl.version}</version>
+  </dependency>
+  <dependency>
+      <groupId>taglibs</groupId>
+      <artifactId>standard</artifactId>
+      <version>${taglib.version}</version>
+  </dependency>
+
   <!-- TEST -->
   <dependency>
    <groupId>junit</groupId>
@@ -88,6 +114,7 @@
  <!-- </plugin> -->
  <!-- </plugins> -->
  <!-- </build> -->
+
  <build>
   <plugins>
    <plugin>
