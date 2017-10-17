@@ -15,12 +15,12 @@ public class Company {
      * @param id unique id to this company
      * @param name Company label
      */
-    public Company(long id, String name) {
+    public Company(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

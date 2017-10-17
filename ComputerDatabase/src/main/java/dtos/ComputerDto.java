@@ -1,23 +1,23 @@
-package model;
+package dtos;
 
 import java.time.LocalDate;
 
-public class Computer {
-
+public class ComputerDto {
     private Long      id;
     private String    name;
     private LocalDate introduced;
     private LocalDate discontinued;
-    private Company   company;
+    private String    companyName;
+    private Boolean   selected;
 
     /**
      * @param name name
      * @param introduced introduced
      * @param discontinued discontinued
-     * @param company company
+     * @param companyName companyName
      */
-    public Computer(String name, LocalDate introduced, LocalDate discontinued, Company company) {
-        this(null, name, introduced, discontinued, company);
+    public ComputerDto(String name, LocalDate introduced, LocalDate discontinued, String companyName) {
+        this(null, name, introduced, discontinued, companyName);
     }
 
     /**
@@ -25,14 +25,15 @@ public class Computer {
      * @param name name
      * @param introduced introduced
      * @param discontinued discontinued
-     * @param company company
+     * @param companyName companyName
      */
-    public Computer(Long id, String name, LocalDate introduced, LocalDate discontinued, Company company) {
+    public ComputerDto(Long id, String name, LocalDate introduced, LocalDate discontinued, String companyName) {
         this.id = id;
         this.name = name;
         this.introduced = introduced;
         this.discontinued = discontinued;
-        this.company = company;
+        this.companyName = companyName;
+        this.selected = false;
     }
 
     /**
@@ -41,7 +42,7 @@ public class Computer {
     @Override
     public String toString() {
         return "id=" + id + ", name=\"" + name + "\", introduced=" + introduced + ", discontinued=" + discontinued
-                + ", company={" + company.toString() + "}";
+                + ", companyName=" + companyName;
     }
 
     public String getName() {
@@ -68,15 +69,20 @@ public class Computer {
         this.discontinued = discontinued;
     }
 
-    public Company getCompany() {
-        return company;
-    }
-
-    public void setCompany(Company company) {
-        this.company = company;
-    }
-
     public Long getId() {
         return id;
     }
+
+    public String getSelectedStr() {
+        return selected ? "1" : "0";
+    }
+
+    public void setSelected(Boolean selected) {
+        this.selected = selected;
+    }
+
+    public String getCompanyName() {
+        return companyName == null ? "" : companyName;
+    }
+
 }

@@ -19,6 +19,7 @@ public class DaoConnection {
     private static String       url                        = null;
     private static String       password                   = null;
     private static String       user                       = null;
+    private static Boolean      loaded                     = false;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DaoConnection.class);
 
@@ -31,7 +32,7 @@ public class DaoConnection {
     public static <T> T executeQuery(QueryCommand<T> query) throws DaoException {
         Connection conn = null;
 
-        if (url == null) {
+        if (!loaded) {
             loadConnectionString();
         }
         try {
@@ -78,6 +79,14 @@ public class DaoConnection {
     private static void loadConnectionString() throws DaoException {
 
         try {
+            // The newInstance() call is a work around for some
+            // broken Java implementations
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            throw new DaoException(ex);
+        }
+
+        try {
             DbProperties.load();
         } catch (IOException e) {
             throw new DaoException(e);
@@ -90,5 +99,7 @@ public class DaoConnection {
         password = DbProperties.getConfig("dbpassword");
         user = DbProperties.getConfig("dbuser");
         url = String.format(JDBC_URL_CONNECTION_FORMAT, hostAddress, port, database);
+
+        loaded = true;
     }
 }

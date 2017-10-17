@@ -16,13 +16,11 @@ import persistence.querycommands.PageQuery;
 
 public class ComputerDaoImpl {
 
-    private static final String SELECT_COUNT_FROM_COMPUTER   = "select count(*) from computer";
-    private static final String SELECT_ID_NAME_FROM_COMPUTER = "select id, name from computer";
-    private static final String SELECT_COMPUTER_WHERE        = "select * from computer where ";
-    private static final String INSERT_INTO_COMPUTER_VALUES  = "insert into computer values (null, ?, ?, ?, ?)";
-
-    private static final String ID_FILTER   = "id = ?";
-    private static final String NAME_FILTER = "name = \"?\"";
+    private static final String SELECT_COUNT_FROM_COMPUTER        = "select count(*) from computer CO";
+    private static final String SELECT_FROM_COMPUTER_WITH_CONPANY = "select CO.*, CA.name as company_name from computer CO left join company CA on CA.Id = CO.Id";
+    private static final String INSERT_INTO_COMPUTER_VALUES = "insert into computer values (null, ?, ?, ?, ?)";
+    private static final String ID_FILTER                         = " where CO.id = ?";
+    private static final String NAME_FILTER                       = " where CO.name = \"?\"";
 
     private static ComputerDaoImpl instance;
 
@@ -47,21 +45,29 @@ public class ComputerDaoImpl {
      * @throws DaoException content couldn't be loaded
      */
     public List<Computer> getComputersList() throws DaoException {
-        return DaoConnection.executeSelectQuery(SELECT_ID_NAME_FROM_COMPUTER, new ComputerMapper());
+        return DaoConnection.executeSelectQuery(SELECT_FROM_COMPUTER_WITH_CONPANY, new ComputerMapper());
     }
 
     /**
      * @param start element index to start
      * @param splitSize number of total elements than can be loaded
-     * @return the first page of the full computer preview list from DB
+     * @return the selected page of the full computer preview list from DB
      * @throws DaoException content couldn't be loaded
      */
     public Page<Computer> getComputerPage(Long start, Long splitSize) throws DaoException {
+        Long size = getComputerTotalCount();
+        return new Page<Computer>(getPageQuery(), start, size, splitSize);
+    }
+
+    /**
+     * @return total number of computer in DB
+     * @throws DaoException content couldn't be loaded
+     */
+    public Long getComputerTotalCount() throws DaoException {
         Long size = DaoConnection.executeSelectQuery(SELECT_COUNT_FROM_COMPUTER, (ResultSet r) -> {
             return (r.next() ? r.getLong(1) : null);
         });
-
-        return new Page<Computer>(getPageQuery(), start, size, splitSize);
+        return size;
     }
 
     /**
@@ -69,14 +75,25 @@ public class ComputerDaoImpl {
      */
     private PageQuery<Computer> getPageQuery() {
         PageQuery<Computer> command = (Long start, Long splitSize) -> {
-            try {
-                String filter = String.format(" ORDER BY id LIMIT %d,%d", start, splitSize);
-                return DaoConnection.executeSelectQuery(SELECT_ID_NAME_FROM_COMPUTER + filter, new ComputerMapper());
-            } catch (DaoException e) {
-                throw new PageException(e);
-            }
+            return getPagedContent(start, splitSize);
         };
         return command;
+    }
+
+    /**
+     * @param start element index to start
+     * @param splitSize number of total elements than can be loaded
+     * @return the content of one computer page from DB
+     * @throws PageException content couldn't be loaded
+     */
+    public List<Computer> getPagedContent(Long start, Long splitSize) throws PageException {
+        try {
+            String filter = String.format(" ORDER BY name LIMIT %d,%d", start, splitSize);
+            String sql = SELECT_FROM_COMPUTER_WITH_CONPANY + filter;
+            return DaoConnection.executeSelectQuery(sql, new ComputerMapper());
+        } catch (DaoException e) {
+            throw new PageException(e);
+        }
     }
 
     /**
@@ -91,7 +108,7 @@ public class ComputerDaoImpl {
             s.setString(1, newComputer.getName());
             s.setDate(2, Date.valueOf(newComputer.getIntroduced()));
             s.setDate(3, newComputer.getDiscontinued() == null ? null : Date.valueOf(newComputer.getDiscontinued()));
-            s.setLong(4, newComputer.getCompanyId());
+            s.setLong(4, newComputer.getCompany().getId());
 
             s.executeUpdate();
             ResultSet r = s.getGeneratedKeys();
@@ -130,7 +147,7 @@ public class ComputerDaoImpl {
      */
     private Computer getComputerDetail(String queryFilter, String param) throws DaoException {
         return DaoConnection.executeQuery((Connection conn) -> {
-            PreparedStatement s = conn.prepareStatement(SELECT_COMPUTER_WHERE + queryFilter);
+            PreparedStatement s = conn.prepareStatement(SELECT_FROM_COMPUTER_WITH_CONPANY + queryFilter);
             s.setString(1, param);
             ResultSet r = s.executeQuery();
 
@@ -154,7 +171,7 @@ public class ComputerDaoImpl {
             s.setString(1, c.getName());
             s.setDate(2, Date.valueOf(c.getIntroduced()));
             s.setDate(3, c.getDiscontinued() == null ? null : Date.valueOf(c.getDiscontinued()));
-            s.setLong(4, c.getCompanyId());
+            s.setLong(4, c.getCompany().getId());
             s.setLong(5, c.getId());
             s.executeUpdate();
 

@@ -43,6 +43,7 @@ public class ComputerMapperTest {
         String host = "host";
         LocalDate date = getDate();
         Long companyId = 42L;
+        String companyName = "cname";
 
         resultSet = Mockito.mock(ResultSet.class);
         Mockito.when(resultSet.getLong("id")).thenReturn(id);
@@ -50,6 +51,7 @@ public class ComputerMapperTest {
         Mockito.when(resultSet.getDate("introduced")).thenReturn(null);
         Mockito.when(resultSet.getDate("discontinued")).thenReturn(Date.valueOf(date));
         Mockito.when(resultSet.getLong("company_id")).thenReturn(companyId);
+        Mockito.when(resultSet.getString("company_name")).thenReturn(companyName);
         Mockito.when(resultSet.next()).thenReturn(true).thenReturn(false);
 
         List<Computer> result = mapper.process(resultSet);
@@ -60,7 +62,8 @@ public class ComputerMapperTest {
         assertEquals(first.getName(), host);
         assertEquals(first.getIntroduced(), null);
         assertEquals(first.getDiscontinued(), date);
-        assertEquals(first.getCompanyId(), companyId);
+        assertEquals(first.getCompany().getId().longValue(), companyId.longValue());
+        assertEquals(first.getCompany().getName(), companyName);
     }
 
     /**

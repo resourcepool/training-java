@@ -5,9 +5,10 @@
  version="3.0">
  <display-name>ComputerDatabase</display-name>
 
- <welcome-file-list>
-  <welcome-file>/dashboard</welcome-file>
- </welcome-file-list>
+ <servlet-mapping>
+  <servlet-name>Dashboard</servlet-name>
+  <url-pattern>/dashboard</url-pattern>
+ </servlet-mapping>
  
  <servlet>
   <servlet-name>Dashboard</servlet-name>
@@ -16,21 +17,13 @@
    <param-name>listings</param-name>
    <param-value>true</param-value>
   </init-param>
-
   <load-on-startup>1</load-on-startup>
  </servlet>
- <servlet-mapping>
-  <servlet-name>Dashboard</servlet-name>
-  <url-pattern>/dashboard</url-pattern>
- </servlet-mapping>
 
- <jsp-config>
-  <taglib>
-   <taglib-uri>mylib-URI</taglib-uri>
-   <taglib-location>/WEB-INF/tld/mylib.tld</taglib-location>
-  </taglib>
- </jsp-config>
-
+ <welcome-file-list>
+  <welcome-file>/dashboard</welcome-file>
+ </welcome-file-list>
+ 
  <error-page>
   <error-code>403</error-code>
   <location>/views/403.html</location>

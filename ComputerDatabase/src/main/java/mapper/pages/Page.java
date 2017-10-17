@@ -7,11 +7,11 @@ import persistence.querycommands.PageQuery;
 
 public class Page<T> {
 
-    private List<T>             content;
+    private List<T>      content;
     private PageQuery<T> command;
-    private Long                start;
-    private Long                size;
-    private Long                splitSize;
+    private Long         start;
+    private Long         size;
+    private Long         pageSize;
 
     /**
      * @param command query used to fill pages content, either dababase or cached entities
@@ -24,20 +24,20 @@ public class Page<T> {
     /**
      * @param command query used to fill pages content, either dababase or cached entities
      * @param size number of total elements than can be loaded
-     * @param splitSize number of elements by page
+     * @param pageSize number of elements by page
      */
-    public Page(PageQuery<T> command, Long size, Long splitSize) {
-        this(command, 0L, size, splitSize);
+    public Page(PageQuery<T> command, Long size, Long pageSize) {
+        this(command, 0L, size, pageSize);
     }
 
     /**
      * @param command query used to fill pages content, either dababase or cached entities
      * @param start element index to start
      * @param size number of total elements than can be loaded
-     * @param splitSize number of elements by page
+     * @param pageSize number of elements by page
      */
-    public Page(PageQuery<T> command, Long start, Long size, Long splitSize) {
-        this.splitSize = splitSize;
+    public Page(PageQuery<T> command, Long start, Long size, Long pageSize) {
+        this.pageSize = pageSize;
         this.content = null;
         this.start = start;
         this.size = size;
@@ -54,7 +54,7 @@ public class Page<T> {
             return this;
         }
 
-        Page<T> p = new Page<T>(command, start + splitSize, size, splitSize);
+        Page<T> p = new Page<T>(command, start + pageSize, size, pageSize);
         p.load();
         return p;
     }
@@ -62,8 +62,8 @@ public class Page<T> {
     /**
      * @throws PageException PageException page couldn't be loaded
      */
-    private void load() throws PageException {
-        content = command.getContent(start, splitSize);
+    public void load() throws PageException {
+        content = command.getContent(start, pageSize);
     }
 
     /**
@@ -78,6 +78,9 @@ public class Page<T> {
         return b.toString();
     }
 
+    /**
+     * @return Content or null if not loaded
+     */
     public List<T> getContent() {
         return content;
     }
@@ -86,7 +89,7 @@ public class Page<T> {
      * @return true if this page is loaded and there is no next page
      */
     public Boolean hasNext() {
-        return !isLoaded() || (start + splitSize < size);
+        return !isLoaded() || (start + pageSize < size);
     }
 
     public Long getCurrentCount() {
@@ -102,11 +105,15 @@ public class Page<T> {
     }
 
     public Long getPageSize() {
-        return content == null ? splitSize : content.size();
+        return content == null ? pageSize : content.size();
     }
 
-    public Long getPageNumber() {
-        return (start + splitSize) / splitSize;
+    public Long getCurrentPage() {
+        return (start / pageSize) + 1;
+    }
+
+    public Long getPageLimit() {
+        return size / pageSize;
     }
 
 }

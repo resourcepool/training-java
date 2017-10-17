@@ -7,10 +7,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import dtos.ComputerDto;
+import model.Company;
 import model.Computer;
 
 public class ComputerMapper implements ResultMapper<List<Computer>> {
 
+    private static final String COMPANY_NAME_FIELD = "company_name";
     private static final String COMPANY_ID_FIELD   = "company_id";
     private static final String DISCONTINUED_FIELD = "discontinued";
     private static final String INTRODUCED_FIELD   = "introduced";
@@ -59,7 +62,27 @@ public class ComputerMapper implements ResultMapper<List<Computer>> {
         Date discontinuedDate = rs.getDate(DISCONTINUED_FIELD);
         LocalDate discontinued = discontinuedDate != null ? discontinuedDate.toLocalDate() : null;
         Long idCompany = rs.getLong(COMPANY_ID_FIELD);
+        String nameCompany = rs.getString(COMPANY_NAME_FIELD);
 
-        return new Computer(id, name, introduced, discontinued, idCompany);
+        return new Computer(id, name, introduced, discontinued, new Company(idCompany, nameCompany));
+    }
+
+    /**
+     * @param content Computers to convert
+     * @return only simplified dtos
+     */
+    public List<ComputerDto> createDtos(List<Computer> content) {
+        List<ComputerDto> dtos = new ArrayList<ComputerDto>();
+
+        for (Computer computer : content) {
+            dtos.add(new ComputerDto(
+                    computer.getId(),
+                    computer.getName(),
+                    computer.getIntroduced(),
+                    computer.getDiscontinued(),
+                    computer.getCompany().getName()
+                    ));
+        }
+        return dtos;
     }
 }

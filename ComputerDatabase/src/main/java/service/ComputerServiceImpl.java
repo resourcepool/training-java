@@ -79,9 +79,20 @@ public class ComputerServiceImpl {
      * @return the first page of the full computer preview list from DB
      * @throws DaoException content couldn't be loaded
      */
-    public Page<Computer> getComputerPage(Long start, Long size) throws DaoException {
+    public Page<Computer> getComputerEntities(Long start, Long size) throws DaoException {
         return computerDao.getComputerPage(start, size);
     }
+
+    /**
+     * @param nbPage the page number to retrieve, starting at 1
+     * @param pageSize number of elements by page
+     * @return the first page of the full computer preview list from DB
+     * @throws DaoException content couldn't be loaded
+     */
+    public Page<Computer> getComputerPage(Long nbPage, Long pageSize) throws DaoException {
+        return getComputerEntities((nbPage - 1) * pageSize, pageSize);
+    }
+
 
     /**
      * @return the full list of computer, only name and id preview
@@ -89,6 +100,15 @@ public class ComputerServiceImpl {
      */
     public List<Computer> getComputersList() throws DaoException {
         return computerDao.getComputersList();
+    }
+
+    /**
+     * @param splitSize number of element by page
+     * @return total of elements / splitSize
+     * @throws DaoException content couldn't be loaded
+     */
+    public long getPageTotal(Long splitSize) throws DaoException {
+        return computerDao.getComputerTotalCount() / splitSize;
     }
 
 }
