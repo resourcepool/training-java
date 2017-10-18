@@ -9,7 +9,7 @@ public class Page<T> {
 
     private List<T>      content;
     private PageQuery<T> command;
-    private Long         start;
+    private Long         startIndex;
     private Long         size;
     private Long         pageSize;
 
@@ -39,7 +39,7 @@ public class Page<T> {
     public Page(PageQuery<T> command, Long start, Long size, Long pageSize) {
         this.pageSize = pageSize;
         this.content = null;
-        this.start = start;
+        this.startIndex = start;
         this.size = size;
         this.command = command;
     }
@@ -54,7 +54,7 @@ public class Page<T> {
             return this;
         }
 
-        Page<T> p = new Page<T>(command, start + pageSize, size, pageSize);
+        Page<T> p = new Page<T>(command, startIndex + pageSize, size, pageSize);
         p.load();
         return p;
     }
@@ -63,7 +63,7 @@ public class Page<T> {
      * @throws PageException PageException page couldn't be loaded
      */
     public void load() throws PageException {
-        content = command.getContent(start, pageSize);
+        content = command.getContent(startIndex, pageSize);
     }
 
     /**
@@ -89,11 +89,11 @@ public class Page<T> {
      * @return true if this page is loaded and there is no next page
      */
     public Boolean hasNext() {
-        return !isLoaded() || (start + pageSize < size);
+        return !isLoaded() || (startIndex + pageSize < size);
     }
 
     public Long getCurrentCount() {
-        return start;
+        return startIndex;
     }
 
     public Long getTotalCount() {
@@ -109,11 +109,11 @@ public class Page<T> {
     }
 
     public Long getCurrentPage() {
-        return (start / pageSize) + 1;
+        return (startIndex / pageSize) + 1;
     }
 
     public Long getPageLimit() {
-        return size / pageSize;
+        return (size / pageSize) + 1;
     }
 
 }

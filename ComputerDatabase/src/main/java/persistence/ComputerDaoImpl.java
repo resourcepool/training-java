@@ -18,7 +18,7 @@ public class ComputerDaoImpl {
 
     private static final String SELECT_COUNT_FROM_COMPUTER        = "select count(*) from computer CO";
     private static final String SELECT_FROM_COMPUTER_WITH_CONPANY = "select CO.*, CA.name as company_name from computer CO left join company CA on CA.Id = CO.Id";
-    private static final String INSERT_INTO_COMPUTER_VALUES = "insert into computer values (null, ?, ?, ?, ?)";
+    private static final String INSERT_INTO_COMPUTER_VALUES       = "insert into computer values (null, ?, ?, ?, ?)";
     private static final String ID_FILTER                         = " where CO.id = ?";
     private static final String NAME_FILTER                       = " where CO.name = \"?\"";
 

@@ -5,25 +5,31 @@
  version="3.0">
  <display-name>ComputerDatabase</display-name>
 
- <servlet-mapping>
-  <servlet-name>Dashboard</servlet-name>
-  <url-pattern>/dashboard</url-pattern>
- </servlet-mapping>
- 
- <servlet>
-  <servlet-name>Dashboard</servlet-name>
-  <servlet-class>controller.Dashboard</servlet-class>
-  <init-param>
-   <param-name>listings</param-name>
-   <param-value>true</param-value>
-  </init-param>
-  <load-on-startup>1</load-on-startup>
- </servlet>
-
  <welcome-file-list>
   <welcome-file>/dashboard</welcome-file>
  </welcome-file-list>
  
+ <servlet>
+  <servlet-name>Dashboard</servlet-name>
+  <servlet-class>controller.Dashboard</servlet-class>
+  <load-on-startup>1</load-on-startup>
+ </servlet>
+ <servlet>
+  <servlet-name>AddComputer</servlet-name>
+  <servlet-class>controller.AddComputer</servlet-class>
+  <load-on-startup>2</load-on-startup>
+ </servlet>
+ 
+ 
+ <servlet-mapping>
+  <servlet-name>Dashboard</servlet-name>
+  <url-pattern>/dashboard</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>AddComputer</servlet-name>
+  <url-pattern>/addComputer</url-pattern>
+ </servlet-mapping>
+
  <error-page>
   <error-code>403</error-code>
   <location>/views/403.html</location>

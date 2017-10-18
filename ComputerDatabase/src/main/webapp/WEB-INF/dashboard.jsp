@@ -16,13 +16,13 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container">
-		<a class="navbar-brand" href="dashboard.html"> Application - Computer Database </a>
+		<a class="navbar-brand" href="./dashboard"> Application - Computer Database </a>
 	</div>
 	</header>
 
 	<section id="main">
 	<div class="container">
-		<h1 id="homeTitle">121 Computers found</h1>
+		<h1 id="homeTitle">${requestScope.content.totalCount} Computers found</h1>
 		<div id="actions" class="form-horizontal">
 			<div class="pull-left">
 				<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -32,7 +32,7 @@
 				</form>
 			</div>
 			<div class="pull-right">
-				<a class="btn btn-success" id="addComputer" href="addComputer.html">Add Computer</a> <a class="btn btn-default"
+				<a class="btn btn-success" id="addComputer" href="./addComputer">Add Computer</a> <a class="btn btn-default"
 					id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
 			</div>
 		</div>
@@ -69,7 +69,7 @@
 				<c:forEach var="computer" items="${computers}">
 					<tr>
 						<td class="editMode"><input type="checkbox" name="cb" class="cb" value="${computer.getSelectedStr()}"></td>
-						<td><a href="editComputer.html" onclick=""><c:out value="${computer.getName()}"/></a></td>
+						<td><a href="./editComputer" onclick=""><c:out value="${computer.getName()}"/></a></td>
 						<td><c:out value="${computer.getIntroduced()}" /></td>
 						<td><c:out value="${computer.getDiscontinued()}"/></td>
 						<td><c:out value="${computer.getCompanyName()}"/></td>
@@ -83,18 +83,13 @@
 
 	<footer class="navbar-fixed-bottom">
 	<div class="container text-center">
-		<mylib:pageLinks target="dashboard" page="${requestScope.page.currentPage}" limit="${requestScope.page.pageLimit}"/>
-
-		<div class="btn-group btn-group-sm pull-right" role="group">
-			<button type="button" class="btn btn-default">10</button>
-			<button type="button" class="btn btn-default">50</button>
-			<button type="button" class="btn btn-default">100</button>
-		</div>
+		<mylib:pageLinks target="dashboard" page="${requestScope.content.currentPage}" limit="${requestScope.content.pageLimit}"/>
+		<mylib:pagination page="${requestScope.page.current}" page_count="${requestScope.page.count}"/>
 	</div>
 	</footer>
-	<script src="../js/jquery.min.js"></script>
-	<script src="../js/bootstrap.min.js"></script>
-	<script src="../js/dashboard.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/dashboard.js"></script>
 
 </body>
 </html>
