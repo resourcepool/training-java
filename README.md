@@ -86,7 +86,7 @@ Please use Singleton patterns where it makes sense, and implement your own Persi
 #### 4.2.2. Pages
 Now that your app's main features work, implement the pageable feature. We recommend the use of a Page class, containing your entities and the page information.  
 
-#### 4.2.3. Code review, logging (t0 + 2 days)
+#### 4.2.3. Code review, logging (t0 + 2 days - 2 & 3 Octobre)
 Important Points: Architecture (daos, mappers, services, models, exceptions etc...)? Singleton, IOC patterns? Validation (dirty checking?)? Date API? Secure inputs?  
 Javadoc? Comments? Use Slf4j-api logging library, with the most common implementation: logback.  
 
@@ -127,7 +127,7 @@ Use Docker to launch two selenium environments (firefox & chrome) and integrate 
 #### 4.3.3. Secure through validation
 Implement both frontend (jQuery) and backend validation in the web-ui.
 
-#### 4.3.4. Code review (t0 + 8 days)
+#### 4.3.4. Code review (t0 + 8 days - 4 & 5 & 6 & 9 & 10 & 11 & 12 Octobre)
 Important Points: Maven structure? Library scopes? Architecture (daos, mappers, services, models, dtos, controllers, exceptions, validators)? Validation? Unit test coverage? What about selenium integration into maven?  JSTL Tags and HTML documents structure.  
 Prepare a point about Threading (Connections, concurrency), and Transactions.
 
@@ -145,7 +145,7 @@ Search box can look for either computer or company objects.
 #### 4.3.8. Add Company deletion feature in cli
 In the command line interface, add a feature which deletes a company, and all computers related to this company. Warning: Using SQL CASCADE is forbidden. This implies the use of a transaction.  
 
-#### 4.3.9. Code review (t0 + 11 days)
+#### 4.3.9. Code review (t0 + 11 days - 13 & 16 & 17 Octobre)
 Important Points: Maven structure? Library scopes? Architecture (daos, mappers, services, models, dtos, controllers, exceptions, validators)? Validation? Unit test coverage? Search and order by design choices? JSTL Tags and HTML documents structure.  
 Point about Threading (Connections, concurrency), and Transactions.
 
@@ -160,7 +160,7 @@ Using Gatling, you have two days to perform **ANY** kind of improvement of your 
 The goal is to reach the highest score, see the relevant gatling-test/README file for more explanations.  
 For now, choose the simulation **without** Spring Security.
 
-#### 4.3.12. Code review (t0 + 14 days)
+#### 4.3.12. Code review (t0 + 14 days - 18 & 19 & 20 Octobre)
 Important Points: What were the bottlenecks, what optimizations were done, for how much performance gain, which scores were reached.
 
 ### 4.4 Continuous Integration / Continuous Delivery
