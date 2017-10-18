@@ -10,7 +10,7 @@ Here is the macro-planning and timeline of all milestones:
  * [--17 Oct--] t0+11 - Search, OrderBy, Transactions, Connection-Pool, HikariCP
  * [--20 Oct--] t0+14 - Threadlocal, Java Performance contest, Gatling
  * [--27 Oct--] t0+19 - Continuous delivery (Jenkins, Docker, Dockerhub, Glazer)
- * [--01 Nov--] t0+21 - Spring integration
+ * [--31 Oct--] t0+21 - Spring integration
  * [-----Nov--] t0+24 - Spring MVC integration, JDBC Template, i18n
  * [-----Nov--] t0+30 - Maven Multi-modules, Spring Security, Hibernate ORM (JPA, Criteria, QueryDSL, Spring Data JPA)
  * [-----Nov--] t0+32 - Web Services, end of java project
