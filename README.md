@@ -4,18 +4,18 @@ Training: computer-database
 # Content
 This training material holds a sequence of steps and features to implement in a Computer Database webapp.  
 Here is the macro-planning and timeline of all milestones:  
- * [    -   ] t0    - Start of the project
- * [  3 Oct ] t0+2  - Base Architecture, CLI (Add / Edit features), Logging
- * [ 12 Oct ] t0+8  - Web UI (Servlet / JSP Tags), Maven, Unit Tests, jQuery Validation, Backend Validation, Selenium
- * [ 17 Oct ] t0+11 - Search, OrderBy, Transactions, Connection-Pool, HikariCP
- * [ 20 Oct ] t0+14 - Threadlocal, Java Performance contest, Gatling
- * [ 26 Oct ] t0+19 - Continuous delivery (Jenkins, Docker, Dockerhub, Glazer)
- * [    Oct ] t0+21 - Spring integration
- * [    Oct ] t0+24 - Spring MVC integration, JDBC Template, i18n
- * [    Oct ] t0+30 - Maven Multi-modules, Spring Security, Hibernate ORM (JPA, Criteria, QueryDSL, Spring Data JPA)
- * [    Oct ] t0+32 - Web Services, end of java project
- * [    Oct ] t0+37 - End of angular.js project
- * [    Oct ] t0+38 - Project presentation to sales & tech audience
+ * [----------] t0    - Start of the project
+ * [---3 Oct--] t0+2  - Base Architecture, CLI (Add / Edit features), Logging
+ * [--12 Oct--] t0+8  - Web UI (Servlet / JSP Tags), Maven, Unit Tests, jQuery Validation, Backend Validation, Selenium
+ * [--17 Oct--] t0+11 - Search, OrderBy, Transactions, Connection-Pool, HikariCP
+ * [--20 Oct--] t0+14 - Threadlocal, Java Performance contest, Gatling
+ * [--27 Oct--] t0+19 - Continuous delivery (Jenkins, Docker, Dockerhub, Glazer)
+ * [--01 Nov--] t0+21 - Spring integration
+ * [-----Nov--] t0+24 - Spring MVC integration, JDBC Template, i18n
+ * [-----Nov--] t0+30 - Maven Multi-modules, Spring Security, Hibernate ORM (JPA, Criteria, QueryDSL, Spring Data JPA)
+ * [-----Nov--] t0+32 - Web Services, end of java project
+ * [-----Nov--] t0+37 - End of angular.js project
+ * [-----Nov--] t0+38 - Project presentation to sales & tech audience
 
 # Installation
 
