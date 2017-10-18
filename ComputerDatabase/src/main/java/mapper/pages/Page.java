@@ -105,15 +105,18 @@ public class Page<T> {
     }
 
     public Long getPageSize() {
-        return content == null ? pageSize : content.size();
+        return pageSize;
     }
 
     public Long getCurrentPage() {
         return (startIndex / pageSize) + 1;
     }
 
-    public Long getPageLimit() {
-        return (size / pageSize) + 1;
+    /**
+     * @return the number of page that can be loaded with pageSize element per page (with imcomplete page)
+     */
+    public Long getTotalPages() {
+        return (size + pageSize - 1) / pageSize;
     }
 
 }

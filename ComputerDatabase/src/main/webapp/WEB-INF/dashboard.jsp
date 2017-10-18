@@ -83,8 +83,8 @@
 
 	<footer class="navbar-fixed-bottom">
 	<div class="container text-center">
-		<mylib:pageLinks target="dashboard" page="${requestScope.content.currentPage}" limit="${requestScope.content.pageLimit}"/>
-		<mylib:pagination page="${requestScope.page.current}" page_count="${requestScope.page.count}"/>
+		<mylib:pageLinks target="dashboard" page="${requestScope.content.currentPage}" limit="${requestScope.content.totalPages}"/>
+		<mylib:pagination page_count="${requestScope.content.pageSize}"/>
 	</div>
 	</footer>
 	<script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>

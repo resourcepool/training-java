@@ -65,12 +65,12 @@ public class Dashboard extends HttpServlet {
      * @return the page size to use to paginate current-page
      */
     private Long retrivePageSize(HttpServletRequest request) {
-        Long param = (Long) request.getAttribute("pagination");
+        String param = request.getParameter("pagination");
 
         if (param != null) {
-            //            Long pagination = retrieveLong(param, DEFAULT_PAGESIZE);
-            request.getSession().setAttribute("pagination", param);
-            return param;
+            Long pagination = retrieveLong(param, DEFAULT_PAGESIZE);
+            request.getSession().setAttribute("pagination", pagination);
+            return pagination;
         }
 
         Long pagination = (Long) request.getSession().getAttribute("pagination");
