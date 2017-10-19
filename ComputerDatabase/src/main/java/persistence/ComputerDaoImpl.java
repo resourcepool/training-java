@@ -9,8 +9,8 @@ import java.util.List;
 
 import mapper.ComputerMapper;
 import mapper.exceptions.PageException;
-import mapper.pages.Page;
 import model.Computer;
+import model.pages.Page;
 import persistence.exceptions.DaoException;
 import persistence.querycommands.PageQuery;
 

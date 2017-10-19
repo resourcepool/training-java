@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
 import dtos.ComputerDto;
 import mapper.ComputerMapper;
 import mapper.exceptions.PageException;
-import mapper.pages.Page;
 import model.Computer;
+import model.pages.Page;
 import persistence.exceptions.DaoException;
 import service.ComputerServiceImpl;
 

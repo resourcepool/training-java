@@ -7,8 +7,8 @@ import java.util.List;
 
 import mapper.CompanyMapper;
 import mapper.exceptions.PageException;
-import mapper.pages.Page;
 import model.Company;
+import model.pages.Page;
 import persistence.exceptions.DaoException;
 import persistence.querycommands.PageQuery;
 

@@ -1,4 +1,4 @@
-package mapper.pages;
+package model.pages;
 
 import java.util.List;
 

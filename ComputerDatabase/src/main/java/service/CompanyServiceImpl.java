@@ -2,8 +2,8 @@ package service;
 
 import java.util.List;
 
-import mapper.pages.Page;
 import model.Company;
+import model.pages.Page;
 import persistence.CompanyDaoImpl;
 import persistence.exceptions.DaoException;
 
