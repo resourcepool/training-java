@@ -36,9 +36,12 @@ public class DaoConnection {
             loadConnectionString();
         }
         try {
+
             conn = DriverManager.getConnection(url, user, password);
             return query.execute(conn);
+
         } catch (SQLException e) {
+
             throw new DaoException(e);
 
         } finally {

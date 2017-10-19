@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.List;
 
 import mapper.ComputerMapper;
@@ -106,9 +107,15 @@ public class ComputerDaoImpl {
             PreparedStatement s = c.prepareStatement(INSERT_INTO_COMPUTER_VALUES, Statement.RETURN_GENERATED_KEYS);
 
             s.setString(1, newComputer.getName());
-            s.setDate(2, Date.valueOf(newComputer.getIntroduced()));
+            s.setDate(2, newComputer.getIntroduced() == null ? null : Date.valueOf(newComputer.getIntroduced()));
             s.setDate(3, newComputer.getDiscontinued() == null ? null : Date.valueOf(newComputer.getDiscontinued()));
-            s.setLong(4, newComputer.getCompany().getId());
+
+            Long companyId = newComputer.getCompany().getId();
+            if (companyId != null) {
+                s.setLong(4, companyId);
+            } else {
+                s.setNull(4, Types.BIGINT);
+            }
 
             s.executeUpdate();
             ResultSet r = s.getGeneratedKeys();

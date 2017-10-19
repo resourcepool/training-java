@@ -19,14 +19,15 @@ import model.Computer;
 import model.pages.Page;
 import persistence.exceptions.DaoException;
 import service.ComputerServiceImpl;
+import validators.ValidationUtils;
 
 @WebServlet
 public class Dashboard extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private static final Long          DEFAULT_PAGESIZE   = 10L;
-    private static final Long          DEFAULT_STARTING_PAGE = 1L;
-    private static final Logger        LOGGER           = LoggerFactory.getLogger(Dashboard.class);
+    private static final Long   DEFAULT_PAGESIZE      = 10L;
+    private static final Long   DEFAULT_STARTING_PAGE = 1L;
+    private static final Logger LOGGER                = LoggerFactory.getLogger(Dashboard.class);
     private ComputerServiceImpl computerService;
 
     /**
@@ -105,30 +106,12 @@ public class Dashboard extends HttpServlet {
      * @return the selected parameter from the request params
      */
     private Long retrieveLong(String param, Long defaultValue) {
-        if (!isLong(param)) {
+        if (!ValidationUtils.isLong(param)) {
             return defaultValue;
         }
         return Long.parseLong(param);
     }
 
-    /**
-     * @param s String to check
-     * @return true is containing only digit and could call Long.parseLong without throw
-     */
-    private boolean isLong(String s) {
-
-        if (s == null) {
-            return false;
-        }
-
-        int size = s.length();
-        for (int i = 0; i < size; i++) {
-            if (!Character.isDigit(s.charAt(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     /**
      * {@inheritDoc}

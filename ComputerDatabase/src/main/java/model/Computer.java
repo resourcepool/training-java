@@ -14,6 +14,16 @@ public class Computer {
      * @param name name
      * @param introduced introduced
      * @param discontinued discontinued
+     * @param companyId companyId
+     */
+    public Computer(String name, LocalDate introduced, LocalDate discontinued, Long companyId) {
+        this(null, name, introduced, discontinued, new Company(companyId, null));
+    }
+
+    /**
+     * @param name name
+     * @param introduced introduced
+     * @param discontinued discontinued
      * @param company company
      */
     public Computer(String name, LocalDate introduced, LocalDate discontinued, Company company) {
