@@ -86,6 +86,8 @@ public class AddComputer extends HttpServlet {
         ComputerValidation v = new ComputerValidation();
         if (!v.validate(name, introduced, discontinued, companyId)) {
 
+            putBackAttributes(req, name, introduced, discontinued, companyId);
+
             StringBuilder sb = new StringBuilder();
             Map<String, String> map = v.getErrors();
             for (Entry<String, String> elem : map.entrySet()) {
@@ -100,8 +102,12 @@ public class AddComputer extends HttpServlet {
             Computer c = new Computer(name, v.getIntroduced(), v.getDiscontinued(), v.getCompanyId());
             try {
                 Long id = computerService.createComputer(c);
-                req.setAttribute("msg", "Computer \"" + name + "\" successfully created (id=" + id + ")");
+                req.setAttribute("msg", "SUCCESS: Computer \"" + name + "\" successfully created (id=" + id + ")");
+                req.setAttribute("success", true);
             } catch (DaoException e) {
+
+                putBackAttributes(req, name, introduced, discontinued, companyId);
+
                 String msg = "Computer cannot be created, reason \"" + e.getMessage() + "\"";
                 req.setAttribute("msg", msg);
                 LOGGER.error(msg);
@@ -111,5 +117,20 @@ public class AddComputer extends HttpServlet {
 
         loadCompanies(req);
         req.getRequestDispatcher("/WEB-INF/addComputer.jsp").forward(req, resp);
+    }
+
+    /**
+     * @param req Request to fill for next .jsp form, keeping the values
+     * @param name name
+     * @param introduced introduced
+     * @param discontinued discontinued
+     * @param companyId companyId
+     */
+    private void putBackAttributes(HttpServletRequest req, String name, String introduced, String discontinued,
+            String companyId) {
+        req.setAttribute(ComputerValidation.COMPUTER_NAME, name);
+        req.setAttribute(ComputerValidation.INTRODUCED, introduced);
+        req.setAttribute(ComputerValidation.DISCONTINUED, discontinued);
+        req.setAttribute(ComputerValidation.COMPANY_ID, companyId);
     }
 }

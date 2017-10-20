@@ -13,7 +13,7 @@ import model.Computer;
 
 public class ComputerMapper implements ResultMapper<List<Computer>> {
 
-    private static final String COMPANY_NAME_FIELD = "company_name";
+    public static final String  COMPANY_NAME_FIELD = "company_name";
     private static final String COMPANY_ID_FIELD   = "company_id";
     private static final String DISCONTINUED_FIELD = "discontinued";
     private static final String INTRODUCED_FIELD   = "introduced";

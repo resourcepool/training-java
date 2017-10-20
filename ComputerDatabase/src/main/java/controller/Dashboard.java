@@ -50,13 +50,13 @@ public class Dashboard extends HttpServlet {
             throws ServletException, IOException {
 
         Long pageSize = retrivePageSize(request);
-        Long currentPage = retrieveLong(request.getParameter("page"), DEFAULT_STARTING_PAGE);
+        Long currentPage = ValidationUtils.retrieveLong(request.getParameter("page"), DEFAULT_STARTING_PAGE);
 
         Page<Computer> page = getPage(currentPage, pageSize);
         List<ComputerDto> computerDtos = new ComputerMapper().createDtos(page.getContent());
 
         request.setAttribute("computers", computerDtos);
-        request.setAttribute("content", page);
+        request.setAttribute("page", page);
 
         request.getRequestDispatcher("/WEB-INF/dashboard.jsp").forward(request, response);
     }
@@ -69,7 +69,7 @@ public class Dashboard extends HttpServlet {
         String param = request.getParameter("pagination");
 
         if (param != null) {
-            Long pagination = retrieveLong(param, DEFAULT_PAGESIZE);
+            Long pagination = ValidationUtils.retrieveLong(param, DEFAULT_PAGESIZE);
             request.getSession().setAttribute("pagination", pagination);
             return pagination;
         }
@@ -91,25 +91,19 @@ public class Dashboard extends HttpServlet {
      */
     private Page<Computer> getPage(Long pageNumber, Long pageSize) {
         try {
+
             Page<Computer> computers = computerService.getComputerPage(pageNumber, pageSize);
             computers.load();
             return computers;
-        } catch (DaoException | PageException e) {
-            LOGGER.error("Computer Page (X/X) couldn't be loaded, reason \"" + e.getMessage() + "\"");
-            return null;
-        }
-    }
 
-    /**
-     * @param param parse to validate and parse
-     * @param defaultValue value to return if @paramName doesn't exists
-     * @return the selected parameter from the request params
-     */
-    private Long retrieveLong(String param, Long defaultValue) {
-        if (!ValidationUtils.isLong(param)) {
-            return defaultValue;
+        } catch (DaoException | PageException e) {
+
+            String msg = String.format("Computer Page (%d) couldn't be loaded, reason \"%s\"", pageNumber,
+                    e.getMessage());
+            LOGGER.error(msg);
+            return null;
+
         }
-        return Long.parseLong(param);
     }
 
 

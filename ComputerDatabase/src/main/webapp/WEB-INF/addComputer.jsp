@@ -18,40 +18,44 @@
 	</header>
 
 	<section id="main">
+
 		<div class="container">
+			
+			<c:if test="${not empty msg}">
+				<div class="alert ${ success ? 'alert-success' : 'alert-danger'}">
+					<p>${msg}</p>
+				</div>
+			</c:if>
+			
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>Add Computer</h1>
 					<form action="addComputer" method="POST">
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName">Computer name</label> 
-								<input type="text" class="form-control" id="computerName"
-									placeholder="Computer name" name="computerName" value="${out.print(companyId)}">
+								<label for="computerName">Computer name</label> <input type="text" class="form-control" id="computerName"
+									placeholder="Computer name" name="computerName" value="${computerName}">
 							</div>
 							<div class="form-group">
-								<label for="introduced">Introduced date</label> 
-								<input type="date" class="form-control" id="introduced"
+								<label for="introduced">Introduced date</label> <input type="date" class="form-control" id="introduced"
 									placeholder="Introduced date" name="introduced" value="${introduced}">
 							</div>
 							<div class="form-group">
-								<label for="discontinued">Discontinued date</label> 
-								<input type="date" class="form-control" id="discontinued"
+								<label for="discontinued">Discontinued date</label> <input type="date" class="form-control" id="discontinued"
 									placeholder="Discontinued date" name="discontinued" value="${discontinued}">
 							</div>
 							<div class="form-group">
 								<label for="companyId">Company</label> <select class="form-control" id="companyId" name="companyId">
 									<option value="${noCompany}">--</option>
 									<c:forEach items="${companies}" var="item">
-										<option value="${item.id}" ${item.id == companyId ? selected : "" }>${item.name}</option>
+										<option value="${item.id}" ${item.id.toString() == companyId ? selected : "" }>${item.name}</option>
 									</c:forEach>
 								</select>
 							</div>
 						</fieldset>
-						<c:if test="${not empty msg}">
-							<div class="msg"><p>${msg}</p></div>
-						</c:if>
-						<div class="msg"><p>${out.print(introduced)}</p></div>
+						<div class="msg">
+							<p>${out.print(introduced)}</p>
+						</div>
 						<div class="actions pull-right">
 							<input type="submit" value="Add" class="btn btn-primary"> or <a href="./dashboard"
 								class="btn btn-default">Cancel</a>

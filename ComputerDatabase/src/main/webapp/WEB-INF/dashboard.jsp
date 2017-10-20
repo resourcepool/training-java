@@ -22,7 +22,7 @@
 
 	<section id="main">
 	<div class="container">
-		<h1 id="homeTitle">${requestScope.content.totalCount} Computers found</h1>
+		<h1 id="homeTitle">${requestScope.page.totalCount} Computers found</h1>
 		<div id="actions" class="form-horizontal">
 			<div class="pull-left">
 				<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -83,8 +83,8 @@
 
 	<footer class="navbar-fixed-bottom">
 	<div class="container text-center">
-		<mylib:pageLinks target="dashboard" page="${requestScope.content.currentPage}" limit="${requestScope.content.totalPages}"/>
-		<mylib:pagination page_count="${requestScope.content.pageSize}"/>
+		<mylib:pageLinks target="dashboard" page="${requestScope.page.currentPage}" limit="${requestScope.page.totalPages}"/>
+		<mylib:pagination page_count="${requestScope.page.pageSize}"/>
 	</div>
 	</footer>
 	<script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>

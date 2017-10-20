@@ -16,7 +16,7 @@ public class ComputerValidation {
     public static final String COMPUTER_NAME = "computerName";
 
     private static final String DATE_FORMAT = "dd-MM-yyyy";
-    private static final String DATEFORMAT_ERROR = "Wrong format (leave empty or" + DATE_FORMAT + ")";
+    private static final String DATEFORMAT_ERROR = "Wrong format (leave empty or use " + DATE_FORMAT + ")";
 
     private Map<String, String> errors;
     private LocalDate           introducedDate;
@@ -38,13 +38,12 @@ public class ComputerValidation {
         }
 
         if (companyIdStr != null && !companyIdStr.isEmpty() && !companyIdStr.equals(NO_COMPANY)) {
-            if (!ValidationUtils.isLong(companyIdStr)) {
+            if (ValidationUtils.isLong(companyIdStr)) {
                 companyId = Long.parseLong(companyIdStr);
             } else {
                 errors.put(COMPANY_ID, "Company id has to be a number");
             }
         }
-
 
         if (!isEmptyOrNull(introduced)) {
             introducedDate = checkDate(introduced);
