@@ -1,3 +1,4 @@
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -53,6 +54,7 @@ public class PageLoadingTest {
     }
 
     /**
+     * verify content is retrieved from page > from service > from dao.
      * @throws SQLException never thrown
      * @throws DaoException never thrown
      * @throws PageException never thrown
@@ -64,5 +66,36 @@ public class PageLoadingTest {
 
         List<Company> l = page.next().getContent();
         assertSame(l.get(0), content);
+    }
+
+    /**
+     * test if page number is accurate.
+     */
+    @Test
+    public void testTotalPage() {
+        Page<Company> page;
+        page = new Page<Company>(query, 0L, 50L, 1L);
+        assertEquals(50L, page.getTotalPages().longValue());
+
+        page = new Page<Company>(query, 50L, 50L, 1L);
+        assertEquals(50L, page.getTotalPages().longValue());
+
+        page = new Page<Company>(query, 0L, 150L, 50L);
+        assertEquals(3L, page.getTotalPages().longValue());
+
+        page = new Page<Company>(query, 0L, 151L, 50L);
+        assertEquals(4L, page.getTotalPages().longValue());
+
+        page = new Page<Company>(query, 0L, 150L, 30L);
+        assertEquals(5L, page.getTotalPages().longValue());
+
+        page = new Page<Company>(query, 0L, 151L, 30L);
+        assertEquals(6L, page.getTotalPages().longValue());
+
+        page = new Page<Company>(query, 0L, 150L, 150L);
+        assertEquals(1L, page.getTotalPages().longValue());
+
+        page = new Page<Company>(query, 0L, 150L, 160L);
+        assertEquals(1L, page.getTotalPages().longValue());
     }
 }

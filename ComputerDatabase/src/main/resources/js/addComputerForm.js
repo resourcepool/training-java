@@ -23,9 +23,8 @@ $(document).ready(function() {
 
 //			$("#nameError").html("Name should contain atleast 5 characters");
 			
-			// $( "<div id=\"introducedError\">Test</div>" ).insertAfter(
-			// "#introduced" )
-			// $("#introducedError").addClass("alert alert-danger");
+//			$( "<div class=\"alert alert-warning\">Test</div>" ).insertAfter("#introduced" )
+//			// $("#introducedError").addClass("alert alert-danger");
 			// $("#introducedError").attr("align", "left")
 
 			// $('.error').show();
@@ -53,8 +52,15 @@ function isValidDate(dateString) {
 	var regEx = /^\d{2}-\d{2}-\d{4}$/;
 	if (!dateString.match(regEx))
 		return false; // Invalid format
-	var d = new Date(dateString);
+
+	var date = dateString.split("-");
+    var d = parseInt(date[0], 10),
+        m = parseInt(date[1], 10),
+        y = parseInt(date[2], 10);
+    
+	var d = new Date(y, m - 1, d);
+	
 	if (!d.getTime())
 		return false; // Invalid date (or this could be epoch)
-	return d.toISOString().slice(0, 10) === dateString;
+	return true;
 }

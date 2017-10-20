@@ -2,7 +2,6 @@ package persistence;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,12 +14,6 @@ import persistence.exceptions.DaoException;
 import persistence.querycommands.QueryCommand;
 
 public class DaoConnection {
-    private static final String JDBC_URL_CONNECTION_FORMAT = "jdbc:mysql://%s:%s/%s?autoReconnect=true&useSSL=false";
-    private static String       url                        = null;
-    private static String       password                   = null;
-    private static String       user                       = null;
-    private static Boolean      loaded                     = false;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(DaoConnection.class);
 
     /**
@@ -32,15 +25,12 @@ public class DaoConnection {
     public static <T> T executeQuery(QueryCommand<T> query) throws DaoException {
         Connection conn = null;
 
-        if (!loaded) {
-            loadConnectionString();
-        }
         try {
 
-            conn = DriverManager.getConnection(url, user, password);
+            conn = DataSource.getConnection();
             return query.execute(conn);
 
-        } catch (SQLException e) {
+        } catch (SQLException | IOException e) {
 
             throw new DaoException(e);
 
@@ -53,7 +43,6 @@ public class DaoConnection {
                     LOGGER.warn("Connection failed to close");
                 }
             }
-
         }
     }
 
@@ -73,36 +62,5 @@ public class DaoConnection {
             }
         };
         return executeQuery(query);
-    }
-
-    /**
-     * load DbConfig and read it to build jdbc connection string url.
-     * @throws DaoException db properties failed to load config file
-     */
-    private static void loadConnectionString() throws DaoException {
-
-        try {
-            // The newInstance() call is a work around for some
-            // broken Java implementations
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-            throw new DaoException(ex);
-        }
-
-        try {
-            DbProperties.load();
-        } catch (IOException e) {
-            throw new DaoException(e);
-        }
-
-        String database = DbProperties.getConfig("database");
-        String port = DbProperties.getConfig("port");
-        String hostAddress = DbProperties.getConfig("hostAddress");
-
-        password = DbProperties.getConfig("dbpassword");
-        user = DbProperties.getConfig("dbuser");
-        url = String.format(JDBC_URL_CONNECTION_FORMAT, hostAddress, port, database);
-
-        loaded = true;
     }
 }

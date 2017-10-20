@@ -28,6 +28,3 @@ input[type='checkbox'] {
     white-space: nowrap;
 }
 
-.form-control.error {
-	background-color: #ffbbbb;
-}

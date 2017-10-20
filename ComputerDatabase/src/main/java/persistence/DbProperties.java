@@ -67,4 +67,8 @@ public class DbProperties {
 
         return props.getProperty(key);
     }
+
+    public static Properties getLoaded() {
+        return props;
+    }
 }

@@ -9,6 +9,7 @@
 <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="${pageContext.request.contextPath}/resources/css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet" media="screen">
+<link href="${pageContext.request.contextPath}/resources/css/cdbForm.css" rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -18,9 +19,8 @@
 	</header>
 
 	<section id="main">
-
 		<div class="container">
-			
+
 			<c:if test="${not empty msg}">
 				<div class="alert ${ success ? 'alert-success' : 'alert-danger'}">
 					<p><c:out value="${msg}"/></p>
