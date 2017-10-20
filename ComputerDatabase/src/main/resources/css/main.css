@@ -27,3 +27,7 @@ input[type='checkbox'] {
     border-radius: 5px;
     white-space: nowrap;
 }
+
+.form-control.error {
+	background-color: #ffbbbb;
+}

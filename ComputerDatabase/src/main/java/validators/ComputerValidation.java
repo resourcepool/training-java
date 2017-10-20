@@ -33,8 +33,12 @@ public class ComputerValidation {
     public Boolean validate(String name, String introduced, String discontinued, String companyIdStr) {
         errors = new HashMap<String, String>();
 
-        if (name == null) {
+        if (name == null || name.isEmpty()) {
             errors.put(COMPUTER_NAME, "Computer name is mandatory");
+        }
+
+        if (name.length() < 3) {
+            errors.put(COMPUTER_NAME, "Computer name has to be at least 3 char long");
         }
 
         if (companyIdStr != null && !companyIdStr.isEmpty() && !companyIdStr.equals(NO_COMPANY)) {
