@@ -26,7 +26,7 @@ public class Dashboard extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Long DEFAULT_PAGESIZE = 10L;
+    private static final Long DEFAULT_PAGESIZE = 20L;
     private static final Long DEFAULT_STARTING_PAGE = 1L;
     private static final Logger LOGGER = LoggerFactory.getLogger(Dashboard.class);
     private ComputerServiceImpl computerService;
@@ -52,9 +52,13 @@ public class Dashboard extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String paramMsg = request.getParameter("successDelete");
-        if (paramMsg != null && !paramMsg.isEmpty()) {
-            RequestUtils.showMsg(request, true, "Company Sucessfully deleted : " + paramMsg);
+        String paramMsg = request.getParameter("msg");
+        String paramSuccess = request.getParameter("success");
+
+        if (paramMsg != null && !paramMsg.isEmpty() && paramSuccess != null && paramSuccess.isEmpty()) {
+
+            Boolean bool = paramSuccess.equals("true") || paramSuccess.equals("success");
+            RequestUtils.showMsg(request, bool, paramMsg);
         }
 
         loadDashboard(request, response);

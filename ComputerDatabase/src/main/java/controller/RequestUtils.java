@@ -28,7 +28,7 @@ public class RequestUtils {
         req.setAttribute(ComputerValidator.INTRODUCED, introducedStr);
         String discontinuedStr = getFormattedString(discontinued);
         req.setAttribute(ComputerValidator.DISCONTINUED, discontinuedStr);
-        req.setAttribute(ComputerValidator.COMPANY_ID, companyId.toString());
+        req.setAttribute(ComputerValidator.COMPANY_ID, companyId == null ? null : companyId.toString());
     }
 
     /**

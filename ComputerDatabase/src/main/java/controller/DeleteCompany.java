@@ -47,14 +47,20 @@ public class DeleteCompany extends HttpServlet {
             try {
 
                 companyService.deleteCompany(Long.parseLong(selection));
-                LOGGER.info("Sucessfully deleted : " + selection);
+                String msg = "Sucessfully deleted : " + selection;
+                RequestUtils.showMsg(req, true, msg);
+                LOGGER.info(msg);
 
             } catch (DaoException e) {
 
-                LOGGER.error("failed to delete : " + e.getMessage());
+
+                String msg = "failed to delete : " + e.getMessage();
+                RequestUtils.showMsg(req, false, msg);
+                LOGGER.error(msg);
             }
         }
 
-        resp.sendRedirect("dashboard?successDelete=" + selection);
+        getServletContext().getRequestDispatcher("/dashboard").forward(req, resp);
+        //
     }
 }
