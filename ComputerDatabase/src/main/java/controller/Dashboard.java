@@ -52,6 +52,11 @@ public class Dashboard extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        String paramMsg = request.getParameter("successDelete");
+        if (paramMsg != null && !paramMsg.isEmpty()) {
+            RequestUtils.showMsg(request, true, "Company Sucessfully deleted : " + paramMsg);
+        }
+
         loadDashboard(request, response);
     }
 

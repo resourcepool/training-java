@@ -26,6 +26,10 @@
 		<servlet-name>EditComputer</servlet-name>
 		<servlet-class>controller.EditComputer</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>DeleteCompany</servlet-name>
+		<servlet-class>controller.DeleteCompany</servlet-class>
+	</servlet>
 
 	<!-- ################################## MAPPINGS ######################################## -->
 
@@ -40,6 +44,10 @@
 	<servlet-mapping>
 		<servlet-name>EditComputer</servlet-name>
 		<url-pattern>/editComputer</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>DeleteCompany</servlet-name>
+		<url-pattern>/deleteCompany</url-pattern>
 	</servlet-mapping>
 
 	<!-- ################################## ERROR PAGES ######################################## -->

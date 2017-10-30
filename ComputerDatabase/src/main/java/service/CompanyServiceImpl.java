@@ -14,6 +14,7 @@ public class CompanyServiceImpl {
 
     /**
      * Private ctor.
+     *
      * @param dao CompanyDao to access Data
      */
     private CompanyServiceImpl(CompanyDaoImpl dao) {
@@ -57,6 +58,14 @@ public class CompanyServiceImpl {
     public Page<Company> getCompanyPage() throws DaoException {
 
         return companyDao.getCompanyPage();
+    }
+
+    /**
+     * @param id id to delete
+     * @throws DaoException failed to delete
+     */
+    public void deleteCompany(Long id) throws DaoException {
+        companyDao.deleteCompany(id);
     }
 
 }

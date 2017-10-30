@@ -9,7 +9,7 @@ import java.util.Properties;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-public class DataSource {
+public class HikariPool {
 
     private static HikariConfig     config;
     private static HikariDataSource ds;
@@ -17,7 +17,7 @@ public class DataSource {
     /**
      * private ctor.
      */
-    private DataSource() {
+    private HikariPool() {
 
     }
 

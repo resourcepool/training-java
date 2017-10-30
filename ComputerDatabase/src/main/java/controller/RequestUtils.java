@@ -1,13 +1,16 @@
 package controller;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import javax.servlet.http.HttpServletRequest;
 
-import mapper.DateToStringFormatted;
 import validators.ComputerValidator;
+import validators.ValidationUtils;
 
 public class RequestUtils {
+
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(ValidationUtils.DATE_FORMAT);
 
     /**
      * @param req req
@@ -21,9 +24,9 @@ public class RequestUtils {
             LocalDate discontinued, Long companyId) {
         req.setAttribute("id", id);
         req.setAttribute(ComputerValidator.COMPUTER_NAME, name);
-        String introducedStr = DateToStringFormatted.getFormattedString(introduced);
+        String introducedStr = getFormattedString(introduced);
         req.setAttribute(ComputerValidator.INTRODUCED, introducedStr);
-        String discontinuedStr = DateToStringFormatted.getFormattedString(discontinued);
+        String discontinuedStr = getFormattedString(discontinued);
         req.setAttribute(ComputerValidator.DISCONTINUED, discontinuedStr);
         req.setAttribute(ComputerValidator.COMPANY_ID, companyId.toString());
     }
@@ -53,4 +56,16 @@ public class RequestUtils {
         req.setAttribute("success", success);
     }
 
+    /**
+     * @param date localDate
+     * @return string formatted as ValidationUtils.DATE_FORMAT
+     */
+    public static String getFormattedString(LocalDate date) {
+        if (date == null) {
+            return "";
+        }
+        DateTimeFormatter formatter = DATE_FORMATTER;
+        return date.format(formatter);
+    }
 }
+

@@ -27,7 +27,7 @@ public class DaoConnection {
 
         try {
 
-            conn = DataSource.getConnection();
+            conn = HikariPool.getConnection();
             return query.execute(conn);
 
         } catch (SQLException | IOException e) {

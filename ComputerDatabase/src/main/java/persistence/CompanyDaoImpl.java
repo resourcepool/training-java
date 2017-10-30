@@ -3,6 +3,7 @@ package persistence;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import mapper.CompanyMapper;
@@ -13,10 +14,12 @@ import persistence.exceptions.DaoException;
 import persistence.querycommands.PageQuery;
 
 public class CompanyDaoImpl {
-    private static final String SELECT_COUNT_FROM_COMPANY          = "select count(*) from company";
+    private static final String DELETE_FROM_COMPANY_WHERE_ID = "delete from company where id = ?";
+    private static final String DELETE_FROM_COMPUTER_WHERE_COMPANY_ID = "delete from computer where company_id = ?";
+    private static final String SELECT_COUNT_FROM_COMPANY = "select count(*) from company";
     private static final String SELECT_COUNT_FROM_COMPANY_WHERE_ID = "select count(*) from company where id = ?";
-    private static final String   SELECT_ID_NAME_FROM_COMPANY        = "select id, name from company order by name";
-    private static CompanyDaoImpl   instance;
+    private static final String SELECT_ID_NAME_FROM_COMPANY = "select id, name from company order by name";
+    private static CompanyDaoImpl instance;
 
     /**
      * private ctor.
@@ -87,5 +90,52 @@ public class CompanyDaoImpl {
             return (r.next() ? r.getLong(1) : null);
         });
         return size;
+    }
+
+    /**
+     * @param id id to delete
+     * @throws DaoException failed to delete
+     */
+    public void deleteCompany(Long id) throws DaoException {
+
+        DaoConnection.executeQuery((Connection conn) -> {
+
+            PreparedStatement deleteComputers = null;
+            PreparedStatement deleteCompany = null;
+
+            try {
+                conn.setAutoCommit(false);
+
+                deleteComputers = conn.prepareStatement(DELETE_FROM_COMPUTER_WHERE_COMPANY_ID);
+                deleteComputers.setLong(1, id);
+
+                deleteCompany = conn.prepareStatement(DELETE_FROM_COMPANY_WHERE_ID);
+                deleteCompany.setLong(1, id);
+
+                deleteComputers.executeUpdate();
+                deleteCompany.executeUpdate();
+                conn.commit();
+
+            } catch (SQLException e) {
+
+                conn.rollback();
+                throw e;
+
+            } finally {
+
+                if (deleteCompany != null) {
+                    deleteCompany.close();
+                }
+                if (deleteComputers != null) {
+                    deleteComputers.close();
+                }
+
+                conn.setAutoCommit(true);
+
+            }
+
+            return true;
+        });
+
     }
 }
