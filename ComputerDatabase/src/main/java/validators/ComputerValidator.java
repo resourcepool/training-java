@@ -1,27 +1,49 @@
 package validators;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ComputerValidation {
+public class ComputerValidator {
+    private static final String ID = "id";
     public static final String NO_COMPANY    = "--";
     public static final String COMPANY_ID    = "companyId";
     public static final String DISCONTINUED  = "discontinued";
     public static final String INTRODUCED    = "introduced";
     public static final String COMPUTER_NAME = "computerName";
 
-    private static final String DATE_FORMAT = "dd-MM-yyyy";
-    private static final String DATEFORMAT_ERROR = "Wrong format (leave empty or use " + DATE_FORMAT + ")";
+    private static final String DATEFORMAT_ERROR = "Wrong format (leave empty or use " + ValidationUtils.DATE_FORMAT + ")";
 
     private Map<String, String> errors;
     private LocalDate           introducedDate;
     private LocalDate           discontinuedDate;
     private Long                companyId = null;
+    private Long                id = null;
+
+
+    /**
+     * validate a computer (id too).
+     * @param idStr id as string from jsp page
+     * @param name name
+     * @param introduced introduced
+     * @param discontinued discontinued
+     * @param companyIdStr companyId
+     * @return errorList
+     */
+    public boolean validate(String idStr, String name, String introduced, String discontinued, String companyIdStr) {
+        prepare();
+
+        if (ValidationUtils.isLong(idStr)) {
+            id = Long.parseLong(idStr);
+            if (id < 1) {
+                errors.put(ID, "id must be valid");
+            }
+        } else {
+            errors.put(ID, "id has to be a number");
+        }
+
+        return validateCore(name, introduced, discontinued, companyIdStr);
+    }
 
     /**
      * @param name name entry from Dashboad servlet
@@ -31,8 +53,25 @@ public class ComputerValidation {
      * @return Values received can be mapper to a Computer model
      */
     public Boolean validate(String name, String introduced, String discontinued, String companyIdStr) {
-        errors = new HashMap<String, String>();
+        prepare();
+        return validateCore(name, introduced, discontinued, companyIdStr);
+    }
 
+    /**
+     * clean previous error, init list and old values.
+     */
+    private void prepare() {
+        errors = new HashMap<String, String>();
+    }
+
+    /**
+     * @param name name
+     * @param introduced introduced
+     * @param discontinued discontinued
+     * @param companyIdStr companyIdStr
+     * @return true if valid
+     */
+    private Boolean validateCore(String name, String introduced, String discontinued, String companyIdStr) {
         if (name == null || name.isEmpty()) {
             errors.put(COMPUTER_NAME, "Computer name is mandatory");
         }
@@ -44,19 +83,22 @@ public class ComputerValidation {
         if (companyIdStr != null && !companyIdStr.isEmpty() && !companyIdStr.equals(NO_COMPANY)) {
             if (ValidationUtils.isLong(companyIdStr)) {
                 companyId = Long.parseLong(companyIdStr);
+                if (companyId < 1) {
+                    errors.put(COMPANY_ID, "company_id must be valid");
+                }
             } else {
                 errors.put(COMPANY_ID, "Company id has to be a number");
             }
         }
 
         if (!isEmptyOrNull(introduced)) {
-            introducedDate = checkDate(introduced);
+            introducedDate = ValidationUtils.checkDate(introduced);
             if (introducedDate == null) {
                 errors.put(INTRODUCED, DATEFORMAT_ERROR);
             }
         }
         if (!isEmptyOrNull(discontinued)) {
-            discontinuedDate = checkDate(discontinued);
+            discontinuedDate = ValidationUtils.checkDate(discontinued);
             if (discontinuedDate == null) {
                 errors.put(DISCONTINUED, DATEFORMAT_ERROR);
             }
@@ -87,28 +129,13 @@ public class ComputerValidation {
         return s == null || s.isEmpty();
     }
 
-    /**
-     * @param dateStr @NotNull dateToCheck, empty or null is automatically VALID (true)
-     * @return true if valid
-     */
-    private LocalDate checkDate(String dateStr) {
-
-        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
-        sdf.setLenient(false);
-
-        try {
-
-            Date date = sdf.parse(dateStr);
-            LocalDate value = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            return value;
-
-        } catch (ParseException e) {
-            return null;
-        }
-    }
-
     public Map<String, String> getErrors() {
         return errors;
     }
+
+    public Long getId() {
+        return id;
+    }
+
 }
 

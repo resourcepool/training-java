@@ -1,8 +1,8 @@
 package model;
 
 public class Company {
-    private Long   id;
-    private String name;
+    private Long   id = null;
+    private String name = null;
 
     /**
      * @param name Company label

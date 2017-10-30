@@ -1,6 +1,15 @@
 package validators;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
+
 public class ValidationUtils {
+
+    public static final String DATE_FORMAT = "dd-MM-yyyy";
 
     /**
      * @param param parse to validate and parse
@@ -28,6 +37,42 @@ public class ValidationUtils {
         for (int i = 0; i < size; i++) {
             if (!Character.isDigit(s.charAt(i))) {
                 return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @param dateStr @NotNull dateToCheck, empty or null is automatically VALID (true)
+     * @return true if valid
+     */
+    public static LocalDate checkDate(String dateStr) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+        sdf.setLenient(false);
+
+        try {
+
+            Date date = sdf.parse(dateStr);
+            LocalDate value = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            return value;
+
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    /**
+     * @param selection selection ids (Long) splited by ","
+     * @param ids list to fill
+     * @return all entries are of type "Long"
+     */
+    public static Boolean isLongList(String[] selection, List<Long> ids) {
+        for (String s : selection[0].split(",")) {
+            if (!isLong(s)) {
+                return false;
+            } else {
+                ids.add(Long.parseLong(s));
             }
         }
         return true;

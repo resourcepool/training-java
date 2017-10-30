@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import mapper.ComputerMapper;
 import mapper.exceptions.PageException;
@@ -174,11 +175,17 @@ public class ComputerDaoImpl {
         DaoConnection.executeQuery((Connection conn) -> {
             PreparedStatement s = conn
                     .prepareStatement(
-                            "update computer set name = ?, introduced = ? discontinued = ?, company_id = ? where id = ?");
+                            "update computer set name = ?, introduced = ?, discontinued = ?, company_id = ? where id = ?");
             s.setString(1, c.getName());
             s.setDate(2, Date.valueOf(c.getIntroduced()));
             s.setDate(3, c.getDiscontinued() == null ? null : Date.valueOf(c.getDiscontinued()));
-            s.setLong(4, c.getCompany().getId());
+
+            if (c.getCompany().getId() != null) {
+                s.setLong(4, c.getCompany().getId());
+            } else {
+                s.setNull(4, Types.BIGINT);
+            }
+
             s.setLong(5, c.getId());
             s.executeUpdate();
 
@@ -195,6 +202,23 @@ public class ComputerDaoImpl {
         DaoConnection.executeQuery((Connection conn) -> {
             try (Statement s = conn.createStatement()) {
                 s.execute("delete from computer where id = " + id);
+            }
+            return true;
+        });
+    }
+
+    /**
+     * @param ids ids to delete
+     * @throws DaoException failed
+     */
+    public void deleteComputers(List<Long> ids) throws DaoException {
+        String filter = ids.stream()
+                .map(number -> String.valueOf(number))
+                .collect(Collectors.joining(","));
+
+        DaoConnection.executeQuery((Connection conn) -> {
+            try (Statement s = conn.createStatement()) {
+                s.execute("delete from computer where id in (" + filter + ")");
             }
             return true;
         });

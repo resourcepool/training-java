@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import dtos.ComputerDto;
 import model.Company;
 import model.Computer;
 
@@ -64,26 +63,9 @@ public class ComputerMapper implements ResultMapper<List<Computer>> {
         Long idCompany = rs.getLong(COMPANY_ID_FIELD);
         String nameCompany = rs.getString(COMPANY_NAME_FIELD);
 
-        return new Computer(id, name, introduced, discontinued, new Company(idCompany, nameCompany));
+        Company company = new Company(idCompany == 0 ? null : idCompany, nameCompany);
+        return new Computer(id, name, introduced, discontinued, company);
     }
 
-    /**
-     * @param content Computers to convert
-     * @return only simplified dtos
-     */
-    public List<ComputerDto> createDtos(List<Computer> content) {
-        List<ComputerDto> dtos = new ArrayList<ComputerDto>();
-
-        for (Computer computer : content) {
-            dtos.add(new ComputerDto(
-                    computer.getId(),
-                    computer.getName(),
-                    computer.getIntroduced(),
-                    computer.getDiscontinued(),
-                    computer.getCompany().getName()
-                    ));
-        }
-        return dtos;
-    }
 
 }

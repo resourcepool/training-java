@@ -31,6 +31,17 @@ public class Computer {
     }
 
     /**
+     * @param id id
+     * @param name name
+     * @param introduced introduced
+     * @param discontinued discontinued
+     * @param companyId companyId
+     */
+    public Computer(Long id, String name, LocalDate introduced, LocalDate discontinued, Long companyId) {
+        this(id, name, introduced, discontinued, new Company(companyId, null));
+    }
+
+    /**
      * @param id unique id
      * @param name name
      * @param introduced introduced

@@ -74,6 +74,14 @@ public class ComputerServiceImpl {
     }
 
     /**
+     * @param ids ids list of the computer to delete
+     * @throws DaoException content couldn't be loaded
+     */
+    public void deleteComputers(List<Long> ids) throws DaoException {
+        computerDao.deleteComputers(ids);
+    }
+
+    /**
      * @param start index entities to start at (start at 0)
      * @param size number of elements
      * @return the first page of the full computer preview list from DB
