@@ -65,6 +65,42 @@ public class Dashboard extends HttpServlet {
     }
 
     /**
+     * {@inheritDoc}
+     *
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     *      response)
+     * @param req request
+     * @param resp response
+     * @throws ServletException request
+     * @throws IOException exception
+     */
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        String[] selection = req.getParameterValues("selection");
+
+        if (selection != null) {
+            List<Long> ids = new ArrayList<Long>();
+            Boolean result = ValidationUtils.isLongList(selection, ids);
+
+            if (result) {
+                try {
+                    computerService.deleteComputers(ids);
+                    RequestUtils.showMsg(req, true, "Success, " + ids.size() + " ids deleted");
+                } catch (DaoException e) {
+                    String msg = "failed to execute deletion, reason :" + e.getMessage();
+                    RequestUtils.showMsg(req, false, msg);
+                    LOGGER.error(msg);
+                }
+            } else {
+                RequestUtils.showMsg(req, false, "all ids are not valid");
+            }
+        }
+
+        loadDashboard(req, resp);
+    }
+
+    /**
      * @param request request
      * @param response response
      * @throws ServletException could not load
@@ -130,45 +166,5 @@ public class Dashboard extends HttpServlet {
             LOGGER.error(msg);
             return null;
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-     *      response)
-     * @param req request
-     * @param resp response
-     * @throws ServletException request
-     * @throws IOException exception
-     */
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        String[] selection = req.getParameterValues("selection");
-
-        if (selection == null || selection.length <= 0) {
-            RequestUtils.showMsg(req, false, "please provide ids for deletion");
-
-        } else {
-
-            List<Long> ids = new ArrayList<Long>();
-            Boolean result = ValidationUtils.isLongList(selection, ids);
-
-            if (result) {
-                try {
-                    computerService.deleteComputers(ids);
-                    RequestUtils.showMsg(req, true, "Success, " + ids.size() + " ids deleted");
-                } catch (DaoException e) {
-                    String msg = "failed to execute deletion, reason :" + e.getMessage();
-                    RequestUtils.showMsg(req, false, msg);
-                    LOGGER.error(msg);
-                }
-            } else {
-                RequestUtils.showMsg(req, false, "all ids are not valid");
-            }
-        }
-
-        loadDashboard(req, resp);
     }
 }

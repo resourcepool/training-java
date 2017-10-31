@@ -8,7 +8,6 @@
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
-<!-- Bootstrap -->
 <link href="<c:url value ="/resources/css/bootstrap.min.css"/>" rel="stylesheet" media="screen">
 <link href="<c:url value ="/resources/css/font-awesome.css"/>" rel="stylesheet" media="screen">
 <link href="<c:url value ="/resources/css/main.css"/>" rel="stylesheet" media="screen">
@@ -21,7 +20,7 @@
 	</header>
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${page.totalCount} Computers found</h1>
+			<h1 id="homeTitle">${page.totalCount}Computersfound</h1>
 			<c:if test="${ not empty msg }">
 				<div class="alert ${ success ? 'alert-success' : 'alert-danger' }">
 					<p><c:out value="${ msg }" /></p>
@@ -39,15 +38,13 @@
 				</div>
 			</div>
 		</div>
-		<form id="deleteForm" action="#" method="POST">
+		<form id="deleteComputerForm" action="#" method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 		<div class="container" style="margin-top: 10px;">
 			<table class="table table-striped table-bordered">
 				<thead>
 					<tr>
-						<!-- Variable declarations for passing labels as parameters -->
-						<!-- Table header for Computer Name -->
 						<th class="editMode" style="width: 60px; height: 22px;">
 							<input type="checkbox" id="selectall" />
 							<span style="vertical-align: top;">
@@ -62,7 +59,6 @@
 						<th class="editMode" style="width: 60px; height: 22px;">delete company ?</th>
 					</tr>
 				</thead>
-				<!-- Browse attribute computers -->
 				<tbody id="results">
 					<c:forEach var="computer" items="${computers}">
 						<tr>
@@ -83,7 +79,11 @@
 							</td>
 							<td class="editMode">
 								<c:if test="${ not empty computer.company.id }">
-									<a href="deleteCompany?id=${computer.getCompany().getId() }" class="btn btn-default"> Delete Company </a>
+									<%-- 									<a onclick="$.fn.confirm();" href="deleteCompany?id=${ computer.getCompany().getId() }" class="btn btn-default"> Delete Company </a> --%>
+									<form id="deleteCompanyForm" action="deleteCompany" method="POST" onsubmit="return $.fn.confirmDeleteCompany();">
+										<input type="hidden" name="id" value="${ computer.getCompany().getId() }" />
+										<input class="btn btn-default" type="submit" id="btnSubmit" value="Delete Company" />
+									</form>
 								</c:if>
 							</td>
 						</tr>

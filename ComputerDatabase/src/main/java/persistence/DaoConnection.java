@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,47 @@ import persistence.querycommands.QueryCommand;
 
 public class DaoConnection {
     private static final Logger LOGGER = LoggerFactory.getLogger(DaoConnection.class);
+
+    /**
+     * @param queries queries using the same connection before commit atomicly
+     * @throws DaoException one or more query failed, each request is rollbacked
+     */
+    public static void executeTransation(List<QueryCommand<?>> queries) throws DaoException {
+        Connection conn = null;
+
+        try {
+
+            conn = HikariPool.getConnection();
+            conn.setAutoCommit(false);
+
+            for (QueryCommand<?> queryCommand : queries) {
+                queryCommand.execute(conn);
+            }
+
+        } catch (SQLException | IOException e) {
+
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException omg) {
+                    LOGGER.warn("Connection could not be rollbacked [" + omg.getMessage() + "]");
+                }
+            }
+
+            throw new DaoException(e);
+
+        } finally {
+
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (SQLException e) {
+                    LOGGER.warn("Connection failed to close");
+                }
+            }
+        }
+    }
 
     /**
      * @param query the query to execute

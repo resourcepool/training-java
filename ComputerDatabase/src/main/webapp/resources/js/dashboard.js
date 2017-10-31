@@ -27,23 +27,18 @@ $(function() {
 
 // Function setCheckboxValues
 (function ( $ ) {
-
     $.fn.setCheckboxValues = function(formFieldName, checkboxFieldName) {
-
         var str = $('.' + checkboxFieldName + ':checked').map(function() {
             return this.value;
         }).get().join();
         
         $(this).attr('value',str);
-        
         return this;
     };
-
 }( jQuery ));
 
 // Function toggleEditMode
 (function ( $ ) {
-
     $.fn.toggleEditMode = function() {
         if($(".editMode").is(":visible")) {
             $(".editMode").hide();
@@ -55,16 +50,20 @@ $(function() {
         }
         return this;
     };
-
 }( jQuery ));
 
+(function ( $ ) {
+    $.fn.confirmDeleteCompany = function() {
+       return (confirm("Are you sure you want to delete the selected company?"));
+    };
+}( jQuery ));
 
-// Function delete selected: Asks for confirmation to delete selected computers, then submits it to the deleteForm
+// Function delete selected: Asks for confirmation to delete selected computers, then submits it to the deleteComputerForm
 (function ( $ ) {
     $.fn.deleteSelected = function() {
         if (confirm("Are you sure you want to delete the selected computers?")) { 
-            $('#deleteForm input[name=selection]').setCheckboxValues('selection','cb');
-            $('#deleteForm').submit();
+            $('#deleteComputerForm input[name=selection]').setCheckboxValues('selection','cb');
+            $('#deleteComputerForm').submit();
         }
     };
 }( jQuery ));
@@ -74,7 +73,6 @@ $(function() {
 //Event handling
 //Onkeydown
 $(document).keydown(function(e) {
-
     switch (e.keyCode) {
         //DEL key
         case 46:

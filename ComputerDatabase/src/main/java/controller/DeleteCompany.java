@@ -11,9 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import persistence.exceptions.DaoException;
 import service.CompanyServiceImpl;
-import validators.ValidationUtils;
 
 @WebServlet
 public class DeleteCompany extends HttpServlet {
@@ -40,27 +38,26 @@ public class DeleteCompany extends HttpServlet {
      * @throws IOException exception
      */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String selection = req.getParameter("id");
-        if (selection != null && ValidationUtils.isLong(selection)) {
-            try {
-
-                companyService.deleteCompany(Long.parseLong(selection));
-                String msg = "Sucessfully deleted : " + selection;
-                RequestUtils.showMsg(req, true, msg);
-                LOGGER.info(msg);
-
-            } catch (DaoException e) {
-
-
-                String msg = "failed to delete : " + e.getMessage();
-                RequestUtils.showMsg(req, false, msg);
-                LOGGER.error(msg);
-            }
-        }
-
-        getServletContext().getRequestDispatcher("/dashboard").forward(req, resp);
+        //        if (selection != null && ValidationUtils.isLong(selection)) {
+        //            try {
         //
+        //                companyService.deleteCompany(Long.parseLong(selection));
+        //                String msg = "Sucessfully deleted : " + selection;
+        //                RequestUtils.showMsg(req, true, msg);
+        //                LOGGER.info(msg);
+        //
+        //            } catch (DaoException e) {
+        //
+        //                String msg = "failed to delete : " + e.getMessage();
+        //                RequestUtils.showMsg(req, false, msg);
+        //                LOGGER.error(msg);
+        //            }
+        //        }
+
+        RequestUtils.showMsg(req, false, "HELLO WORLD");
+        getServletContext().getRequestDispatcher("/dashboard").forward(req, resp);
+        //        resp.sendRedirect("/dashboard");
     }
 }
