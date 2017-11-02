@@ -97,8 +97,6 @@ public class CompanyDaoImpl {
             PreparedStatement deleteCompany = null;
 
             try {
-
-
                 deleteCompany = conn.prepareStatement(DELETE_FROM_COMPANY_WHERE_ID);
                 deleteCompany.setLong(1, id);
 

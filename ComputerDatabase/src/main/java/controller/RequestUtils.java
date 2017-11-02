@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import model.pages.Page;
-import validators.ComputerValidator;
 import validators.ValidationUtils;
 
 public class RequestUtils {
@@ -30,12 +29,12 @@ public class RequestUtils {
     public static void putBackAttributes(HttpServletRequest req, Long id, String name, LocalDate introduced,
             LocalDate discontinued, Long companyId) {
         req.setAttribute("id", id);
-        req.setAttribute(ComputerValidator.COMPUTER_NAME, name);
+        req.setAttribute(ValidationUtils.COMPUTER_NAME, name);
         String introducedStr = getFormattedString(introduced);
-        req.setAttribute(ComputerValidator.INTRODUCED, introducedStr);
+        req.setAttribute(ValidationUtils.INTRODUCED, introducedStr);
         String discontinuedStr = getFormattedString(discontinued);
-        req.setAttribute(ComputerValidator.DISCONTINUED, discontinuedStr);
-        req.setAttribute(ComputerValidator.COMPANY_ID, companyId == null ? null : companyId.toString());
+        req.setAttribute(ValidationUtils.DISCONTINUED, discontinuedStr);
+        req.setAttribute(ValidationUtils.COMPANY_ID, companyId == null ? null : companyId.toString());
     }
 
     /**
@@ -47,10 +46,10 @@ public class RequestUtils {
      */
     public static void putBackAttributes(HttpServletRequest req, String name, String introduced, String discontinued,
             String companyId) {
-        req.setAttribute(ComputerValidator.COMPUTER_NAME, name);
-        req.setAttribute(ComputerValidator.INTRODUCED, introduced);
-        req.setAttribute(ComputerValidator.DISCONTINUED, discontinued);
-        req.setAttribute(ComputerValidator.COMPANY_ID, companyId);
+        req.setAttribute(ValidationUtils.COMPUTER_NAME, name);
+        req.setAttribute(ValidationUtils.INTRODUCED, introduced);
+        req.setAttribute(ValidationUtils.DISCONTINUED, discontinued);
+        req.setAttribute(ValidationUtils.COMPANY_ID, companyId);
     }
 
     /**

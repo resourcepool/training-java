@@ -6,6 +6,10 @@ import persistence.exceptions.DaoException;
 import persistence.querycommands.PageQuery;
 
 public class Page<T> {
+    public enum Order {
+        ASC,
+        DESC
+    };
 
     private List<T>      content;
     private PageQuery<T> command;
@@ -13,6 +17,8 @@ public class Page<T> {
     private Long         size;
     private Long         pageSize;
     private String       search;
+    private String       columnSort;
+    private Order        order;
 
     /**
      * @param command query used to fill pages content, either dababase or cached entities
@@ -128,5 +134,19 @@ public class Page<T> {
         this.search = search;
     }
 
+    public String getColumnSort() {
+        return columnSort;
+    }
 
+    public void setColumnSort(String columnSort) {
+        this.columnSort = columnSort;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
 }

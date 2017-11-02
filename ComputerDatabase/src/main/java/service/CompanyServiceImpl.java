@@ -67,7 +67,7 @@ public class CompanyServiceImpl {
      * @throws DaoException failed to delete
      */
     public void deleteCompany(Long id) throws DaoException {
-        Connection conn = Transaction.getTransaction();
+        Connection conn = Transaction.openTransaction();
 
         ComputerServiceImpl.getInstance().deleteComputerByCompany(id);
         companyDao.deleteCompany(id);

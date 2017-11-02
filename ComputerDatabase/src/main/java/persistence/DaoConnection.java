@@ -22,40 +22,15 @@ public class DaoConnection {
      * @throws DaoException one or more query failed, each request is rollbacked
      */
     public static void executeTransation(List<QueryCommand<?>> queries) throws DaoException {
-        Connection conn = null;
-
-        try {
-
-            conn = HikariPool.getConnection();
-            conn.setAutoCommit(false);
-
+        Connection conn = Transaction.openTransaction();
+        QueryCommand<?> query = (Connection c) -> {
             for (QueryCommand<?> queryCommand : queries) {
-                queryCommand.execute(conn);
+                queryCommand.execute(c);
             }
-
-        } catch (SQLException | IOException e) {
-
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (SQLException omg) {
-                    LOGGER.warn("Connection could not be rollbacked [" + omg.getMessage() + "]");
-                }
-            }
-
-            throw new DaoException(e);
-
-        } finally {
-
-            if (conn != null) {
-                try {
-                    conn.setAutoCommit(true);
-                    conn.close();
-                } catch (SQLException e) {
-                    LOGGER.warn("Connection failed to close");
-                }
-            }
-        }
+            return true;
+        };
+        executeQuery(query);
+        Transaction.releaseTransaction(conn);
     }
 
     /**

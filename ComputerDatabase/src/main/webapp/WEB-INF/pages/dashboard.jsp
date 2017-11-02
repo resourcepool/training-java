@@ -52,10 +52,15 @@
 								</a>
 							</span>
 						</th>
-						<th>Computer name</th>
-						<th>Introduced date</th>
-						<th>Discontinued date</th>
-						<th>Company</th>
+						<c:set var="sort_name" value="${ page.order eq 'ASC' && page.columnSort eq 'computerName' ? 'DESC' : 'ASC' }"/>
+						<c:set var="sort_introduced" value="${ page.order eq 'ASC' && page.columnSort eq 'introduced' ? 'DESC' : 'ASC' }"/>
+						<c:set var="sort_discontinued" value="${ page.order eq 'ASC' && page.columnSort eq 'discontinued' ? 'DESC' : 'ASC' }"/>
+						<c:set var="sort_company" value="${ page.order eq 'ASC' && page.columnSort eq 'company' ? 'DESC' : 'ASC' }"/>
+						
+						<th><a href="dashboard?sort=computerName&order=${sort_name}">${sort_name}</a> Computer name</th>
+						<th><a href="dashboard?sort=introduced&order=${ sort_introduced }">${ sort_introduced }</a> Introduced date</th>
+						<th><a href="dashboard?sort=discontinued&order=${ sort_discontinued }">${ sort_discontinued }</a> Discontinued date</th>
+						<th><a href="dashboard?sort=company&order=${ sort_company }">${ sort_company }</a> Company</th>
 						<th class="editMode" style="width: 60px; height: 22px;">Delete company ?</th>
 					</tr>
 				</thead>

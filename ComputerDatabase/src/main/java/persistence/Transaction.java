@@ -14,7 +14,7 @@ public class Transaction {
      * @return get current ThreadLocal Connection
      * @throws DaoException connection could't be opened
      */
-    public static Connection getTransaction() throws DaoException {
+    public static Connection openTransaction() throws DaoException {
         if (tconn.get() == null) {
             try {
                 Connection conn = HikariPool.getConnection();

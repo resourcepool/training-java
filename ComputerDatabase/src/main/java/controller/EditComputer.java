@@ -70,11 +70,11 @@ public class EditComputer extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String idStr = req.getParameter("id");
-        String name = req.getParameter(ComputerValidator.COMPUTER_NAME);
-        String introducedStr = req.getParameter(ComputerValidator.INTRODUCED);
-        String discontinuedStr = req.getParameter(ComputerValidator.DISCONTINUED);
-        String companyIdStr = req.getParameter(ComputerValidator.COMPANY_ID);
+        String idStr = req.getParameter(ValidationUtils.ID);
+        String name = req.getParameter(ValidationUtils.COMPUTER_NAME);
+        String introducedStr = req.getParameter(ValidationUtils.INTRODUCED);
+        String discontinuedStr = req.getParameter(ValidationUtils.DISCONTINUED);
+        String companyIdStr = req.getParameter(ValidationUtils.COMPANY_ID);
 
         ComputerValidator v = new ComputerValidator();
         if (!v.validate(idStr, name, introducedStr, discontinuedStr, companyIdStr)) {

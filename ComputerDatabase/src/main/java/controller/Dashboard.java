@@ -138,11 +138,9 @@ public class Dashboard extends HttpServlet {
      * @throws IOException could not load
      */
     private void loadDashboard(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Long pageSize = retrievePaginationSize(req);
-        Long currentPage = ValidationUtils.retrieveLong(req.getParameter("page"), DEFAULT_STARTING_PAGE);
 
         List<Computer> computerDtos = null;
-        Page<Computer> page = getPage(req, currentPage, pageSize);
+        Page<Computer> page = getPage(req);
 
         if (page != null) {
             computerDtos = page.getContent();
@@ -175,22 +173,25 @@ public class Dashboard extends HttpServlet {
 
     /**
      * @param req request
-     * @param pageNumber page to get
-     * @param pageSize page size
      * @return return the page
      */
-    private Page<Computer> getPage(HttpServletRequest req, Long pageNumber, Long pageSize) {
+    private Page<Computer> getPage(HttpServletRequest req) {
+        Long pageSize = retrievePaginationSize(req);
+        Long pageNumber = ValidationUtils.retrieveLong(req.getParameter("page"), DEFAULT_STARTING_PAGE);
         String search = req.getParameter("search");
-        //        String sort = req.getParameter("sort");
-        //        String order = req.getParameter("order");
+        String sort = req.getParameter("sort");
+        String order = req.getParameter("order");
 
         try {
 
             Page<Computer> page;
-            if (search == null) {
-                page = computerService.getComputerPage(pageNumber, pageSize);
+            if (sort != null && order != null) {
+                Page.Order o = order.equals(Page.Order.ASC.toString()) ? Page.Order.ASC : Page.Order.DESC;
+                page = computerService.getPageWithOrder(pageNumber, pageSize, sort, o);
+            } else if (search != null) {
+                page = computerService.getPageWithSearch(pageNumber, pageSize, search);
             } else {
-                page = computerService.getComputerPageWithSearch(pageNumber, pageSize, search);
+                page = computerService.getPage(pageNumber, pageSize);
             }
 
             return page.load();

@@ -9,7 +9,13 @@ import java.util.List;
 
 public class ValidationUtils {
 
-    public static final String DATE_FORMAT = "dd-MM-yyyy";
+    public static final String COMPANY_NAME  = "company";
+    public static final String COMPANY_ID    = "companyId";
+    public static final String DISCONTINUED  = "discontinued";
+    public static final String INTRODUCED    = "introduced";
+    public static final String COMPUTER_NAME = "computerName";
+    public static final String ID            = "id";
+    public static final String DATE_FORMAT   = "dd-MM-yyyy";
 
     /**
      * @param param parse to validate and parse
@@ -25,7 +31,8 @@ public class ValidationUtils {
 
     /**
      * @param s String to check
-     * @return true is containing only digit and could call Long.parseLong without throw
+     * @return true is containing only digit and could call Long.parseLong without
+     *         throw
      */
     public static boolean isLong(String s) {
 
@@ -43,7 +50,8 @@ public class ValidationUtils {
     }
 
     /**
-     * @param dateStr @NotNull dateToCheck, empty or null is automatically VALID (true)
+     * @param dateStr @NotNull dateToCheck, empty or null is automatically VALID
+     *            (true)
      * @return true if valid
      */
     public static LocalDate checkDate(String dateStr) {

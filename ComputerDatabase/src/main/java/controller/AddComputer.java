@@ -21,6 +21,7 @@ import persistence.exceptions.DaoException;
 import service.CompanyServiceImpl;
 import service.ComputerServiceImpl;
 import validators.ComputerValidator;
+import validators.ValidationUtils;
 
 @WebServlet
 public class AddComputer extends HttpServlet {
@@ -76,10 +77,10 @@ public class AddComputer extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String name = req.getParameter(ComputerValidator.COMPUTER_NAME);
-        String introduced = req.getParameter(ComputerValidator.INTRODUCED);
-        String discontinued = req.getParameter(ComputerValidator.DISCONTINUED);
-        String companyId = req.getParameter(ComputerValidator.COMPANY_ID);
+        String name = req.getParameter(ValidationUtils.COMPUTER_NAME);
+        String introduced = req.getParameter(ValidationUtils.INTRODUCED);
+        String discontinued = req.getParameter(ValidationUtils.DISCONTINUED);
+        String companyId = req.getParameter(ValidationUtils.COMPANY_ID);
 
         ComputerValidator v = new ComputerValidator();
         if (!v.validate(name, introduced, discontinued, companyId)) {

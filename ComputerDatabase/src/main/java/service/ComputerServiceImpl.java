@@ -1,17 +1,21 @@
 package service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import model.Computer;
 import model.pages.Page;
 import persistence.ComputerDaoImpl;
 import persistence.exceptions.DaoException;
 import persistence.querycommands.PageQuery;
+import validators.ValidationUtils;
 
 public class ComputerServiceImpl {
 
     private static ComputerServiceImpl instance;
     private ComputerDaoImpl            computerDao;
+    private static Map<String, String> mapFields = createMap();
 
     /**
      * Private ctor.
@@ -19,6 +23,18 @@ public class ComputerServiceImpl {
      */
     private ComputerServiceImpl(ComputerDaoImpl dao) {
         computerDao = dao;
+    }
+
+    /**
+     * @return create map from form to db column name
+     */
+    private static Map<String, String> createMap() {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put(ValidationUtils.COMPANY_NAME, "CA.name");
+        map.put(ValidationUtils.DISCONTINUED, "CO.discontinued");
+        map.put(ValidationUtils.INTRODUCED, "CO.introduced");
+        map.put(ValidationUtils.COMPUTER_NAME, "CO.name");
+        return map;
     }
 
     /**
@@ -79,7 +95,7 @@ public class ComputerServiceImpl {
      * @return the first page of the full computer preview list from DB, with content not loaded yet (LAZY)
      * @throws DaoException content couldn't be loaded
      */
-    public Page<Computer> getComputerPage(Long nbPage, Long pageSize) throws DaoException {
+    public Page<Computer> getPage(Long nbPage, Long pageSize) throws DaoException {
         PageQuery<Computer> pageQuery = (Long start, Long splitSize) -> {
             return computerDao.get(start, splitSize);
         };
@@ -97,7 +113,7 @@ public class ComputerServiceImpl {
      * @return the first page of the full computer preview list from DB
      * @throws DaoException content couldn't be loaded
      */
-    public Page<Computer> getComputerPageWithSearch(Long nbPage, Long pageSize, String search) throws DaoException {
+    public Page<Computer> getPageWithSearch(Long nbPage, Long pageSize, String search) throws DaoException {
         PageQuery<Computer> pageQuery = (Long start, Long splitSize) -> {
             return computerDao.get(start, splitSize, search);
         };
@@ -112,10 +128,34 @@ public class ComputerServiceImpl {
     }
 
     /**
+     * @param nbPage the page number to retrieve, starting at 1
+     * @param pageSize number of elements by page
+     * @param sort column to sort
+     * @param order ASC or DESC
+     * @return the first page of the full computer preview list from DB
+     * @throws DaoException content couldn't be loaded
+     */
+    public Page<Computer> getPageWithOrder(Long nbPage, Long pageSize, String sort, Page.Order order) throws DaoException {
+        PageQuery<Computer> pageQuery = (Long start, Long splitSize) -> {
+            return computerDao.get(start, splitSize, mapFields.get(sort), order.toString());
+        };
+
+        long startElem = (nbPage - 1) * pageSize;
+        Long size = computerDao.getComputerTotalCount();
+        Page<Computer> page = new Page<Computer>(pageQuery, startElem, size, pageSize);
+
+        page.setColumnSort(sort);
+        page.setOrder(order);
+
+        return page;
+    }
+
+    /**
      * @param id id of the company to delete computers from
      * @throws DaoException deletion failed
      */
     public void deleteComputerByCompany(Long id) throws DaoException {
         computerDao.deleteComputerByCompany(id);
     }
+
 }

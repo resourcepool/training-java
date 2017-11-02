@@ -5,24 +5,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ComputerValidator {
-    private static final String ID = "id";
-    public static final String NO_COMPANY    = "--";
-    public static final String COMPANY_ID    = "companyId";
-    public static final String DISCONTINUED  = "discontinued";
-    public static final String INTRODUCED    = "introduced";
-    public static final String COMPUTER_NAME = "computerName";
 
+    private static final String NO_COMPANY       = "--";
     private static final String DATEFORMAT_ERROR = "Wrong format (leave empty or use " + ValidationUtils.DATE_FORMAT + ")";
 
     private Map<String, String> errors;
     private LocalDate           introducedDate;
     private LocalDate           discontinuedDate;
-    private Long                companyId = null;
-    private Long                id = null;
-
+    private Long                companyId        = null;
+    private Long                id               = null;
 
     /**
      * validate a computer (id too).
+     *
      * @param idStr id as string from jsp page
      * @param name name
      * @param introduced introduced
@@ -36,10 +31,10 @@ public class ComputerValidator {
         if (ValidationUtils.isLong(idStr)) {
             id = Long.parseLong(idStr);
             if (id < 1) {
-                errors.put(ID, "id must be valid");
+                errors.put(ValidationUtils.ID, "id must be valid");
             }
         } else {
-            errors.put(ID, "id has to be a number");
+            errors.put(ValidationUtils.ID, "id has to be a number");
         }
 
         return validateCore(name, introduced, discontinued, companyIdStr);
@@ -73,38 +68,38 @@ public class ComputerValidator {
      */
     private Boolean validateCore(String name, String introduced, String discontinued, String companyIdStr) {
         if (name == null || name.isEmpty()) {
-            errors.put(COMPUTER_NAME, "Computer name is mandatory");
+            errors.put(ValidationUtils.COMPUTER_NAME, "Computer name is mandatory");
         }
 
         if (name.length() < 3) {
-            errors.put(COMPUTER_NAME, "Computer name has to be at least 3 char long");
+            errors.put(ValidationUtils.COMPUTER_NAME, "Computer name has to be at least 3 char long");
         }
 
         if (companyIdStr != null && !companyIdStr.isEmpty() && !companyIdStr.equals(NO_COMPANY)) {
             if (ValidationUtils.isLong(companyIdStr)) {
                 companyId = Long.parseLong(companyIdStr);
                 if (companyId < 1) {
-                    errors.put(COMPANY_ID, "company_id must be valid");
+                    errors.put(ValidationUtils.COMPANY_ID, "company_id must be valid");
                 }
             } else {
-                errors.put(COMPANY_ID, "Company id has to be a number");
+                errors.put(ValidationUtils.COMPANY_ID, "Company id has to be a number");
             }
         }
 
         if (!isEmptyOrNull(introduced)) {
             introducedDate = ValidationUtils.checkDate(introduced);
             if (introducedDate == null) {
-                errors.put(INTRODUCED, DATEFORMAT_ERROR);
+                errors.put(ValidationUtils.INTRODUCED, DATEFORMAT_ERROR);
             }
         }
         if (!isEmptyOrNull(discontinued)) {
             discontinuedDate = ValidationUtils.checkDate(discontinued);
             if (discontinuedDate == null) {
-                errors.put(DISCONTINUED, DATEFORMAT_ERROR);
+                errors.put(ValidationUtils.DISCONTINUED, DATEFORMAT_ERROR);
             }
         }
         if (introducedDate != null && discontinuedDate != null && discontinuedDate.compareTo(introducedDate) < 0) {
-            errors.put(DISCONTINUED, "Introduced Date should be before Discontinued Date");
+            errors.put(ValidationUtils.DISCONTINUED, "Introduced Date should be before Discontinued Date");
         }
         return errors.isEmpty();
     }
@@ -138,4 +133,3 @@ public class ComputerValidator {
     }
 
 }
-
