@@ -53,11 +53,12 @@ public class Transaction {
     }
 
     /**
+     * Beware, actually it doesn't check that the connection is closed.
+     * It checks that the connection is the current transaction.
      * @param conn the connection to check
      * @return true if the connection is the currently open Transaction for this thread
-     * @throws SQLException could not check autocommit
      */
-    public static boolean isOpen(Connection conn) throws SQLException {
-        return conn != null && conn == tconn.get() && !conn.getAutoCommit();
+    public static boolean isOpen(Connection conn) {
+        return conn != null && conn == tconn.get();
     }
 }
