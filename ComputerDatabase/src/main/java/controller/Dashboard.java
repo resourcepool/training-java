@@ -146,6 +146,9 @@ public class Dashboard extends HttpServlet {
 
         if (page != null) {
             computerDtos = page.getContent();
+            String params = RequestUtils.buildParam(page);
+            req.setAttribute("params", params);
+
         }
 
         req.setAttribute("computers", computerDtos);
@@ -189,9 +192,6 @@ public class Dashboard extends HttpServlet {
             } else {
                 page = computerService.getComputerPageWithSearch(pageNumber, pageSize, search);
             }
-
-            String params = RequestUtils.buildParam(page);
-            req.setAttribute("params", params);
 
             return page.load();
 

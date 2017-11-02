@@ -60,10 +60,11 @@ public class ComputerMapper implements ResultMapper<List<Computer>> {
         LocalDate introduced = introducedDate != null ? introducedDate.toLocalDate() : null;
         Date discontinuedDate = rs.getDate(DISCONTINUED_FIELD);
         LocalDate discontinued = discontinuedDate != null ? discontinuedDate.toLocalDate() : null;
+
         Long idCompany = rs.getLong(COMPANY_ID_FIELD);
         String nameCompany = rs.getString(COMPANY_NAME_FIELD);
-
         Company company = new Company(idCompany == 0 ? null : idCompany, nameCompany);
+
         return new Computer(id, name, introduced, discontinued, company);
     }
 

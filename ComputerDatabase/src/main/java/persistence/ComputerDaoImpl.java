@@ -22,6 +22,7 @@ public class ComputerDaoImpl {
     private static final String INSERT_INTO_COMPUTER_VALUES = "insert into computer values (null, ?, ?, ?, ?)";
     private static final String ID_FILTER = " where CO.id = ?";
     private static final String NAME_FILTER = " where CO.name = \"?\"";
+    private static final String DELETE_FROM_COMPUTER_WHERE_COMPANY_ID = "delete from computer where company_id = ?";
 
     // ######################### SINGLETON ###################################
     private static ComputerDaoImpl instance;
@@ -197,7 +198,21 @@ public class ComputerDaoImpl {
     public void deleteComputer(Long id) throws DaoException {
         DaoConnection.executeQuery((Connection conn) -> {
             try (Statement s = conn.createStatement()) {
-                s.execute("delete from computer where id = " + id);
+                s.executeUpdate("delete from computer where id = " + id);
+            }
+            return true;
+        });
+    }
+
+    /**
+     * @param id id of the computer to delete
+     * @throws DaoException content couldn't be loaded
+     */
+    public void deleteComputerByCompany(Long id) throws DaoException {
+        DaoConnection.executeQuery((Connection conn) -> {
+            try (PreparedStatement s = conn.prepareStatement(DELETE_FROM_COMPUTER_WHERE_COMPANY_ID)) {
+                s.setObject(1, id);
+                s.executeUpdate();
             }
             return true;
         });
@@ -212,7 +227,7 @@ public class ComputerDaoImpl {
 
         DaoConnection.executeQuery((Connection conn) -> {
             try (Statement s = conn.createStatement()) {
-                s.execute("delete from computer where id in (" + filter + ")");
+                s.executeUpdate("delete from computer where id in (" + filter + ")");
             }
             return true;
         });

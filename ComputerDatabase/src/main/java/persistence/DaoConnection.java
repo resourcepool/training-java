@@ -68,22 +68,31 @@ public class DaoConnection {
         Connection conn = null;
 
         try {
+            Connection t = Transaction.getCurrent();
+            conn = t == null ? HikariPool.getConnection() : t;
 
-            conn = HikariPool.getConnection();
             return query.execute(conn);
 
         } catch (SQLException | IOException e) {
 
+            try {
+                if (Transaction.isOpen(conn)) {
+                    conn.rollback();
+                    conn.setAutoCommit(true);
+                }
+            } catch (SQLException ex) {
+                LOGGER.error("Connection could not be rollbacked");
+            }
             throw new DaoException(e);
 
         } finally {
 
-            if (conn != null) {
-                try {
+            try {
+                if (conn != null && !Transaction.isOpen(conn)) {
                     conn.close();
-                } catch (SQLException e) {
-                    LOGGER.warn("Connection failed to close");
                 }
+            } catch (SQLException e) {
+                LOGGER.warn("Connection failed to close");
             }
         }
     }
@@ -106,7 +115,6 @@ public class DaoConnection {
         return executeQuery(query);
     }
 
-
     /**
      * @param req req
      * @return total number of computer in DB
@@ -121,4 +129,5 @@ public class DaoConnection {
         }
         return size;
     }
+
 }

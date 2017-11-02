@@ -83,8 +83,11 @@ public class RequestUtils {
 
         StringBuilder sb = new StringBuilder();
         try {
-            sb.append("&search=" + URLEncoder.encode(page.getSearch(), "UTF-8"));
-            //            sb.append("&sort=" + URLEncoder.encode(page.getSearch(), "UTF-8"));
+            if (page.getSearch() != null) {
+                sb.append("&search=" + URLEncoder.encode(page.getSearch(), "UTF-8"));
+            }
+
+            // sb.append("&sort=" + URLEncoder.encode(page.getSearch(), "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             LOGGER.info("fail encoding");
         }
@@ -92,4 +95,3 @@ public class RequestUtils {
         return sb.toString();
     }
 }
-

@@ -41,15 +41,6 @@ public class ComputerServiceImpl {
     }
 
     /**
-     * @param name the name to search
-     * @return the first computer corresponding exactly to @name
-     * @throws DaoException content couldn't be loaded
-     */
-    public Computer getComputerDetail(String name) throws DaoException {
-        return computerDao.getComputerDetail(name);
-    }
-
-    /**
      * @param newComputer complete computer to create, without id
      * @return the id of the created computer
      * @throws DaoException content couldn't be loaded
@@ -92,6 +83,7 @@ public class ComputerServiceImpl {
         PageQuery<Computer> pageQuery = (Long start, Long splitSize) -> {
             return computerDao.get(start, splitSize);
         };
+
         long startElem = (nbPage - 1) * pageSize;
         Long size = computerDao.getComputerTotalCount();
         return new Page<Computer>(pageQuery, startElem, size, pageSize);
@@ -113,7 +105,17 @@ public class ComputerServiceImpl {
         long startElem = (nbPage - 1) * pageSize;
         Long size = computerDao.getComputerTotalCount(search);
         Page<Computer> page = new Page<Computer>(pageQuery, startElem, size, pageSize);
+
         page.setSearch(search);
+
         return page;
+    }
+
+    /**
+     * @param id id of the company to delete computers from
+     * @throws DaoException deletion failed
+     */
+    public void deleteComputerByCompany(Long id) throws DaoException {
+        computerDao.deleteComputerByCompany(id);
     }
 }

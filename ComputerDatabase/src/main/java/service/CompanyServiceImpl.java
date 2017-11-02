@@ -1,10 +1,12 @@
 package service;
 
+import java.sql.Connection;
 import java.util.List;
 
 import model.Company;
 import model.pages.Page;
 import persistence.CompanyDaoImpl;
+import persistence.Transaction;
 import persistence.exceptions.DaoException;
 
 public class CompanyServiceImpl {
@@ -65,7 +67,12 @@ public class CompanyServiceImpl {
      * @throws DaoException failed to delete
      */
     public void deleteCompany(Long id) throws DaoException {
+        Connection conn = Transaction.getTransaction();
+
+        ComputerServiceImpl.getInstance().deleteComputerByCompany(id);
         companyDao.deleteCompany(id);
+
+        Transaction.releaseTransaction(conn);
     }
 
 }
