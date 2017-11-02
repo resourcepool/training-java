@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import model.Computer;
 import model.pages.Page;
 import persistence.exceptions.DaoException;
+import service.CompanyServiceImpl;
 import service.ComputerServiceImpl;
 import validators.ValidationUtils;
 
@@ -29,12 +30,14 @@ public class Dashboard extends HttpServlet {
     private static final Long DEFAULT_STARTING_PAGE = 1L;
     private static final Logger LOGGER = LoggerFactory.getLogger(Dashboard.class);
     private ComputerServiceImpl computerService;
+    private CompanyServiceImpl companyService;
 
     /**
      * Default constructor.
      */
     public Dashboard() {
         computerService = ComputerServiceImpl.getInstance();
+        companyService = CompanyServiceImpl.getInstance();
     }
 
     /**
@@ -65,15 +68,47 @@ public class Dashboard extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         handleComputerDeletion(req);
+        handleCompanyDeletion(req);
         loadDashboard(req, resp);
     }
+
+    /**
+     * @param req req
+     */
+    private void handleCompanyDeletion(HttpServletRequest req) {
+        String id = req.getParameter("company_id_delete");
+
+        if (id == null) {
+            return;
+        }
+
+        if (!ValidationUtils.isLong(id)) {
+            RequestUtils.showMsg(req, false, "please provide a company id");
+        } else {
+
+            try {
+
+                companyService.deleteCompany(Long.parseLong(id));
+                String msg = "Sucessfully deleted company : n°" + id;
+                RequestUtils.showMsg(req, true, msg);
+                LOGGER.info(msg);
+
+            } catch (DaoException e) {
+
+                String msg = "failed to delete : " + e.getMessage();
+                RequestUtils.showMsg(req, false, msg);
+                LOGGER.error(msg);
+            }
+        }
+    }
+
 
     /**
      * @param req req containing parameters of computers to delete ("selection") or
      *            none (ignored then)
      */
     private void handleComputerDeletion(HttpServletRequest req) {
-        String[] computerSelection = req.getParameterValues("selection");
+        String[] computerSelection = req.getParameterValues("computer_selection_delete");
 
         if (computerSelection == null) {
             return;
@@ -103,12 +138,11 @@ public class Dashboard extends HttpServlet {
      * @throws IOException could not load
      */
     private void loadDashboard(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Long pageSize = retrivePaginationSize(req);
+        Long pageSize = retrievePaginationSize(req);
         Long currentPage = ValidationUtils.retrieveLong(req.getParameter("page"), DEFAULT_STARTING_PAGE);
 
-        String search = req.getParameter("search");
         List<Computer> computerDtos = null;
-        Page<Computer> page = getPage(currentPage, pageSize, search);
+        Page<Computer> page = getPage(req, currentPage, pageSize);
 
         if (page != null) {
             computerDtos = page.getContent();
@@ -124,7 +158,7 @@ public class Dashboard extends HttpServlet {
      *            pagination parametered
      * @return the page size to use to paginate current-page
      */
-    private Long retrivePaginationSize(HttpServletRequest req) {
+    private Long retrievePaginationSize(HttpServletRequest req) {
         String param = req.getParameter("pagination");
 
         if (param != null) {
@@ -137,12 +171,16 @@ public class Dashboard extends HttpServlet {
     }
 
     /**
+     * @param req request
      * @param pageNumber page to get
      * @param pageSize page size
-     * @param search companyName or computerName to search or null
      * @return return the page
      */
-    private Page<Computer> getPage(Long pageNumber, Long pageSize, String search) {
+    private Page<Computer> getPage(HttpServletRequest req, Long pageNumber, Long pageSize) {
+        String search = req.getParameter("search");
+        //        String sort = req.getParameter("sort");
+        //        String order = req.getParameter("order");
+
         try {
 
             Page<Computer> page;
@@ -152,13 +190,16 @@ public class Dashboard extends HttpServlet {
                 page = computerService.getComputerPageWithSearch(pageNumber, pageSize, search);
             }
 
-            page.load();
-            return page;
+            String params = RequestUtils.buildParam(page);
+            req.setAttribute("params", params);
+
+            return page.load();
 
         } catch (DaoException e) {
 
             String msg = String.format("Computer Page (%d) couldn't be loaded, reason \"%s\"", pageNumber,
                     e.getMessage());
+            RequestUtils.showMsg(req, false, msg);
             LOGGER.error(msg);
             return null;
         }

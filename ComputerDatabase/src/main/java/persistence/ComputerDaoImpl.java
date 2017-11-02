@@ -15,7 +15,9 @@ import persistence.exceptions.DaoException;
 
 public class ComputerDaoImpl {
 
-    private static final String SELECT_COUNT_FROM_COMPUTER = "select count(*) from computer CO";
+    private static final String SEARCH_FILTER = "where lower(CO.name) like '%%%1$s%%' or lower(CA.name) like '%%%1$s%%'";
+    private static final String COUNT_FROM_COMPUTER = "select count(*) from computer";
+    private static final String COUNT_FROM_COMPUTER_WITH_COMPANY = "select count(*) from computer CO left join company CA on CA.Id = CO.company_id";
     private static final String SELECT_FROM_COMPUTER_WITH_COMPANY = "select CO.*, CA.name as company_name from computer CO left join company CA on CA.Id = CO.company_id";
     private static final String INSERT_INTO_COMPUTER_VALUES = "insert into computer values (null, ?, ?, ?, ?)";
     private static final String ID_FILTER = " where CO.id = ?";
@@ -47,10 +49,17 @@ public class ComputerDaoImpl {
      * @throws DaoException content couldn't be loaded
      */
     public Long getComputerTotalCount() throws DaoException {
-        Long size = DaoConnection.executeSelectQuery(SELECT_COUNT_FROM_COMPUTER, (ResultSet r) -> {
-            return (r.next() ? r.getLong(1) : null);
-        });
-        return size;
+        return DaoConnection.getCount(COUNT_FROM_COMPUTER);
+    }
+
+    /**
+     * @param search filter to used
+     * @return total number of computer in DB
+     * @throws DaoException content couldn't be loaded
+     */
+    public Long getComputerTotalCount(String search) throws DaoException {
+        String req = COUNT_FROM_COMPUTER_WITH_COMPANY + ' ' + String.format(SEARCH_FILTER, search);
+        return DaoConnection.getCount(req);
     }
 
     /**
@@ -92,6 +101,7 @@ public class ComputerDaoImpl {
         });
     }
 
+
     // ########################## PAGES, SEARCH, SORT, LIMIT #######################
 
     /**
@@ -100,10 +110,10 @@ public class ComputerDaoImpl {
      * @return the content of one computer page from DB
      * @throws DaoException content couldn't be loaded
      */
-    public List<Computer> getContent(Long start, Long splitSize) throws DaoException {
+    public List<Computer> get(Long start, Long splitSize) throws DaoException {
 
-        String filter = String.format(" ORDER BY name LIMIT %d,%d", start, splitSize); // where CO.name = 'zzzzz'
-        String sql = SELECT_FROM_COMPUTER_WITH_COMPANY + filter;
+        String filter = String.format("ORDER BY name LIMIT %d,%d", start, splitSize); // where CO.name = 'zzzzz'
+        String sql = SELECT_FROM_COMPUTER_WITH_COMPANY + ' ' + filter;
         return DaoConnection.executeSelectQuery(sql, new ComputerMapper());
     }
 
@@ -114,11 +124,11 @@ public class ComputerDaoImpl {
      * @return the content of one computer page from DB
      * @throws DaoException content couldn't be loaded
      */
-    public List<Computer> getContent(Long start, Long splitSize, String search) throws DaoException {
+    public List<Computer> get(Long start, Long splitSize, String search) throws DaoException {
 
-        String where = "where CO.name like '%" + search + "%' or CA.name like '%" + search + "%'";
-        String filter = String.format("%s ORDER BY name LIMIT %d,%d", where, start, splitSize);
-        String sql = SELECT_FROM_COMPUTER_WITH_COMPANY + filter;
+        String where = String.format(SEARCH_FILTER, search);
+        String filter = String.format("ORDER BY name LIMIT %d,%d", start, splitSize);
+        String sql = SELECT_FROM_COMPUTER_WITH_COMPANY + ' ' + where + ' ' + filter;
         return DaoConnection.executeSelectQuery(sql, new ComputerMapper());
     }
 

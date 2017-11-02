@@ -1,16 +1,23 @@
 package controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import model.pages.Page;
 import validators.ComputerValidator;
 import validators.ValidationUtils;
 
 public class RequestUtils {
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(ValidationUtils.DATE_FORMAT);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RequestUtils.class);
 
     /**
      * @param req req
@@ -66,6 +73,23 @@ public class RequestUtils {
         }
         DateTimeFormatter formatter = DATE_FORMATTER;
         return date.format(formatter);
+    }
+
+    /**
+     * @param page page
+     * @return constructed params
+     */
+    public static String buildParam(Page<?> page) {
+
+        StringBuilder sb = new StringBuilder();
+        try {
+            sb.append("&search=" + URLEncoder.encode(page.getSearch(), "UTF-8"));
+            //            sb.append("&sort=" + URLEncoder.encode(page.getSearch(), "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            LOGGER.info("fail encoding");
+        }
+
+        return sb.toString();
     }
 }
 

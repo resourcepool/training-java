@@ -1,5 +1,6 @@
 <%@ tag body-content="scriptless" language="java" pageEncoding="UTF-8" %>
 <%@ attribute name="page_count" required="true" rtexprvalue="true" type="Long" %> 
+<%@ attribute name="params" required="false" rtexprvalue="true" type="String" %> 
 
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 
@@ -16,6 +17,6 @@
 		</c:otherwise>
 	</c:choose>
 	
-	<button type="button" class="btn btn-default${active}" onclick="location.href='dashboard?pagination=${value}'">${value}</button>
+	<a class="btn btn-default${active}" href="dashboard?pagination=${value}${params}">${value}</a>
 </c:forTokens>
 </div>

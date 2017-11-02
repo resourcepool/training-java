@@ -29,7 +29,7 @@ public class ValidationUtils {
      */
     public static boolean isLong(String s) {
 
-        if (s == null) {
+        if (s == null || s.isEmpty()) {
             return false;
         }
 

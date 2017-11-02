@@ -12,6 +12,7 @@ public class Page<T> {
     private Long         startIndex;
     private Long         size;
     private Long         pageSize;
+    private String       search;
 
     /**
      * @param command query used to fill pages content, either dababase or cached entities
@@ -118,5 +119,14 @@ public class Page<T> {
     public Long getTotalPages() {
         return (size + pageSize - 1) / pageSize;
     }
+
+    public String getSearch() {
+        return search;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
+    }
+
 
 }

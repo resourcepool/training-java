@@ -90,9 +90,11 @@ public class ComputerServiceImpl {
      */
     public Page<Computer> getComputerPage(Long nbPage, Long pageSize) throws DaoException {
         PageQuery<Computer> pageQuery = (Long start, Long splitSize) -> {
-            return computerDao.getContent(start, splitSize);
+            return computerDao.get(start, splitSize);
         };
-        return createPage(nbPage, pageSize, pageQuery);
+        long startElem = (nbPage - 1) * pageSize;
+        Long size = computerDao.getComputerTotalCount();
+        return new Page<Computer>(pageQuery, startElem, size, pageSize);
     }
 
 
@@ -105,21 +107,13 @@ public class ComputerServiceImpl {
      */
     public Page<Computer> getComputerPageWithSearch(Long nbPage, Long pageSize, String search) throws DaoException {
         PageQuery<Computer> pageQuery = (Long start, Long splitSize) -> {
-            return computerDao.getContent(start, splitSize, search);
+            return computerDao.get(start, splitSize, search);
         };
-        return createPage(nbPage, pageSize, pageQuery);
-    }
 
-    /**
-     * @param nbPage the page number to retrieve, starting at 1
-     * @param pageSize number of elements by page
-     * @param pageQuery the request to retrieve the content
-     * @return the first page of the full computer preview list from DB, with content not loaded yet (LAZY)
-     * @throws DaoException content couldn't be loaded
-     */
-    private Page<Computer> createPage(Long nbPage, Long pageSize, PageQuery<Computer> pageQuery) throws DaoException {
         long startElem = (nbPage - 1) * pageSize;
-        Long size = computerDao.getComputerTotalCount();
-        return new Page<Computer>(pageQuery, startElem, size, pageSize);
+        Long size = computerDao.getComputerTotalCount(search);
+        Page<Computer> page = new Page<Computer>(pageQuery, startElem, size, pageSize);
+        page.setSearch(search);
+        return page;
     }
 }

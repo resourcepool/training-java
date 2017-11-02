@@ -105,4 +105,20 @@ public class DaoConnection {
         };
         return executeQuery(query);
     }
+
+
+    /**
+     * @param req req
+     * @return total number of computer in DB
+     * @throws DaoException failed
+     */
+    public static Long getCount(String req) throws DaoException {
+        Long size = DaoConnection.executeSelectQuery(req, (ResultSet r) -> {
+            return (r.next() ? r.getLong(1) : null);
+        });
+        if (size == null) {
+            throw new DaoException("failure when count total result");
+        }
+        return size;
+    }
 }

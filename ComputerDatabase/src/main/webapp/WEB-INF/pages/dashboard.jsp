@@ -29,7 +29,7 @@
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
-						<input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
+						<input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${ page.search }"/>
 						<input type="submit" id="searchsubmit" value="Filter by name" class="btn btn-primary" />
 					</form>
 				</div>
@@ -39,7 +39,7 @@
 			</div>
 		</div>
 		<form id="deleteComputerForm" action="#" method="POST">
-			<input type="hidden" name="selection" value="">
+			<input type="hidden" name="computer_selection_delete" value="">
 		</form>
 		<div class="container" style="margin-top: 10px;">
 			<table class="table table-striped table-bordered">
@@ -80,8 +80,8 @@
 							<td class="editMode">
 								<c:if test="${ not empty computer.company.id }">
 									<%-- 									<a onclick="$.fn.confirm();" href="deleteCompany?id=${ computer.getCompany().getId() }" class="btn btn-default"> Delete Company </a> --%>
-									<form id="deleteCompanyForm" action="deleteCompany" method="POST" onsubmit="return $.fn.confirmDeleteCompany();">
-										<input type="hidden" name="id" value="${ computer.getCompany().getId() }" />
+									<form id="deleteCompanyForm" action="dashboard" method="POST" onsubmit="return $.fn.confirmDeleteCompany();">
+										<input type="hidden" name="company_id_delete" value="${ computer.getCompany().getId() }" />
 										<input class="btn btn-default" type="submit" id="btnSubmit" value="Delete Company" />
 									</form>
 								</c:if>
@@ -94,8 +94,8 @@
 	</section>
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
-			<mylib:pageLinks target="dashboard" current_page="${page.currentPage}" pages_limit="${page.totalPages}" pagination_size="${page.pageSize}"/>
-			<mylib:pagination page_count="${page.pageSize}" />
+			<mylib:pageLinks target="dashboard" current_page="${page.currentPage}" pages_limit="${page.totalPages}" pagination_size="${page.pageSize}" params="${params}"/>
+			<mylib:pagination page_count="${page.pageSize}" params="${params}"/>
 		</div>
 	</footer>
 	<script src="<c:url value ="/resources/js/jquery.min.js"/>"></script>
