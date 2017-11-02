@@ -20,7 +20,7 @@
 	</header>
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${page.totalCount}Computersfound</h1>
+			<h1 id="homeTitle">${page.totalCount} Computers found</h1>
 			<c:if test="${ not empty msg }">
 				<div class="alert ${ success ? 'alert-success' : 'alert-danger' }">
 					<p><c:out value="${ msg }" /></p>
@@ -56,7 +56,7 @@
 						<th>Introduced date</th>
 						<th>Discontinued date</th>
 						<th>Company</th>
-						<th class="editMode" style="width: 60px; height: 22px;">delete company ?</th>
+						<th class="editMode" style="width: 60px; height: 22px;">Delete company ?</th>
 					</tr>
 				</thead>
 				<tbody id="results">
@@ -94,7 +94,7 @@
 	</section>
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
-			<mylib:pageLinks target="dashboard" page="${page.currentPage}" limit="${page.totalPages}" />
+			<mylib:pageLinks target="dashboard" current_page="${page.currentPage}" pages_limit="${page.totalPages}" pagination_size="${page.pageSize}"/>
 			<mylib:pagination page_count="${page.pageSize}" />
 		</div>
 	</footer>

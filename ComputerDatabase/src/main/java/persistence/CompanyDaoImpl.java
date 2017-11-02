@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import mapper.CompanyMapper;
-import mapper.exceptions.PageException;
 import model.Company;
 import model.pages.Page;
 import persistence.exceptions.DaoException;
@@ -71,11 +70,7 @@ public class CompanyDaoImpl {
 
         PageQuery<Company> command = (Long start, Long splitSize) -> {
             String filter = String.format(" ORDER BY id LIMIT %d,%d", start, splitSize);
-            try {
-                return DaoConnection.executeSelectQuery(SELECT_ID_NAME_FROM_COMPANY + filter, new CompanyMapper());
-            } catch (DaoException e) {
-                throw new PageException(e);
-            }
+            return DaoConnection.executeSelectQuery(SELECT_ID_NAME_FROM_COMPANY + filter, new CompanyMapper());
         };
 
         return new Page<Company>(command, size);

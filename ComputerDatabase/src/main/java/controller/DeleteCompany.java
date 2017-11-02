@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import persistence.exceptions.DaoException;
 import service.CompanyServiceImpl;
+import validators.ValidationUtils;
 
 @WebServlet
 public class DeleteCompany extends HttpServlet {
@@ -39,25 +41,25 @@ public class DeleteCompany extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String selection = req.getParameter("id");
-        //        if (selection != null && ValidationUtils.isLong(selection)) {
-        //            try {
-        //
-        //                companyService.deleteCompany(Long.parseLong(selection));
-        //                String msg = "Sucessfully deleted : " + selection;
-        //                RequestUtils.showMsg(req, true, msg);
-        //                LOGGER.info(msg);
-        //
-        //            } catch (DaoException e) {
-        //
-        //                String msg = "failed to delete : " + e.getMessage();
-        //                RequestUtils.showMsg(req, false, msg);
-        //                LOGGER.error(msg);
-        //            }
-        //        }
+        String id = req.getParameter("id");
 
-        RequestUtils.showMsg(req, false, "HELLO WORLD");
+        if (id != null && ValidationUtils.isLong(id)) {
+            try {
+
+                companyService.deleteCompany(Long.parseLong(id));
+                String msg = "Sucessfully deleted company : n°" + id;
+                RequestUtils.showMsg(req, true, msg);
+                LOGGER.info(msg);
+
+            } catch (DaoException e) {
+
+                String msg = "failed to delete : " + e.getMessage();
+                RequestUtils.showMsg(req, false, msg);
+                LOGGER.error(msg);
+            }
+        }
+
         getServletContext().getRequestDispatcher("/dashboard").forward(req, resp);
-        //        resp.sendRedirect("/dashboard");
+        // resp.sendRedirect("/dashboard");
     }
 }

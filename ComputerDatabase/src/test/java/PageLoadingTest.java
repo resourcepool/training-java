@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import mapper.exceptions.PageException;
 import model.Company;
 import model.pages.Page;
 import persistence.CompanyDaoImpl;
@@ -40,10 +39,9 @@ public class PageLoadingTest {
     /**
      * Init Mocks.
      * @throws DaoException never thrown
-     * @throws PageException never thrown
      */
     @Before
-    public void setUp() throws DaoException, PageException {
+    public void setUp() throws DaoException {
         content = new Company("name");
         List<Company> list = new ArrayList<Company>();
         list.add(content);
@@ -57,10 +55,9 @@ public class PageLoadingTest {
      * verify content is retrieved from page > from service > from dao.
      * @throws SQLException never thrown
      * @throws DaoException never thrown
-     * @throws PageException never thrown
      */
     @Test
-    public void processTest() throws SQLException, DaoException, PageException {
+    public void processTest() throws SQLException, DaoException {
         Page<Company> page = service.getCompanyPage();
         verify(companyDao, times(1)).getCompanyPage();
 

@@ -6,6 +6,7 @@ import model.Computer;
 import model.pages.Page;
 import persistence.ComputerDaoImpl;
 import persistence.exceptions.DaoException;
+import persistence.querycommands.PageQuery;
 
 public class ComputerServiceImpl {
 
@@ -82,41 +83,43 @@ public class ComputerServiceImpl {
     }
 
     /**
-     * @param start index entities to start at (start at 0)
-     * @param size number of elements
+     * @param nbPage the page number to retrieve, starting at 1
+     * @param pageSize number of elements by page
+     * @return the first page of the full computer preview list from DB, with content not loaded yet (LAZY)
+     * @throws DaoException content couldn't be loaded
+     */
+    public Page<Computer> getComputerPage(Long nbPage, Long pageSize) throws DaoException {
+        PageQuery<Computer> pageQuery = (Long start, Long splitSize) -> {
+            return computerDao.getContent(start, splitSize);
+        };
+        return createPage(nbPage, pageSize, pageQuery);
+    }
+
+
+    /**
+     * @param nbPage the page number to retrieve, starting at 1
+     * @param pageSize number of elements by page
+     * @param search search by ComputerName or CompanyName
      * @return the first page of the full computer preview list from DB
      * @throws DaoException content couldn't be loaded
      */
-    public Page<Computer> getComputerEntities(Long start, Long size) throws DaoException {
-        return computerDao.getComputerPage(start, size);
+    public Page<Computer> getComputerPageWithSearch(Long nbPage, Long pageSize, String search) throws DaoException {
+        PageQuery<Computer> pageQuery = (Long start, Long splitSize) -> {
+            return computerDao.getContent(start, splitSize, search);
+        };
+        return createPage(nbPage, pageSize, pageQuery);
     }
 
     /**
      * @param nbPage the page number to retrieve, starting at 1
      * @param pageSize number of elements by page
-     * @return the first page of the full computer preview list from DB
+     * @param pageQuery the request to retrieve the content
+     * @return the first page of the full computer preview list from DB, with content not loaded yet (LAZY)
      * @throws DaoException content couldn't be loaded
      */
-    public Page<Computer> getComputerPage(Long nbPage, Long pageSize) throws DaoException {
-        return getComputerEntities((nbPage - 1) * pageSize, pageSize);
+    private Page<Computer> createPage(Long nbPage, Long pageSize, PageQuery<Computer> pageQuery) throws DaoException {
+        long startElem = (nbPage - 1) * pageSize;
+        Long size = computerDao.getComputerTotalCount();
+        return new Page<Computer>(pageQuery, startElem, size, pageSize);
     }
-
-
-    /**
-     * @return the full list of computer, only name and id preview
-     * @throws DaoException content couldn't be loaded
-     */
-    public List<Computer> getComputersList() throws DaoException {
-        return computerDao.getComputersList();
-    }
-
-    /**
-     * @param splitSize number of element by page
-     * @return total of elements / splitSize
-     * @throws DaoException content couldn't be loaded
-     */
-    public long getPageTotal(Long splitSize) throws DaoException {
-        return computerDao.getComputerTotalCount() / splitSize;
-    }
-
 }

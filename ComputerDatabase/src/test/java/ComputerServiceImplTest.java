@@ -2,8 +2,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import java.util.ArrayList;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +30,7 @@ public class ComputerServiceImplTest {
      */
     @Before
     public void setUp() throws DaoException {
-        Mockito.when(computerDao.getComputersList()).thenReturn(new ArrayList<Computer>());
+        Mockito.when(computerDao.getComputerDetail(1L)).thenReturn(Mockito.mock(Computer.class));
     }
 
     /**
@@ -40,7 +38,7 @@ public class ComputerServiceImplTest {
      */
     @Test
     public void testGetComputerList() throws DaoException {
-        assertNotNull(service.getComputersList());
-        verify(computerDao, times(1)).getComputersList();
+        assertNotNull(service.getComputerDetail(1L));
+        verify(computerDao, times(1)).getComputerDetail(1L);
     }
 }

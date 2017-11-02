@@ -2,7 +2,7 @@ package model.pages;
 
 import java.util.List;
 
-import mapper.exceptions.PageException;
+import persistence.exceptions.DaoException;
 import persistence.querycommands.PageQuery;
 
 public class Page<T> {
@@ -46,24 +46,24 @@ public class Page<T> {
 
     /**
      * @return return the current page loaded if it wasn't, else return the next page
-     * @throws PageException page couldn't be loaded
+     * @throws DaoException page couldn't be loaded
      */
-    public Page<T> next() throws PageException {
+    public Page<T> next() throws DaoException {
         if (!isLoaded()) {
-            this.load();
-            return this;
+            return this.load();
         }
 
         Page<T> p = new Page<T>(command, startIndex + pageSize, size, pageSize);
-        p.load();
-        return p;
+        return p.load();
     }
 
     /**
-     * @throws PageException PageException page couldn't be loaded
+     * @return current page with loaded content
+     * @throws DaoException PageException page couldn't be loaded
      */
-    public void load() throws PageException {
+    public Page<T> load() throws DaoException {
         content = command.getContent(startIndex, pageSize);
+        return this;
     }
 
     /**

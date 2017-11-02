@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mapper.exceptions.PageException;
 import model.Computer;
 import model.pages.Page;
 import persistence.exceptions.DaoException;
@@ -41,125 +40,122 @@ public class Dashboard extends HttpServlet {
     /**
      * {@inheritDoc}
      *
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-     *      response)
-     * @param request request
-     * @param response response
-     * @throws ServletException request
+     * @see HttpServlet#doGet(HttpServletRequest req, HttpServletResponse resp)
+     * @param req req
+     * @param resp resp
+     * @throws ServletException req
      * @throws IOException exception
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        String paramMsg = request.getParameter("msg");
-        String paramSuccess = request.getParameter("success");
-
-        if (paramMsg != null && !paramMsg.isEmpty() && paramSuccess != null && paramSuccess.isEmpty()) {
-
-            Boolean bool = paramSuccess.equals("true") || paramSuccess.equals("success");
-            RequestUtils.showMsg(request, bool, paramMsg);
-        }
-
-        loadDashboard(request, response);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-     *      response)
-     * @param req request
-     * @param resp response
-     * @throws ServletException request
-     * @throws IOException exception
-     */
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        String[] selection = req.getParameterValues("selection");
-
-        if (selection != null) {
-            List<Long> ids = new ArrayList<Long>();
-            Boolean result = ValidationUtils.isLongList(selection, ids);
-
-            if (result) {
-                try {
-                    computerService.deleteComputers(ids);
-                    RequestUtils.showMsg(req, true, "Success, " + ids.size() + " ids deleted");
-                } catch (DaoException e) {
-                    String msg = "failed to execute deletion, reason :" + e.getMessage();
-                    RequestUtils.showMsg(req, false, msg);
-                    LOGGER.error(msg);
-                }
-            } else {
-                RequestUtils.showMsg(req, false, "all ids are not valid");
-            }
-        }
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         loadDashboard(req, resp);
     }
 
     /**
-     * @param request request
-     * @param response response
+     * {@inheritDoc}
+     *
+     * @see HttpServlet#doPost(HttpServletRequest req, HttpServletResponse resp)
+     * @param req req
+     * @param resp resp
+     * @throws ServletException req
+     * @throws IOException exception
+     */
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        handleComputerDeletion(req);
+        loadDashboard(req, resp);
+    }
+
+    /**
+     * @param req req containing parameters of computers to delete ("selection") or
+     *            none (ignored then)
+     */
+    private void handleComputerDeletion(HttpServletRequest req) {
+        String[] computerSelection = req.getParameterValues("selection");
+
+        if (computerSelection == null) {
+            return;
+        }
+
+        List<Long> ids = new ArrayList<Long>();
+        Boolean result = ValidationUtils.isLongList(computerSelection, ids);
+
+        if (result) {
+            try {
+                computerService.deleteComputers(ids);
+                RequestUtils.showMsg(req, true, "Success, " + ids.size() + " computer ids deleted");
+            } catch (DaoException e) {
+                String msg = "failed to execute deletion, reason :" + e.getMessage();
+                RequestUtils.showMsg(req, false, msg);
+                LOGGER.error(msg);
+            }
+        } else {
+            RequestUtils.showMsg(req, false, "all ids are not valid");
+        }
+    }
+
+    /**
+     * @param req req
+     * @param resp resp
      * @throws ServletException could not load
      * @throws IOException could not load
      */
-    private void loadDashboard(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        Long pageSize = retrivePageSize(request);
-        Long currentPage = ValidationUtils.retrieveLong(request.getParameter("page"), DEFAULT_STARTING_PAGE);
+    private void loadDashboard(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Long pageSize = retrivePaginationSize(req);
+        Long currentPage = ValidationUtils.retrieveLong(req.getParameter("page"), DEFAULT_STARTING_PAGE);
 
-        Page<Computer> page = getPage(currentPage, pageSize);
+        String search = req.getParameter("search");
         List<Computer> computerDtos = null;
+        Page<Computer> page = getPage(currentPage, pageSize, search);
 
         if (page != null) {
             computerDtos = page.getContent();
         }
 
-        request.setAttribute("computers", computerDtos);
-        request.setAttribute("page", page);
-        request.getRequestDispatcher(DASHBOARD_JSP_PATH).forward(request, response);
+        req.setAttribute("computers", computerDtos);
+        req.setAttribute("page", page);
+        req.getRequestDispatcher(DASHBOARD_JSP_PATH).forward(req, resp);
     }
 
     /**
-     * @param request request containing params and current session to recover
-     *            current pagination parametered
+     * @param req req containing params and current session to recover current
+     *            pagination parametered
      * @return the page size to use to paginate current-page
      */
-    private Long retrivePageSize(HttpServletRequest request) {
-        String param = request.getParameter("pagination");
+    private Long retrivePaginationSize(HttpServletRequest req) {
+        String param = req.getParameter("pagination");
 
         if (param != null) {
             Long pagination = ValidationUtils.retrieveLong(param, DEFAULT_PAGESIZE);
-            request.getSession().setAttribute("pagination", pagination);
+            req.setAttribute("pagination", param);
             return pagination;
         }
 
-        Long pagination = (Long) request.getSession().getAttribute("pagination");
-        if (pagination != null) {
-            request.setAttribute("pagination", pagination);
-            return pagination;
-        }
-
-        request.getSession().setAttribute("pagination", DEFAULT_PAGESIZE);
         return DEFAULT_PAGESIZE;
     }
 
     /**
      * @param pageNumber page to get
      * @param pageSize page size
+     * @param search companyName or computerName to search or null
      * @return return the page
      */
-    private Page<Computer> getPage(Long pageNumber, Long pageSize) {
+    private Page<Computer> getPage(Long pageNumber, Long pageSize, String search) {
         try {
 
-            Page<Computer> computers = computerService.getComputerPage(pageNumber, pageSize);
-            computers.load();
-            return computers;
+            Page<Computer> page;
+            if (search == null) {
+                page = computerService.getComputerPage(pageNumber, pageSize);
+            } else {
+                page = computerService.getComputerPageWithSearch(pageNumber, pageSize, search);
+            }
 
-        } catch (DaoException | PageException e) {
+            page.load();
+            return page;
+
+        } catch (DaoException e) {
 
             String msg = String.format("Computer Page (%d) couldn't be loaded, reason \"%s\"", pageNumber,
                     e.getMessage());
