@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<%@ taglib prefix="mylib" tagdir="/WEB-INF/tags"%>
 <c:if test="${empty edit}">
 	<c:set var="edit" value="false"/>
 </c:if>
@@ -23,11 +23,7 @@
 	</header>
 	<section id="main">
 		<div class="container">
-			<c:if test="${ not empty msg }">
-				<div class="alert ${ success ? 'alert-success' : 'alert-danger' }">
-					<p><c:out value="${ msg }" /></p>
-				</div>
-			</c:if>
+			<mylib:showMsg/>
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>${ edit ? 'Edit Computer' : 'Add Computer' }</h1>

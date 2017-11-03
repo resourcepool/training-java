@@ -1,6 +1,8 @@
 package controller;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,15 +15,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mapper.ComputerMapping;
 import model.Computer;
-import model.pages.Order;
 import model.pages.Page;
 import persistence.exceptions.DaoException;
 import service.CompanyServiceImpl;
 import service.ComputerServiceImpl;
 import service.ICompanyService;
 import service.IComputerService;
+import service.PageBuilder;
 import validators.ValidationUtils;
 
 @WebServlet
@@ -30,8 +31,6 @@ public class Dashboard extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Long DEFAULT_PAGESIZE = 20L;
-    private static final Long DEFAULT_STARTING_PAGE = 1L;
     private static final Logger LOGGER = LoggerFactory.getLogger(Dashboard.class);
     private IComputerService computerService;
     private ICompanyService companyService;
@@ -143,53 +142,46 @@ public class Dashboard extends HttpServlet {
      */
     private void loadDashboard(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        List<Computer> computerDtos = null;
-        Page<Computer> page = getPage(req);
+        PageBuilder<Computer> builder = new PageBuilder<Computer>();
+        Page<Computer> page = computerService.loadPage(builder.with(req));
 
         if (page != null) {
-            computerDtos = page.getContent();
-            String params = DashboardLoader.buildParam(page);
-            req.setAttribute("params", params);
+            List<Computer> content = page.getContent();
+            buildParams(req, page);
+            req.setAttribute("computers", content);
+            req.setAttribute("page", page);
         }
 
-        req.setAttribute("computers", computerDtos);
-        req.setAttribute("page", page);
         req.getRequestDispatcher(DASHBOARD_JSP_PATH).forward(req, resp);
     }
 
+
     /**
-     * @param req request
-     * @return return the page
+     * @param req req
+     * @param page page
      */
-    private Page<Computer> getPage(HttpServletRequest req) {
-        Long pageSize = ValidationUtils.retrieveLong(req.getParameter("pagination"), DEFAULT_PAGESIZE);
-        Long pageNumber = ValidationUtils.retrieveLong(req.getParameter("page"), DEFAULT_STARTING_PAGE);
-        String search = req.getParameter("search");
-        String sort = req.getParameter("sort");
-        String order = req.getParameter("order");
+    public static void buildParams(HttpServletRequest req, Page<?> page) {
 
+        StringBuilder pageParam = new StringBuilder();
+        String sortParams = null;
         try {
-
-            Page<Computer> page;
-            if (sort != null && order != null) {
-                Order o = order.equals(Order.ASC.toString()) ? Order.ASC : Order.DESC;
-                ComputerMapping m = ComputerMapping.get(sort);
-                page = computerService.getPageWithOrder(pageNumber, pageSize, m, o);
-            } else if (search != null) {
-                page = computerService.getPageWithSearch(pageNumber, pageSize, search);
-            } else {
-                page = computerService.getPage(pageNumber, pageSize);
+            if (page.getSearch() != null) {
+                sortParams = "&search=" + URLEncoder.encode(page.getSearch(), "UTF-8");
+                pageParam.append(sortParams);
             }
 
-            return page.load();
+            if (page.getFormSort() != null) {
+                pageParam.append("&sort=" + URLEncoder.encode(page.getFormSort(), "UTF-8"));
+            }
 
-        } catch (DaoException e) {
+            if (page.getOrder() != null) {
+                pageParam.append("&order=" + page.getOrder().toString());
+            }
 
-            String msg = String.format("Computer Page (%d) couldn't be loaded, reason \"%s\"", pageNumber,
-                    e.getMessage());
-            RequestUtils.showMsg(req, false, msg);
-            LOGGER.error(msg);
-            return null;
+        } catch (UnsupportedEncodingException e) {
+            // TODO
         }
+        req.setAttribute("sortparams", sortParams);
+        req.setAttribute("pageparams", pageParam.toString());
     }
 }

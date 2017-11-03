@@ -2,16 +2,16 @@ package persistence.querycommands;
 
 import java.util.List;
 
+import model.pages.Page;
 import persistence.exceptions.DaoException;
 
 public interface PageQuery<T> {
 
     /**
-     * @param start start index to query
-     * @param split number of elements to return
+     * @param page page to use
      * @return the content resulting of the query with @split elements
      * @throws DaoException content couldn't be loaded
      */
-    List<T> getContent(Long start, Long split) throws DaoException;
+    List<T> getContent(Page<T> page) throws DaoException;
 
 }

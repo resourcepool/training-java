@@ -2,53 +2,72 @@ package model.pages;
 
 import java.util.List;
 
+import mapper.ComputerMapping;
 import persistence.exceptions.DaoException;
 import persistence.querycommands.PageQuery;
+import service.PageBuilder;
 
 public class Page<T> {
 
-    private List<T>      content;
-    private PageQuery<T> command;
-    private Long         startIndex;
-    private Long         size;
-    private Long         pageSize;
-    private String       search;
-    private String       columnSort;
-    private Order        order;
+    private PageQuery<T>    command;
+    private List<T>         content;
+    private Long            total;
+
+    private Long            pageSize;
+    private Long            nbPage;
+    private String          search;
+    private ComputerMapping columnSort;
+    private String          order;
 
     /**
-     * @param command query used to fill pages content, either dababase or cached entities
-     * @param size number of total elements than can be loaded
+     * Contruct from a page builder.
+     *
+     * @param pageQuery query to get content
+     * @param total total of elem
+     * @param pageBuilder builder
      */
-    public Page(PageQuery<T> command, Long size) {
-        this(command, size, 10L);
+    public Page(PageQuery<T> pageQuery, Long total, PageBuilder<T> pageBuilder) {
+        this(pageQuery, total);
+        this.nbPage = pageBuilder.getNbPage();
+        this.pageSize = pageBuilder.getPageSize();
+        this.search = pageBuilder.getSearch();
+        this.order = pageBuilder.getOrder();
+        this.columnSort = pageBuilder.getColumnSort();
     }
 
     /**
-     * @param command query used to fill pages content, either dababase or cached entities
-     * @param size number of total elements than can be loaded
-     * @param pageSize number of elements by page
+     * Contruct from an already existing page.
+     *
+     * @param pageQuery query to get content
+     * @param total total of elem
+     * @param page page
+     * @param nbPage nbpage
      */
-    public Page(PageQuery<T> command, Long size, Long pageSize) {
-        this(command, 0L, size, pageSize);
+    public Page(PageQuery<T> pageQuery, Long total, Page<T> page, Long nbPage) {
+        this(pageQuery, total);
+
+        this.nbPage = nbPage;
+        this.pageSize = page.getPageSize();
+        this.search = page.getSearch();
+        this.order = page.getOrder();
+        this.columnSort = page.getColumnSort();
     }
 
+
+
     /**
-     * @param command query used to fill pages content, either dababase or cached entities
-     * @param start element index to start
-     * @param size number of total elements than can be loaded
-     * @param pageSize number of elements by page
+     * @param pageQuery page
+     * @param total total
      */
-    public Page(PageQuery<T> command, Long start, Long size, Long pageSize) {
-        this.pageSize = pageSize;
+    private Page(PageQuery<T> pageQuery, Long total) {
         this.content = null;
-        this.startIndex = start;
-        this.size = size;
-        this.command = command;
+        this.command = pageQuery;
+        this.total = total;
     }
 
     /**
-     * @return return the current page loaded if it wasn't, else return the next page
+     * @return return the current page loaded if it wasn't, else return the next
+     *         page
      * @throws DaoException page couldn't be loaded
      */
     public Page<T> next() throws DaoException {
@@ -56,7 +75,7 @@ public class Page<T> {
             return this.load();
         }
 
-        Page<T> p = new Page<T>(command, startIndex + pageSize, size, pageSize);
+        Page<T> p = new Page<T>(command, total, this, nbPage + 1);
         return p.load();
     }
 
@@ -65,7 +84,7 @@ public class Page<T> {
      * @throws DaoException PageException page couldn't be loaded
      */
     public Page<T> load() throws DaoException {
-        content = command.getContent(startIndex, pageSize);
+        content = command.getContent(this);
         return this;
     }
 
@@ -92,15 +111,11 @@ public class Page<T> {
      * @return true if this page is loaded and there is no next page
      */
     public Boolean hasNext() {
-        return !isLoaded() || (startIndex + pageSize < size);
-    }
-
-    public Long getCurrentCount() {
-        return startIndex;
+        return !isLoaded() || (nbPage * pageSize < total);
     }
 
     public Long getTotalCount() {
-        return size;
+        return total;
     }
 
     public Boolean isLoaded() {
@@ -112,37 +127,35 @@ public class Page<T> {
     }
 
     public Long getCurrentPage() {
-        return (startIndex / pageSize) + 1;
+        return nbPage;
     }
 
     /**
-     * @return the number of page that can be loaded with pageSize element per page (with imcomplete page)
+     * @return the number of page that can be loaded with pageSize element per page
+     *         (with imcomplete page)
      */
     public Long getTotalPages() {
-        return (size + pageSize - 1) / pageSize;
+        return (total + getPageSize() - 1) / getPageSize();
     }
 
     public String getSearch() {
         return search;
     }
 
-    public void setSearch(String search) {
-        this.search = search;
+    public String getFormSort() {
+        return columnSort != null ? columnSort.getFormName() : null;
     }
 
-    public String getColumnSort() {
+    public String getDbSort() {
+        return columnSort != null ? columnSort.getDbName() : null;
+    }
+
+    private ComputerMapping getColumnSort() {
         return columnSort;
     }
 
-    public void setColumnSort(String columnSort) {
-        this.columnSort = columnSort;
-    }
-
-    public Order getOrder() {
+    public String getOrder() {
         return order;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
-    }
 }

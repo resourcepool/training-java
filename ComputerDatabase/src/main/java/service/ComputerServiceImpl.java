@@ -2,9 +2,10 @@ package service;
 
 import java.util.List;
 
-import mapper.ComputerMapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import model.Computer;
-import model.pages.Order;
 import model.pages.Page;
 import persistence.ComputerDaoImpl;
 import persistence.exceptions.DaoException;
@@ -12,9 +13,9 @@ import persistence.querycommands.PageQuery;
 
 public class ComputerServiceImpl implements IComputerService {
 
-
-    private static IComputerService    instance;
-    private ComputerDaoImpl            computerDao;
+    private static final Logger     LOGGER = LoggerFactory.getLogger(ComputerServiceImpl.class);
+    private static IComputerService instance;
+    private ComputerDaoImpl         computerDao;
 
     /**
      * Private ctor.
@@ -26,9 +27,10 @@ public class ComputerServiceImpl implements IComputerService {
     }
 
     /**
-
-
-    /**
+     *
+     *
+     * /**
+     *
      * @return a loaded Service, ready to work
      */
     public static IComputerService getInstance() {
@@ -86,68 +88,38 @@ public class ComputerServiceImpl implements IComputerService {
     }
 
     /**
-     * @param nbPage the page number to retrieve, starting at 1
-     * @param pageSize number of elements by page
-     * @return the first page of the full computer preview list from DB, with
-     *         content not loaded yet (LAZY)
-     * @throws DaoException content couldn't be loaded
-     */
-    @Override
-    public Page<Computer> getPage(Long nbPage, Long pageSize) throws DaoException {
-        PageQuery<Computer> pageQuery = (Long start, Long splitSize) -> {
-            return computerDao.get(start, splitSize);
-        };
-
-        long startElem = (nbPage - 1) * pageSize;
-        Long size = computerDao.getComputerTotalCount();
-        return new Page<Computer>(pageQuery, startElem, size, pageSize);
-    }
-
-    /**
-     * @param nbPage the page number to retrieve, starting at 1
-     * @param pageSize number of elements by page
-     * @param search search by ComputerName or CompanyName
+     * @param pageBuilder page request
      * @return the first page of the full computer preview list from DB
      * @throws DaoException content couldn't be loaded
      */
     @Override
-    public Page<Computer> getPageWithSearch(Long nbPage, Long pageSize, String search) throws DaoException {
-        PageQuery<Computer> pageQuery = (Long start, Long splitSize) -> {
-            return computerDao.get(start, splitSize, search);
-        };
+    public Page<Computer> loadPage(PageBuilder<Computer> pageBuilder) {
+        PageQuery<Computer> pageQuery = getPageQuery();
 
-        long startElem = (nbPage - 1) * pageSize;
-        Long size = computerDao.getComputerTotalCount(search);
-        Page<Computer> page = new Page<Computer>(pageQuery, startElem, size, pageSize);
-
-        page.setSearch(search);
-
-        return page;
+        try {
+            Long size = getCount(pageBuilder.getSearch());
+            Page<Computer> page = pageBuilder.build(pageQuery, size);
+            return page.load();
+        } catch (DaoException e) {
+            LOGGER.error(e.getMessage());
+            return null;
+        }
     }
 
     /**
-     * @param nbPage the page number to retrieve, starting at 1
-     * @param pageSize number of elements by page
-     * @param sort column to sort
-     * @param order ASC or DESC
-     * @return the first page of the full computer preview list from DB
-     * @throws DaoException content couldn't be loaded
+     * @param search filter to search (computer or company name like) or null
+     * @return number of elem
+     * @throws DaoException fail to load
      */
-    @Override
-    public Page<Computer> getPageWithOrder(Long nbPage, Long pageSize, ComputerMapping sort, Order order)
-            throws DaoException {
-        PageQuery<Computer> pageQuery = (Long start, Long splitSize) -> {
-            return computerDao.get(start, splitSize, sort.getDbName(), order.toString());
+    private Long getCount(String search) throws DaoException {
+        return search == null ? computerDao.getComputerTotalCount() : computerDao.getComputerTotalCount(search);
+    }
+
+    private PageQuery<Computer> getPageQuery() {
+        return (Page<Computer> page) -> {
+            long startElem = (page.getCurrentPage() - 1) * page.getPageSize();
+            return computerDao.get(startElem, page);
         };
-
-        long startElem = (nbPage - 1) * pageSize;
-        Long size = computerDao.getComputerTotalCount();
-        Page<Computer> page = new Page<Computer>(pageQuery, startElem, size, pageSize);
-
-        page.setColumnSort(sort.getFormName());
-        page.setOrder(order);
-
-        return page;
     }
 
     /**

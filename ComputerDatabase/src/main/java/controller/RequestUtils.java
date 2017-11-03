@@ -42,7 +42,7 @@ public class RequestUtils {
         req.setAttribute(ValidationUtils.COMPUTER_NAME, name);
         req.setAttribute(ValidationUtils.INTRODUCED, introduced);
         req.setAttribute(ValidationUtils.DISCONTINUED, discontinued);
-        req.setAttribute(ValidationUtils.COMPANY_ID, companyId);
+        req.setAttribute(ValidationUtils.COMPANY_ID, companyId.equals("--") ? null : companyId);
     }
 
     /**

@@ -11,18 +11,19 @@ import java.util.stream.Collectors;
 
 import mapper.ComputerMapper;
 import model.Computer;
+import model.pages.Page;
 import persistence.exceptions.DaoException;
 
 public class ComputerDaoImpl {
 
-    private static final String SEARCH_FILTER = "where lower(CO.name) like '%%%1$s%%' or lower(CA.name) like '%%%1$s%%'";
-    private static final String COUNT_FROM_COMPUTER = "select count(*) from computer";
-    private static final String COUNT_FROM_COMPUTER_WITH_COMPANY = "select count(*) from computer CO left join company CA on CA.Id = CO.company_id";
-    private static final String SELECT_FROM_COMPUTER_WITH_COMPANY = "select CO.*, CA.name as company_name from computer CO left join company CA on CA.Id = CO.company_id";
-    private static final String INSERT_INTO_COMPUTER_VALUES = "insert into computer values (null, ?, ?, ?, ?)";
-    private static final String ID_FILTER = " where CO.id = ?";
-    private static final String NAME_FILTER = " where CO.name = \"?\"";
-    private static final String DELETE_FROM_COMPUTER_WHERE_COMPANY_ID = "delete from computer where company_id = ?";
+    private static final String    SEARCH_FILTER                         = "where lower(CO.name) like '%%%1$s%%' or lower(CA.name) like '%%%1$s%%'";
+    private static final String    COUNT_FROM_COMPUTER                   = "select count(*) from computer";
+    private static final String    COUNT_FROM_COMPUTER_WITH_COMPANY      = "select count(*) from computer CO left join company CA on CA.Id = CO.company_id";
+    private static final String    SELECT_FROM_COMPUTER_WITH_COMPANY     = "select CO.*, CA.name as company_name from computer CO left join company CA on CA.Id = CO.company_id";
+    private static final String    INSERT_INTO_COMPUTER_VALUES           = "insert into computer values (null, ?, ?, ?, ?)";
+    private static final String    ID_FILTER                             = " where CO.id = ?";
+    private static final String    NAME_FILTER                           = " where CO.name = \"?\"";
+    private static final String    DELETE_FROM_COMPUTER_WHERE_COMPANY_ID = "delete from computer where company_id = ?";
 
     // ######################### SINGLETON ###################################
     private static ComputerDaoImpl instance;
@@ -102,20 +103,33 @@ public class ComputerDaoImpl {
         });
     }
 
-
     // ########################## PAGES, SEARCH, SORT, LIMIT #######################
 
     /**
      * @param start element index to start
-     * @param splitSize number of total elements than can be loaded
+     * @param page number of total elements than can be loaded
      * @return the content of one computer page from DB
      * @throws DaoException content couldn't be loaded
      */
-    public List<Computer> get(Long start, Long splitSize) throws DaoException {
+    public List<Computer> get(Long start, Page<Computer> page) throws DaoException {
+        StringBuilder sb = new StringBuilder(SELECT_FROM_COMPUTER_WITH_COMPANY);
+        sb.append(' ');
 
-        String filter = String.format("ORDER BY name LIMIT %d,%d", start, splitSize); // where CO.name = 'zzzzz'
-        String sql = SELECT_FROM_COMPUTER_WITH_COMPANY + ' ' + filter;
-        return DaoConnection.executeSelectQuery(sql, new ComputerMapper());
+        if (page.getSearch() != null) {
+            sb.append(String.format(SEARCH_FILTER, page.getSearch()));
+            sb.append(' ');
+        }
+
+        if (page.getDbSort() != null) {
+            sb.append(String.format("ORDER BY %s %s", page.getDbSort(), page.getOrder()));
+        } else {
+            sb.append("ORDER BY CO.name");
+        }
+        sb.append(' ');
+
+        sb.append(String.format(" LIMIT %d,%d", start, page.getPageSize()));
+
+        return DaoConnection.executeSelectQuery(sb.toString(), new ComputerMapper());
     }
 
     /**
@@ -132,7 +146,6 @@ public class ComputerDaoImpl {
         String sql = SELECT_FROM_COMPUTER_WITH_COMPANY + ' ' + where + ' ' + filter;
         return DaoConnection.executeSelectQuery(sql, new ComputerMapper());
     }
-
 
     /**
      * @param start element index to start
@@ -190,7 +203,7 @@ public class ComputerDaoImpl {
             PreparedStatement s = conn.prepareStatement(
                     "update computer set name = ?, introduced = ?, discontinued = ?, company_id = ? where id = ?");
             s.setString(1, c.getName());
-            s.setDate(2, Date.valueOf(c.getIntroduced()));
+            s.setDate(2, c.getIntroduced() == null ? null : Date.valueOf(c.getIntroduced()));
             s.setDate(3, c.getDiscontinued() == null ? null : Date.valueOf(c.getDiscontinued()));
 
             if (c.getCompany().getId() != null) {
@@ -248,6 +261,5 @@ public class ComputerDaoImpl {
             return true;
         });
     }
-
 
 }

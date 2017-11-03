@@ -16,16 +16,13 @@
 	<section id="main">
 		<div class="container">
 			<h1 id="homeTitle">${page.totalCount} Computers found</h1>
-			<c:if test="${ not empty msg }">
-				<div class="alert ${ success ? 'alert-success' : 'alert-danger' }">
-					<p><c:out value="${ msg }" /></p>
-				</div>
-			</c:if>
+			<mylib:showMsg/>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
 						<input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${ page.search }" />
 						<input type="submit" id="searchsubmit" value="Filter by name" class="btn btn-primary" />
+						
 					</form>
 				</div>
 				<div class="pull-right">
@@ -46,10 +43,10 @@
 							</a>
 							</span>
 						</th>
-						<mylib:sortTableHeader content="Computer name" column_name="computerName" current_order="${ page.order }"  current_sort="${ page.columnSort }"/>
-						<mylib:sortTableHeader content="Introduced date" column_name="introduced" current_order="${ page.order }"  current_sort="${ page.columnSort }"/>
-						<mylib:sortTableHeader content="Discontinued date" column_name="discontinued" current_order="${ page.order }"  current_sort="${ page.columnSort }"/>
-						<mylib:sortTableHeader content="Company" column_name="company" current_order="${ page.order }"  current_sort="${ page.columnSort }"/>
+						<mylib:sortTableHeader content="Computer name" column_name="computerName" current_order="${ page.order }"  current_sort="${ page.formSort }" params="${sortparams}"/>
+						<mylib:sortTableHeader content="Introduced date" column_name="introduced" current_order="${ page.order }"  current_sort="${ page.formSort }" params="${sortparams}"/>
+						<mylib:sortTableHeader content="Discontinued date" column_name="discontinued" current_order="${ page.order }"  current_sort="${ page.formSort }" params="${sortparams}"/>
+						<mylib:sortTableHeader content="Company" column_name="company" current_order="${ page.order }"  current_sort="${ page.formSort }" params="${sortparams}"/>
 						<th class="editMode" style="width: 60px; height: 22px;">Delete company ?</th>
 					</tr>
 				</thead>
@@ -87,8 +84,8 @@
 	</section>
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
-			<mylib:pageLinks target="dashboard" current_page="${page.currentPage}" pages_limit="${page.totalPages}" pagination_size="${page.pageSize}" params="${params}" />
-			<mylib:pagination page_count="${page.pageSize}" params="${params}" />
+			<mylib:pageLinks target="dashboard" current_page="${page.currentPage}" pages_limit="${page.totalPages}" pagination_size="${page.pageSize}" params="${pageparams}" />
+			<mylib:pagination page_count="${page.pageSize}" params="${pageparams}" />
 		</div>
 	</footer>
 	

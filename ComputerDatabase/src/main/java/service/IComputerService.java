@@ -2,9 +2,7 @@ package service;
 
 import java.util.List;
 
-import mapper.ComputerMapping;
 import model.Computer;
-import model.pages.Order;
 import model.pages.Page;
 import persistence.exceptions.DaoException;
 
@@ -43,36 +41,17 @@ public interface IComputerService {
     void deleteComputers(List<Long> ids) throws DaoException;
 
     /**
-     * @param nbPage the page number to retrieve, starting at 1
-     * @param pageSize number of elements by page
-     * @return the first page of the full computer preview list from DB, with content not loaded yet (LAZY)
-     * @throws DaoException content couldn't be loaded
-     */
-    Page<Computer> getPage(Long nbPage, Long pageSize) throws DaoException;
-
-    /**
-     * @param nbPage the page number to retrieve, starting at 1
-     * @param pageSize number of elements by page
-     * @param search search by ComputerName or CompanyName
+     * @param pageBuilder page request
      * @return the first page of the full computer preview list from DB
-     * @throws DaoException content couldn't be loaded
      */
-    Page<Computer> getPageWithSearch(Long nbPage, Long pageSize, String search) throws DaoException;
-
-    /**
-     * @param nbPage the page number to retrieve, starting at 1
-     * @param pageSize number of elements by page
-     * @param sort column to sort
-     * @param order ASC or DESC
-     * @return the first page of the full computer preview list from DB
-     * @throws DaoException content couldn't be loaded
-     */
-    Page<Computer> getPageWithOrder(Long nbPage, Long pageSize, ComputerMapping sort, Order order) throws DaoException;
+    Page<Computer> loadPage(PageBuilder<Computer> pageBuilder);
 
     /**
      * @param id id of the company to delete computers from
      * @throws DaoException deletion failed
      */
     void deleteComputerByCompany(Long id) throws DaoException;
+
+
 
 }
