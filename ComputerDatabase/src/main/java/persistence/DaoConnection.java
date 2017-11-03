@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import mapper.IResultMapper;
 import persistence.exceptions.DaoException;
-import persistence.querycommands.IQueryCommand;
+import persistence.querycommands.QueryCommand;
 
 public class DaoConnection {
     private static final Logger LOGGER = LoggerFactory.getLogger(DaoConnection.class);
@@ -21,10 +21,10 @@ public class DaoConnection {
      * @param queries queries using the same connection before commit atomicly
      * @throws DaoException one or more query failed, each request is rollbacked
      */
-    public static void executeTransation(List<IQueryCommand<?>> queries) throws DaoException {
+    public static void executeTransation(List<QueryCommand<?>> queries) throws DaoException {
         Connection conn = Transaction.openTransaction();
-        IQueryCommand<?> query = (Connection c) -> {
-            for (IQueryCommand<?> queryCommand : queries) {
+        QueryCommand<?> query = (Connection c) -> {
+            for (QueryCommand<?> queryCommand : queries) {
                 queryCommand.execute(c);
             }
             return true;
@@ -39,7 +39,7 @@ public class DaoConnection {
      * @param <T> the type of the model to @return
      * @throws DaoException content couldn't be loaded
      */
-    public static <T> T executeQuery(IQueryCommand<T> query) throws DaoException {
+    public static <T> T executeQuery(QueryCommand<T> query) throws DaoException {
         Connection conn = null;
 
         try {
@@ -80,7 +80,7 @@ public class DaoConnection {
      * @throws DaoException content couldn't be loaded
      */
     public static <T> T executeSelectQuery(String sql, IResultMapper<T> mapper) throws DaoException {
-        IQueryCommand<T> query = (Connection c) -> {
+        QueryCommand<T> query = (Connection c) -> {
             try (Statement s = c.createStatement();) {
                 try (ResultSet r = s.executeQuery(sql)) {
                     return mapper.process(r);

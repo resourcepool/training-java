@@ -8,7 +8,7 @@ import model.pages.Order;
 import model.pages.Page;
 import persistence.ComputerDaoImpl;
 import persistence.exceptions.DaoException;
-import persistence.querycommands.IPageQuery;
+import persistence.querycommands.PageQuery;
 
 public class ComputerServiceImpl implements IComputerService {
 
@@ -94,7 +94,7 @@ public class ComputerServiceImpl implements IComputerService {
      */
     @Override
     public Page<Computer> getPage(Long nbPage, Long pageSize) throws DaoException {
-        IPageQuery<Computer> pageQuery = (Long start, Long splitSize) -> {
+        PageQuery<Computer> pageQuery = (Long start, Long splitSize) -> {
             return computerDao.get(start, splitSize);
         };
 
@@ -112,7 +112,7 @@ public class ComputerServiceImpl implements IComputerService {
      */
     @Override
     public Page<Computer> getPageWithSearch(Long nbPage, Long pageSize, String search) throws DaoException {
-        IPageQuery<Computer> pageQuery = (Long start, Long splitSize) -> {
+        PageQuery<Computer> pageQuery = (Long start, Long splitSize) -> {
             return computerDao.get(start, splitSize, search);
         };
 
@@ -136,7 +136,7 @@ public class ComputerServiceImpl implements IComputerService {
     @Override
     public Page<Computer> getPageWithOrder(Long nbPage, Long pageSize, ComputerMapping sort, Order order)
             throws DaoException {
-        IPageQuery<Computer> pageQuery = (Long start, Long splitSize) -> {
+        PageQuery<Computer> pageQuery = (Long start, Long splitSize) -> {
             return computerDao.get(start, splitSize, sort.getDbName(), order.toString());
         };
 

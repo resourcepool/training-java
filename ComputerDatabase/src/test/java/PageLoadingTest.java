@@ -19,7 +19,7 @@ import model.Company;
 import model.pages.Page;
 import persistence.CompanyDaoImpl;
 import persistence.exceptions.DaoException;
-import persistence.querycommands.IPageQuery;
+import persistence.querycommands.PageQuery;
 import service.ICompanyService;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -29,7 +29,7 @@ public class PageLoadingTest {
     private static CompanyDaoImpl companyDao;
 
     @Mock
-    private IPageQuery<Company> query;
+    private PageQuery<Company> query;
 
     @InjectMocks
     private ICompanyService service;

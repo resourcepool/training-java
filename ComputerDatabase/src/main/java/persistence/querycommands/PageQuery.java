@@ -4,7 +4,7 @@ import java.util.List;
 
 import persistence.exceptions.DaoException;
 
-public interface IPageQuery<T> {
+public interface PageQuery<T> {
 
     /**
      * @param start start index to query

@@ -3,12 +3,12 @@ package model.pages;
 import java.util.List;
 
 import persistence.exceptions.DaoException;
-import persistence.querycommands.IPageQuery;
+import persistence.querycommands.PageQuery;
 
 public class Page<T> {
 
     private List<T>      content;
-    private IPageQuery<T> command;
+    private PageQuery<T> command;
     private Long         startIndex;
     private Long         size;
     private Long         pageSize;
@@ -20,7 +20,7 @@ public class Page<T> {
      * @param command query used to fill pages content, either dababase or cached entities
      * @param size number of total elements than can be loaded
      */
-    public Page(IPageQuery<T> command, Long size) {
+    public Page(PageQuery<T> command, Long size) {
         this(command, size, 10L);
     }
 
@@ -29,7 +29,7 @@ public class Page<T> {
      * @param size number of total elements than can be loaded
      * @param pageSize number of elements by page
      */
-    public Page(IPageQuery<T> command, Long size, Long pageSize) {
+    public Page(PageQuery<T> command, Long size, Long pageSize) {
         this(command, 0L, size, pageSize);
     }
 
@@ -39,7 +39,7 @@ public class Page<T> {
      * @param size number of total elements than can be loaded
      * @param pageSize number of elements by page
      */
-    public Page(IPageQuery<T> command, Long start, Long size, Long pageSize) {
+    public Page(PageQuery<T> command, Long start, Long size, Long pageSize) {
         this.pageSize = pageSize;
         this.content = null;
         this.startIndex = start;
