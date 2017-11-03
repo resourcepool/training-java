@@ -5,12 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta charset="utf-8">
-<link href="<c:url value ="/resources/css/bootstrap.min.css"/>" rel="stylesheet" media="screen">
-<link href="<c:url value ="/resources/css/font-awesome.css"/>" rel="stylesheet" media="screen">
-<link href="<c:url value ="/resources/css/main.css"/>" rel="stylesheet" media="screen">
+	<jsp:include page="/WEB-INF/pages/header.jsp" />
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -29,7 +24,7 @@
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
-						<input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${ page.search }"/>
+						<input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${ page.search }" />
 						<input type="submit" id="searchsubmit" value="Filter by name" class="btn btn-primary" />
 					</form>
 				</div>
@@ -47,20 +42,14 @@
 					<tr>
 						<th class="editMode" style="width: 60px; height: 22px;">
 							<input type="checkbox" id="selectall" />
-							<span style="vertical-align: top;">
-								- <a href="#" id="deleteSelected" onclick="$.fn.deleteSelected();"> <i class="fa fa-trash-o fa-lg"></i>
-								</a>
+							<span style="vertical-align: top;"> - <a href="#" id="deleteSelected" onclick="$.fn.deleteSelected();"> <i class="fa fa-trash-o fa-lg"></i>
+							</a>
 							</span>
 						</th>
-						<c:set var="sort_name" value="${ page.order eq 'ASC' && page.columnSort eq 'computerName' ? 'DESC' : 'ASC' }"/>
-						<c:set var="sort_introduced" value="${ page.order eq 'ASC' && page.columnSort eq 'introduced' ? 'DESC' : 'ASC' }"/>
-						<c:set var="sort_discontinued" value="${ page.order eq 'ASC' && page.columnSort eq 'discontinued' ? 'DESC' : 'ASC' }"/>
-						<c:set var="sort_company" value="${ page.order eq 'ASC' && page.columnSort eq 'company' ? 'DESC' : 'ASC' }"/>
-						
-						<th><a href="dashboard?sort=computerName&order=${sort_name}">${sort_name}</a> Computer name</th>
-						<th><a href="dashboard?sort=introduced&order=${ sort_introduced }">${ sort_introduced }</a> Introduced date</th>
-						<th><a href="dashboard?sort=discontinued&order=${ sort_discontinued }">${ sort_discontinued }</a> Discontinued date</th>
-						<th><a href="dashboard?sort=company&order=${ sort_company }">${ sort_company }</a> Company</th>
+						<mylib:sortTableHeader content="Computer name" column_name="computerName" current_order="${ page.order }"  current_sort="${ page.columnSort }"/>
+						<mylib:sortTableHeader content="Introduced date" column_name="introduced" current_order="${ page.order }"  current_sort="${ page.columnSort }"/>
+						<mylib:sortTableHeader content="Discontinued date" column_name="discontinued" current_order="${ page.order }"  current_sort="${ page.columnSort }"/>
+						<mylib:sortTableHeader content="Company" column_name="company" current_order="${ page.order }"  current_sort="${ page.columnSort }"/>
 						<th class="editMode" style="width: 60px; height: 22px;">Delete company ?</th>
 					</tr>
 				</thead>
@@ -84,7 +73,6 @@
 							</td>
 							<td class="editMode">
 								<c:if test="${ not empty computer.company.id }">
-									<%-- 									<a onclick="$.fn.confirm();" href="deleteCompany?id=${ computer.getCompany().getId() }" class="btn btn-default"> Delete Company </a> --%>
 									<form id="deleteCompanyForm" action="dashboard" method="POST" onsubmit="return $.fn.confirmDeleteCompany();">
 										<input type="hidden" name="company_id_delete" value="${ computer.getCompany().getId() }" />
 										<input class="btn btn-default" type="submit" id="btnSubmit" value="Delete Company" />
@@ -99,12 +87,12 @@
 	</section>
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
-			<mylib:pageLinks target="dashboard" current_page="${page.currentPage}" pages_limit="${page.totalPages}" pagination_size="${page.pageSize}" params="${params}"/>
-			<mylib:pagination page_count="${page.pageSize}" params="${params}"/>
+			<mylib:pageLinks target="dashboard" current_page="${page.currentPage}" pages_limit="${page.totalPages}" pagination_size="${page.pageSize}" params="${params}" />
+			<mylib:pagination page_count="${page.pageSize}" params="${params}" />
 		</div>
 	</footer>
-	<script src="<c:url value ="/resources/js/jquery.min.js"/>"></script>
-	<script src="<c:url value ="/resources/js/bootstrap.min.js"/>"></script>
+	
+	<jsp:include page="/WEB-INF/pages/footer.jsp" />
 	<script src="<c:url value ="/resources/js/dashboard.js"/>"></script>
 </body>
 </html>

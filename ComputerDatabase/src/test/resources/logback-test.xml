@@ -10,8 +10,6 @@
   </layout>
  </appender>
 
- <logger name="com.base22" level="TRACE" />
-
  <root level="debug">
   <appender-ref ref="STDOUT" />
  </root>

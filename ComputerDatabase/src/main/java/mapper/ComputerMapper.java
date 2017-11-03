@@ -10,14 +10,14 @@ import java.util.List;
 import model.Company;
 import model.Computer;
 
-public class ComputerMapper implements ResultMapper<List<Computer>> {
+public class ComputerMapper implements IResultMapper<List<Computer>> {
 
-    public static final String  COMPANY_NAME_FIELD = "company_name";
-    private static final String COMPANY_ID_FIELD   = "company_id";
-    private static final String DISCONTINUED_FIELD = "discontinued";
-    private static final String INTRODUCED_FIELD   = "introduced";
-    private static final String NAME_FIELD         = "name";
-    private static final String ID_FIELD           = "id";
+    public static final String COMPANY_NAME = "company_name";
+    public static final String COMPANY_ID   = "CO.company_id";
+    public static final String DISCONTINUED = "CO.discontinued";
+    public static final String INTRODUCED   = "CO.introduced";
+    public static final String NAME         = "CO.name";
+    public static final String ID           = "CO.id";
 
     /**
      * @param rs ComputerPreview Set loaded from DB
@@ -54,19 +54,18 @@ public class ComputerMapper implements ResultMapper<List<Computer>> {
      * @throws SQLException One value couldn't be loaded
      */
     private Computer mapOneComputer(ResultSet rs) throws SQLException {
-        Long id = rs.getLong(ID_FIELD);
-        String name = rs.getString(NAME_FIELD);
-        Date introducedDate = rs.getDate(INTRODUCED_FIELD);
+        Long id = rs.getLong(ID);
+        String name = rs.getString(NAME);
+        Date introducedDate = rs.getDate(INTRODUCED);
         LocalDate introduced = introducedDate != null ? introducedDate.toLocalDate() : null;
-        Date discontinuedDate = rs.getDate(DISCONTINUED_FIELD);
+        Date discontinuedDate = rs.getDate(DISCONTINUED);
         LocalDate discontinued = discontinuedDate != null ? discontinuedDate.toLocalDate() : null;
 
-        Long idCompany = rs.getLong(COMPANY_ID_FIELD);
-        String nameCompany = rs.getString(COMPANY_NAME_FIELD);
+        Long idCompany = rs.getLong(COMPANY_ID);
+        String nameCompany = rs.getString(COMPANY_NAME);
         Company company = new Company(idCompany == 0 ? null : idCompany, nameCompany);
 
         return new Computer(id, name, introduced, discontinued, company);
     }
-
 
 }

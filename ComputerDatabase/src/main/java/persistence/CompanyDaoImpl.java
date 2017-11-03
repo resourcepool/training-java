@@ -9,7 +9,7 @@ import mapper.CompanyMapper;
 import model.Company;
 import model.pages.Page;
 import persistence.exceptions.DaoException;
-import persistence.querycommands.PageQuery;
+import persistence.querycommands.IPageQuery;
 
 public class CompanyDaoImpl {
     private static final String DELETE_FROM_COMPANY_WHERE_ID = "delete from company where id = ?";
@@ -67,7 +67,7 @@ public class CompanyDaoImpl {
     public Page<Company> getCompanyPage() throws DaoException {
         Long size = getCompanyCount();
 
-        PageQuery<Company> command = (Long start, Long splitSize) -> {
+        IPageQuery<Company> command = (Long start, Long splitSize) -> {
             String filter = String.format(" ORDER BY id LIMIT %d,%d", start, splitSize);
             return DaoConnection.executeSelectQuery(SELECT_ID_NAME_FROM_COMPANY + filter, new CompanyMapper());
         };

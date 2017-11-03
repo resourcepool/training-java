@@ -13,11 +13,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mapper.ComputerMapping;
 import model.Computer;
+import model.pages.Order;
 import model.pages.Page;
 import persistence.exceptions.DaoException;
 import service.CompanyServiceImpl;
 import service.ComputerServiceImpl;
+import service.ICompanyService;
+import service.IComputerService;
 import validators.ValidationUtils;
 
 @WebServlet
@@ -29,8 +33,8 @@ public class Dashboard extends HttpServlet {
     private static final Long DEFAULT_PAGESIZE = 20L;
     private static final Long DEFAULT_STARTING_PAGE = 1L;
     private static final Logger LOGGER = LoggerFactory.getLogger(Dashboard.class);
-    private ComputerServiceImpl computerService;
-    private CompanyServiceImpl companyService;
+    private IComputerService computerService;
+    private ICompanyService companyService;
 
     /**
      * Default constructor.
@@ -88,7 +92,7 @@ public class Dashboard extends HttpServlet {
 
             try {
 
-                companyService.deleteCompany(Long.parseLong(id));
+                companyService.delete(Long.parseLong(id));
                 String msg = "Sucessfully deleted company : n°" + id;
                 RequestUtils.showMsg(req, true, msg);
                 LOGGER.info(msg);
@@ -144,9 +148,8 @@ public class Dashboard extends HttpServlet {
 
         if (page != null) {
             computerDtos = page.getContent();
-            String params = RequestUtils.buildParam(page);
+            String params = DashboardLoader.buildParam(page);
             req.setAttribute("params", params);
-
         }
 
         req.setAttribute("computers", computerDtos);
@@ -155,28 +158,11 @@ public class Dashboard extends HttpServlet {
     }
 
     /**
-     * @param req req containing params and current session to recover current
-     *            pagination parametered
-     * @return the page size to use to paginate current-page
-     */
-    private Long retrievePaginationSize(HttpServletRequest req) {
-        String param = req.getParameter("pagination");
-
-        if (param != null) {
-            Long pagination = ValidationUtils.retrieveLong(param, DEFAULT_PAGESIZE);
-            req.setAttribute("pagination", param);
-            return pagination;
-        }
-
-        return DEFAULT_PAGESIZE;
-    }
-
-    /**
      * @param req request
      * @return return the page
      */
     private Page<Computer> getPage(HttpServletRequest req) {
-        Long pageSize = retrievePaginationSize(req);
+        Long pageSize = ValidationUtils.retrieveLong(req.getParameter("pagination"), DEFAULT_PAGESIZE);
         Long pageNumber = ValidationUtils.retrieveLong(req.getParameter("page"), DEFAULT_STARTING_PAGE);
         String search = req.getParameter("search");
         String sort = req.getParameter("sort");
@@ -186,8 +172,9 @@ public class Dashboard extends HttpServlet {
 
             Page<Computer> page;
             if (sort != null && order != null) {
-                Page.Order o = order.equals(Page.Order.ASC.toString()) ? Page.Order.ASC : Page.Order.DESC;
-                page = computerService.getPageWithOrder(pageNumber, pageSize, sort, o);
+                Order o = order.equals(Order.ASC.toString()) ? Order.ASC : Order.DESC;
+                ComputerMapping m = ComputerMapping.get(sort);
+                page = computerService.getPageWithOrder(pageNumber, pageSize, m, o);
             } else if (search != null) {
                 page = computerService.getPageWithSearch(pageNumber, pageSize, search);
             } else {

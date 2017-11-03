@@ -19,8 +19,8 @@ import model.Company;
 import model.pages.Page;
 import persistence.CompanyDaoImpl;
 import persistence.exceptions.DaoException;
-import persistence.querycommands.PageQuery;
-import service.CompanyServiceImpl;
+import persistence.querycommands.IPageQuery;
+import service.ICompanyService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PageLoadingTest {
@@ -29,10 +29,10 @@ public class PageLoadingTest {
     private static CompanyDaoImpl companyDao;
 
     @Mock
-    private PageQuery<Company> query;
+    private IPageQuery<Company> query;
 
     @InjectMocks
-    private CompanyServiceImpl service;
+    private ICompanyService service;
 
     private Company content;
 
@@ -58,7 +58,7 @@ public class PageLoadingTest {
      */
     @Test
     public void processTest() throws SQLException, DaoException {
-        Page<Company> page = service.getCompanyPage();
+        Page<Company> page = service.getPage();
         verify(companyDao, times(1)).getCompanyPage();
 
         List<Company> l = page.next().getContent();

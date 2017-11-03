@@ -15,7 +15,7 @@ public class ValidationUtils {
     public static final String INTRODUCED    = "introduced";
     public static final String COMPUTER_NAME = "computerName";
     public static final String ID            = "id";
-    public static final String DATE_FORMAT   = "dd-MM-yyyy";
+    public static final String DATE_FORMAT = "dd-MM-yyyy";
 
     /**
      * @param param parse to validate and parse

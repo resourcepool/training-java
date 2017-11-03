@@ -1,24 +1,24 @@
 package service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import mapper.ComputerMapping;
 import model.Computer;
+import model.pages.Order;
 import model.pages.Page;
 import persistence.ComputerDaoImpl;
 import persistence.exceptions.DaoException;
-import persistence.querycommands.PageQuery;
-import validators.ValidationUtils;
+import persistence.querycommands.IPageQuery;
 
-public class ComputerServiceImpl {
+public class ComputerServiceImpl implements IComputerService {
 
-    private static ComputerServiceImpl instance;
+
+    private static IComputerService    instance;
     private ComputerDaoImpl            computerDao;
-    private static Map<String, String> mapFields = createMap();
 
     /**
      * Private ctor.
+     *
      * @param dao CompanyDao to access Data
      */
     private ComputerServiceImpl(ComputerDaoImpl dao) {
@@ -26,21 +26,12 @@ public class ComputerServiceImpl {
     }
 
     /**
-     * @return create map from form to db column name
-     */
-    private static Map<String, String> createMap() {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put(ValidationUtils.COMPANY_NAME, "CA.name");
-        map.put(ValidationUtils.DISCONTINUED, "CO.discontinued");
-        map.put(ValidationUtils.INTRODUCED, "CO.introduced");
-        map.put(ValidationUtils.COMPUTER_NAME, "CO.name");
-        return map;
-    }
+
 
     /**
      * @return a loaded Service, ready to work
      */
-    public static ComputerServiceImpl getInstance() {
+    public static IComputerService getInstance() {
         if (instance == null) {
             instance = new ComputerServiceImpl(ComputerDaoImpl.getInstance());
         }
@@ -52,6 +43,7 @@ public class ComputerServiceImpl {
      * @return the first computer corresponding exactly to @id
      * @throws DaoException content couldn't be loaded
      */
+    @Override
     public Computer getComputerDetail(Long id) throws DaoException {
         return computerDao.getComputerDetail(id);
     }
@@ -61,6 +53,7 @@ public class ComputerServiceImpl {
      * @return the id of the created computer
      * @throws DaoException content couldn't be loaded
      */
+    @Override
     public Long createComputer(Computer newComputer) throws DaoException {
         return computerDao.createComputer(newComputer);
     }
@@ -69,6 +62,7 @@ public class ComputerServiceImpl {
      * @param c full computer to update with id != null
      * @throws DaoException content couldn't be loaded
      */
+    @Override
     public void updateComputer(Computer c) throws DaoException {
         computerDao.updateComputer(c);
     }
@@ -77,6 +71,7 @@ public class ComputerServiceImpl {
      * @param id id of the computer to delete
      * @throws DaoException content couldn't be loaded
      */
+    @Override
     public void deleteComputer(Long id) throws DaoException {
         computerDao.deleteComputer(id);
     }
@@ -85,6 +80,7 @@ public class ComputerServiceImpl {
      * @param ids ids list of the computer to delete
      * @throws DaoException content couldn't be loaded
      */
+    @Override
     public void deleteComputers(List<Long> ids) throws DaoException {
         computerDao.deleteComputers(ids);
     }
@@ -92,11 +88,13 @@ public class ComputerServiceImpl {
     /**
      * @param nbPage the page number to retrieve, starting at 1
      * @param pageSize number of elements by page
-     * @return the first page of the full computer preview list from DB, with content not loaded yet (LAZY)
+     * @return the first page of the full computer preview list from DB, with
+     *         content not loaded yet (LAZY)
      * @throws DaoException content couldn't be loaded
      */
+    @Override
     public Page<Computer> getPage(Long nbPage, Long pageSize) throws DaoException {
-        PageQuery<Computer> pageQuery = (Long start, Long splitSize) -> {
+        IPageQuery<Computer> pageQuery = (Long start, Long splitSize) -> {
             return computerDao.get(start, splitSize);
         };
 
@@ -105,7 +103,6 @@ public class ComputerServiceImpl {
         return new Page<Computer>(pageQuery, startElem, size, pageSize);
     }
 
-
     /**
      * @param nbPage the page number to retrieve, starting at 1
      * @param pageSize number of elements by page
@@ -113,8 +110,9 @@ public class ComputerServiceImpl {
      * @return the first page of the full computer preview list from DB
      * @throws DaoException content couldn't be loaded
      */
+    @Override
     public Page<Computer> getPageWithSearch(Long nbPage, Long pageSize, String search) throws DaoException {
-        PageQuery<Computer> pageQuery = (Long start, Long splitSize) -> {
+        IPageQuery<Computer> pageQuery = (Long start, Long splitSize) -> {
             return computerDao.get(start, splitSize, search);
         };
 
@@ -135,16 +133,18 @@ public class ComputerServiceImpl {
      * @return the first page of the full computer preview list from DB
      * @throws DaoException content couldn't be loaded
      */
-    public Page<Computer> getPageWithOrder(Long nbPage, Long pageSize, String sort, Page.Order order) throws DaoException {
-        PageQuery<Computer> pageQuery = (Long start, Long splitSize) -> {
-            return computerDao.get(start, splitSize, mapFields.get(sort), order.toString());
+    @Override
+    public Page<Computer> getPageWithOrder(Long nbPage, Long pageSize, ComputerMapping sort, Order order)
+            throws DaoException {
+        IPageQuery<Computer> pageQuery = (Long start, Long splitSize) -> {
+            return computerDao.get(start, splitSize, sort.getDbName(), order.toString());
         };
 
         long startElem = (nbPage - 1) * pageSize;
         Long size = computerDao.getComputerTotalCount();
         Page<Computer> page = new Page<Computer>(pageQuery, startElem, size, pageSize);
 
-        page.setColumnSort(sort);
+        page.setColumnSort(sort.getFormName());
         page.setOrder(order);
 
         return page;
@@ -154,6 +154,7 @@ public class ComputerServiceImpl {
      * @param id id of the company to delete computers from
      * @throws DaoException deletion failed
      */
+    @Override
     public void deleteComputerByCompany(Long id) throws DaoException {
         computerDao.deleteComputerByCompany(id);
     }

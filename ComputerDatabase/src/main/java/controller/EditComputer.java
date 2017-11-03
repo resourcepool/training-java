@@ -20,20 +20,21 @@ import model.Computer;
 import persistence.exceptions.DaoException;
 import service.CompanyServiceImpl;
 import service.ComputerServiceImpl;
+import service.ICompanyService;
+import service.IComputerService;
 import validators.ComputerValidator;
 import validators.ValidationUtils;
 
 @WebServlet
 public class EditComputer extends HttpServlet {
 
+    private static final String COMPUTER_FORM_JSP = "/WEB-INF/pages/computerForm.jsp";
     private static final String ID_IS_NOT_VALID = "id is not valid";
-
     private static final long serialVersionUID = -7371267190245615780L;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(Dashboard.class);
 
-    private CompanyServiceImpl companyService;
-    private ComputerServiceImpl computerService;
+    private ICompanyService companyService;
+    private IComputerService computerService;
 
     /**
      * ctor.
@@ -118,7 +119,7 @@ public class EditComputer extends HttpServlet {
      */
     private void loadPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("edit", true);
-        req.getRequestDispatcher("/WEB-INF/pages/computerForm.jsp").forward(req, resp);
+        req.getRequestDispatcher(COMPUTER_FORM_JSP).forward(req, resp);
     }
 
     /**
@@ -127,10 +128,12 @@ public class EditComputer extends HttpServlet {
      */
     private Boolean loadComputer(HttpServletRequest req) {
         String idStr = req.getParameter("id");
+
         if (!ValidationUtils.isLong(idStr)) {
             RequestUtils.showMsg(req, false, ID_IS_NOT_VALID);
             return false;
         }
+
         Long id = Long.parseLong(idStr);
         Computer c;
         try {
@@ -140,6 +143,7 @@ public class EditComputer extends HttpServlet {
             RequestUtils.showMsg(req, false, "Computer could not be loaded");
             return false;
         }
+
         return true;
     }
 
@@ -150,7 +154,7 @@ public class EditComputer extends HttpServlet {
         List<Company> companies;
 
         try {
-            companies = companyService.getCompanyList();
+            companies = companyService.getList();
         } catch (DaoException e) {
             companies = new ArrayList<Company>();
             LOGGER.error("Companies list couldn't be loaded, reason \"" + e.getMessage() + "\"");

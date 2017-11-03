@@ -66,4 +66,16 @@
 		</jsp-property-group>
 	</jsp-config>
 
+<!-- <jsp-config> -->
+<!--    <jsp-property-group> -->
+<!--      <display-name>Display</display-name> -->
+<!--      <url-pattern>*.jsp</url-pattern> -->
+<!--      <el-ignored>false</el-ignored> -->
+<!--      <scripting-invalid>false</scripting-invalid> -->
+<!--      <is-xml>false</is-xml> -->
+<!--      <include-prelude>/template/header.jsp</include-prelude>header -->
+<!--      <include-coda>/template/footer.jsp</include-coda>footer -->
+<!--    </jsp-property-group> -->
+<!--  </jsp-config> -->
+ 
 </web-app>

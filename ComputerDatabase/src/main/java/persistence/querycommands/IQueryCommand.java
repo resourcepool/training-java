@@ -3,7 +3,7 @@ package persistence.querycommands;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public interface QueryCommand<T> {
+public interface IQueryCommand<T> {
     /**
      * @param s the opened DB connection
      * @return the result

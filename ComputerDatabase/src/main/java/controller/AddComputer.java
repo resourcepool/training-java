@@ -20,6 +20,8 @@ import model.Computer;
 import persistence.exceptions.DaoException;
 import service.CompanyServiceImpl;
 import service.ComputerServiceImpl;
+import service.ICompanyService;
+import service.IComputerService;
 import validators.ComputerValidator;
 import validators.ValidationUtils;
 
@@ -29,8 +31,8 @@ public class AddComputer extends HttpServlet {
     private static final long serialVersionUID = -8465135918905858327L;
     private static final Logger LOGGER = LoggerFactory.getLogger(Dashboard.class);
 
-    private CompanyServiceImpl companyService;
-    private ComputerServiceImpl computerService;
+    private ICompanyService companyService;
+    private IComputerService computerService;
 
     /**
      * ctor.
@@ -59,7 +61,7 @@ public class AddComputer extends HttpServlet {
         List<Company> companies;
 
         try {
-            companies = companyService.getCompanyList();
+            companies = companyService.getList();
         } catch (DaoException e) {
             companies = new ArrayList<Company>();
             LOGGER.error("Companies list couldn't be loaded, reason \"" + e.getMessage() + "\"");
@@ -93,7 +95,7 @@ public class AddComputer extends HttpServlet {
                 String msg = "Computer cannot be created, reason [" + elem.getKey() + "] : \"" + elem.getValue() + "\"";
                 sb.append(msg + "<br/>");
             }
-            req.setAttribute("msg", sb.toString());
+            RequestUtils.showMsg(req, false, sb.toString());
             LOGGER.debug(sb.toString());
 
         } else {
@@ -101,14 +103,13 @@ public class AddComputer extends HttpServlet {
             Computer c = new Computer(name, v.getIntroduced(), v.getDiscontinued(), v.getCompanyId());
             try {
                 Long id = computerService.createComputer(c);
-                req.setAttribute("msg", "SUCCESS: Computer \"" + name + "\" successfully created (id=" + id + ")");
-                req.setAttribute("success", true);
+                RequestUtils.showMsg(req, true, "SUCCESS: Computer \"" + name + "\" successfully created (id=" + id + ")");
             } catch (DaoException e) {
 
                 RequestUtils.putBackAttributes(req, name, introduced, discontinued, companyId);
 
                 String msg = "Computer cannot be created, reason \"" + e.getMessage() + "\"";
-                req.setAttribute("msg", msg);
+                RequestUtils.showMsg(req, false, msg);
                 LOGGER.error(msg);
             }
         }

@@ -9,7 +9,8 @@ import persistence.CompanyDaoImpl;
 import persistence.Transaction;
 import persistence.exceptions.DaoException;
 
-public class CompanyServiceImpl {
+public class CompanyServiceImpl implements ICompanyService {
+
 
     private static CompanyServiceImpl instance;
     private CompanyDaoImpl companyDao;
@@ -26,7 +27,7 @@ public class CompanyServiceImpl {
     /**
      * @return a loaded Service, ready to work
      */
-    public static CompanyServiceImpl getInstance() {
+    public static ICompanyService getInstance() {
         if (instance == null) {
             instance = new CompanyServiceImpl(CompanyDaoImpl.getInstance());
         }
@@ -37,7 +38,8 @@ public class CompanyServiceImpl {
      * @return Full company list from DB
      * @throws DaoException content couldn't be loaded
      */
-    public List<Company> getCompanyList() throws DaoException {
+    @Override
+    public List<Company> getList() throws DaoException {
         return companyDao.getCompanyList();
     }
 
@@ -46,7 +48,8 @@ public class CompanyServiceImpl {
      * @return true is company id is present in DB
      * @throws DaoException content couldn't be loaded
      */
-    public boolean companyExists(Long idCompany) throws DaoException {
+    @Override
+    public boolean exists(Long idCompany) throws DaoException {
         if (idCompany == null) {
             throw new NullPointerException();
         }
@@ -57,7 +60,8 @@ public class CompanyServiceImpl {
      * @return the first page of the full company list from DB
      * @throws DaoException content couldn't be loaded
      */
-    public Page<Company> getCompanyPage() throws DaoException {
+    @Override
+    public Page<Company> getPage() throws DaoException {
 
         return companyDao.getCompanyPage();
     }
@@ -66,7 +70,8 @@ public class CompanyServiceImpl {
      * @param id id to delete
      * @throws DaoException failed to delete
      */
-    public void deleteCompany(Long id) throws DaoException {
+    @Override
+    public void delete(Long id) throws DaoException {
         Connection conn = Transaction.openTransaction();
 
         ComputerServiceImpl.getInstance().deleteComputerByCompany(id);
@@ -74,5 +79,4 @@ public class CompanyServiceImpl {
 
         Transaction.releaseTransaction(conn);
     }
-
 }

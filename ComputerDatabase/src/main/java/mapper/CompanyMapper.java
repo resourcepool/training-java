@@ -7,7 +7,7 @@ import java.util.List;
 
 import model.Company;
 
-public class CompanyMapper implements ResultMapper<List<Company>> {
+public class CompanyMapper implements IResultMapper<List<Company>> {
     /**
      * @param rs companySet loaded from DB
      * @return the model list
