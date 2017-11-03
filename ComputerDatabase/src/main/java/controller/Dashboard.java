@@ -146,10 +146,7 @@ public class Dashboard extends HttpServlet {
         Page<Computer> page = computerService.loadPage(builder.with(req));
 
         if (page != null) {
-            List<Computer> content = page.getContent();
             buildParams(req, page);
-            req.setAttribute("computers", content);
-            req.setAttribute("page", page);
         }
 
         req.getRequestDispatcher(DASHBOARD_JSP_PATH).forward(req, resp);
@@ -160,8 +157,8 @@ public class Dashboard extends HttpServlet {
      * @param req req
      * @param page page
      */
-    public static void buildParams(HttpServletRequest req, Page<?> page) {
-
+    public static void buildParams(HttpServletRequest req, Page<Computer> page) {
+        List<Computer> content = page.getContent();
         StringBuilder pageParam = new StringBuilder();
         String sortParams = null;
         try {
@@ -179,9 +176,11 @@ public class Dashboard extends HttpServlet {
             }
 
         } catch (UnsupportedEncodingException e) {
-            // TODO
+            LOGGER.error("UnsupportedEncodingException " + e.getMessage());
         }
         req.setAttribute("sortparams", sortParams);
         req.setAttribute("pageparams", pageParam.toString());
+        req.setAttribute("computers", content);
+        req.setAttribute("page", page);
     }
 }
