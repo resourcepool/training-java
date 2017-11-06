@@ -1,8 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +26,9 @@ import validators.ValidationUtils;
 @WebServlet
 public class Dashboard extends HttpServlet {
     private static final String DASHBOARD_JSP_PATH = "/WEB-INF/pages/dashboard.jsp";
-
     private static final long serialVersionUID = 1L;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(Dashboard.class);
+
     private IComputerService computerService;
     private ICompanyService companyService;
 
@@ -158,30 +155,9 @@ public class Dashboard extends HttpServlet {
      */
     public static void buildParams(HttpServletRequest req, Page<Computer> page) {
         List<Computer> content = page.getContent();
-        StringBuilder pageParam = new StringBuilder();
-        String sortParams = null;
-        try {
-            if (page.getSearch() != null) {
-                sortParams = "&search=" + URLEncoder.encode(page.getSearch(), "UTF-8");
-                pageParam.append(sortParams);
-            }
-
-            if (page.getFormSort() != null) {
-                String sort = "sort=" + URLEncoder.encode(page.getFormSort(), "UTF-8");
-                pageParam.append('&' + sort);
-            }
-
-            if (page.getOrder() != null) {
-                String order = "&order=" + page.getOrder().toString();
-                pageParam.append(order);
-            }
-
-        } catch (UnsupportedEncodingException e) {
-            LOGGER.error("UnsupportedEncodingException " + e.getMessage());
-        }
-        req.setAttribute("sortparams", sortParams);
-        req.setAttribute("pageparams", pageParam.toString());
+        RequestUtils.buildPageParams(req, page);
         req.setAttribute("computers", content);
         req.setAttribute("page", page);
     }
+
 }

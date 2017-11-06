@@ -1,15 +1,22 @@
 package controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import model.pages.Page;
 import validators.ValidationUtils;
 
 public class RequestUtils {
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(ValidationUtils.DATE_FORMAT);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RequestUtils.class);
 
     /**
      * @param req req
@@ -67,4 +74,33 @@ public class RequestUtils {
         return date.format(formatter);
     }
 
+    /**
+     * @param req req to fill
+     * @param page page with the request
+     */
+    public static void buildPageParams(HttpServletRequest req, Page<?> page) {
+        StringBuilder pageParam = new StringBuilder();
+        String sortParams = null;
+        try {
+            if (page.getSearch() != null) {
+                sortParams = "&search=" + URLEncoder.encode(page.getSearch(), "UTF-8");
+                pageParam.append(sortParams);
+            }
+
+            if (page.getFormSort() != null) {
+                String sort = "sort=" + URLEncoder.encode(page.getFormSort(), "UTF-8");
+                pageParam.append('&' + sort);
+            }
+
+            if (page.getOrder() != null) {
+                String order = "&order=" + page.getOrder().toString();
+                pageParam.append(order);
+            }
+
+        } catch (UnsupportedEncodingException e) {
+            LOGGER.error("Encoding url failed { }", e);
+        }
+        req.setAttribute("sortparams", sortParams);
+        req.setAttribute("pageparams", pageParam.toString());
+    }
 }
