@@ -8,7 +8,9 @@ import java.util.List;
 import mapper.CompanyMapper;
 import model.Company;
 import model.pages.Page;
+import model.pages.PageUtils;
 import persistence.exceptions.DaoException;
+import persistence.querycommands.PageQuery;
 
 public class CompanyDaoImpl {
     private static final String DELETE_FROM_COMPANY_WHERE_ID = "delete from company where id = ?";
@@ -64,15 +66,15 @@ public class CompanyDaoImpl {
      * @throws DaoException content couldn't be loaded
      */
     public Page<Company> getCompanyPage() throws DaoException {
-        //        Long size = getCompanyCount();
-        //
-        //        PageQuery<Company> command = (Long start, Long splitSize) -> {
-        //            String filter = String.format(" ORDER BY id LIMIT %d,%d", start, splitSize);
-        //            return DaoConnection.executeSelectQuery(SELECT_ID_NAME_FROM_COMPANY + filter, new CompanyMapper());
-        //        };
-        //
-        //        return new Page<Company>(command, size);
-        return null; //TODO
+        Long size = getCompanyCount();
+
+        PageQuery<Company> command = (Page<Company> p) -> {
+            Long startElem = PageUtils.getStartElem(p);
+            String filter = String.format(" ORDER BY id LIMIT %d,%d", startElem, p.getPageSize());
+            return DaoConnection.executeSelectQuery(SELECT_ID_NAME_FROM_COMPANY + filter, new CompanyMapper());
+        };
+
+        return new Page<Company>(command, size, 10L, 1L);
     }
 
     /**

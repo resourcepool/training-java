@@ -12,7 +12,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import persistence.CompanyDaoImpl;
 import persistence.exceptions.DaoException;
-import service.ICompanyService;
+import service.CompanyServiceImpl;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CompanyServiceImplTest {
@@ -21,7 +21,7 @@ public class CompanyServiceImplTest {
     private static CompanyDaoImpl companyDao;
 
     @InjectMocks
-    private ICompanyService service;
+    private CompanyServiceImpl service;
 
     /**
      * Init mock, mostly Dao.

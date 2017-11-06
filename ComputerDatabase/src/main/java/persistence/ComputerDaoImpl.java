@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import mapper.ComputerMapper;
 import model.Computer;
 import model.pages.Page;
+import model.pages.PageUtils;
 import persistence.exceptions.DaoException;
 
 public class ComputerDaoImpl {
@@ -106,12 +107,13 @@ public class ComputerDaoImpl {
     // ########################## PAGES, SEARCH, SORT, LIMIT #######################
 
     /**
-     * @param start element index to start
      * @param page number of total elements than can be loaded
      * @return the content of one computer page from DB
      * @throws DaoException content couldn't be loaded
      */
-    public List<Computer> get(Long start, Page<Computer> page) throws DaoException {
+    public List<Computer> get(Page<Computer> page) throws DaoException {
+        //TODO PrepareStatement
+        Long start = PageUtils.getStartElem(page);
         StringBuilder sb = new StringBuilder(SELECT_FROM_COMPUTER_WITH_COMPANY);
         sb.append(' ');
 

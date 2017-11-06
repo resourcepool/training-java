@@ -41,7 +41,7 @@ public class Page<T> {
      * @param pageQuery query to get content
      * @param total total of elem
      * @param page page
-     * @param nbPage nbpage
+     * @param nbPage nbpage (starting a 1)
      */
     public Page(PageQuery<T> pageQuery, Long total, Page<T> page, Long nbPage) {
         this(pageQuery, total);
@@ -53,7 +53,17 @@ public class Page<T> {
         this.columnSort = page.getColumnSort();
     }
 
-
+    /**
+     * Build a page without params (search, sort, order).
+     * @param query query
+     * @param total nb of elem in DB
+     * @param pageSize nb of elem / page
+     * @param nbPage current page (starting a 1)
+     */
+    public Page(PageQuery<T> query, Long total, Long pageSize, Long nbPage) {
+        this(query, total);
+        this.pageSize = pageSize;
+    }
 
     /**
      * @param pageQuery page
@@ -88,17 +98,6 @@ public class Page<T> {
         return this;
     }
 
-    /**
-     * @return concatenation of each .toString() loaded content
-     */
-    public String dump() {
-        StringBuilder b = new StringBuilder();
-        for (T t : content) {
-            b.append(t.toString());
-            b.append(System.lineSeparator());
-        }
-        return b.toString();
-    }
 
     /**
      * @return Content or null if not loaded

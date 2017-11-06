@@ -152,7 +152,6 @@ public class Dashboard extends HttpServlet {
         req.getRequestDispatcher(DASHBOARD_JSP_PATH).forward(req, resp);
     }
 
-
     /**
      * @param req req
      * @param page page
@@ -168,11 +167,13 @@ public class Dashboard extends HttpServlet {
             }
 
             if (page.getFormSort() != null) {
-                pageParam.append("&sort=" + URLEncoder.encode(page.getFormSort(), "UTF-8"));
+                String sort = "sort=" + URLEncoder.encode(page.getFormSort(), "UTF-8");
+                pageParam.append('&' + sort);
             }
 
             if (page.getOrder() != null) {
-                pageParam.append("&order=" + page.getOrder().toString());
+                String order = "&order=" + page.getOrder().toString();
+                pageParam.append(order);
             }
 
         } catch (UnsupportedEncodingException e) {

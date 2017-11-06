@@ -13,7 +13,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import model.Computer;
 import persistence.ComputerDaoImpl;
 import persistence.exceptions.DaoException;
-import service.IComputerService;
+import service.ComputerServiceImpl;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ComputerServiceImplTest {
@@ -22,7 +22,7 @@ public class ComputerServiceImplTest {
     private static ComputerDaoImpl computerDao;
 
     @InjectMocks
-    private IComputerService service;
+    private ComputerServiceImpl service;
 
     /**
      * Init mock, mostly Dao.

@@ -21,8 +21,9 @@
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
 						<input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${ page.search }" />
+						<input type="hidden" name="sort" value="${ page.formSort }" />
+						<input type="hidden" name="order" value="${ page.order }" />
 						<input type="submit" id="searchsubmit" value="Filter by name" class="btn btn-primary" />
-						
 					</form>
 				</div>
 				<div class="pull-right">

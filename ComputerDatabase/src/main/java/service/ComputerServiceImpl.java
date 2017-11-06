@@ -117,8 +117,7 @@ public class ComputerServiceImpl implements IComputerService {
 
     private PageQuery<Computer> getPageQuery() {
         return (Page<Computer> page) -> {
-            long startElem = (page.getCurrentPage() - 1) * page.getPageSize();
-            return computerDao.get(startElem, page);
+            return computerDao.get(page);
         };
     }
 

@@ -44,24 +44,24 @@ public class ComputerMapperTest {
         String companyName = "cname";
 
         resultSet = Mockito.mock(ResultSet.class);
-        Mockito.when(resultSet.getLong("id")).thenReturn(id);
-        Mockito.when(resultSet.getString("name")).thenReturn(host);
-        Mockito.when(resultSet.getDate("introduced")).thenReturn(null);
-        Mockito.when(resultSet.getDate("discontinued")).thenReturn(Date.valueOf(date));
-        Mockito.when(resultSet.getLong("company_id")).thenReturn(companyId);
-        Mockito.when(resultSet.getString("company_name")).thenReturn(companyName);
+        Mockito.when(resultSet.getLong(ComputerMapper.ID)).thenReturn(id);
+        Mockito.when(resultSet.getString(ComputerMapper.NAME)).thenReturn(host);
+        Mockito.when(resultSet.getDate(ComputerMapper.INTRODUCED)).thenReturn(null);
+        Mockito.when(resultSet.getDate(ComputerMapper.DISCONTINUED)).thenReturn(Date.valueOf(date));
+        Mockito.when(resultSet.getLong(ComputerMapper.COMPANY_ID)).thenReturn(companyId);
+        Mockito.when(resultSet.getString(ComputerMapper.COMPANY_NAME)).thenReturn(companyName);
         Mockito.when(resultSet.next()).thenReturn(true).thenReturn(false);
 
         List<Computer> result = mapper.process(resultSet);
         assertEquals(result.size(), 1);
 
         Computer first = result.get(0);
-        assertEquals(first.getId().longValue(), id.longValue());
-        assertEquals(first.getName(), host);
-        assertEquals(first.getIntroduced(), null);
-        assertEquals(first.getDiscontinued(), date);
-        assertEquals(first.getCompany().getId().longValue(), companyId.longValue());
-        assertEquals(first.getCompany().getName(), companyName);
+        assertEquals(id.longValue(), first.getId().longValue());
+        assertEquals(host, first.getName());
+        assertEquals(null, first.getIntroduced());
+        assertEquals(date, first.getDiscontinued());
+        assertEquals(companyId.longValue(), first.getCompany().getId().longValue());
+        assertEquals(companyName, first.getCompany().getName());
     }
 
     /**
