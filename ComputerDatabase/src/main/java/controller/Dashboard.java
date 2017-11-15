@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import model.Computer;
 import model.pages.Page;
-import persistence.exceptions.DaoException;
 import service.CompanyServiceImpl;
 import service.ComputerServiceImpl;
 import service.ICompanyService;
@@ -51,7 +50,6 @@ public class Dashboard extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         loadDashboard(req, resp);
     }
 
@@ -86,22 +84,12 @@ public class Dashboard extends HttpServlet {
             RequestUtils.showMsg(req, false, "please provide a company id");
         } else {
 
-            try {
-
-                companyService.delete(Long.parseLong(id));
-                String msg = "Sucessfully deleted company : n°" + id;
-                RequestUtils.showMsg(req, true, msg);
-                LOGGER.info(msg);
-
-            } catch (DaoException e) {
-
-                String msg = "failed to delete : " + e.getMessage();
-                RequestUtils.showMsg(req, false, msg);
-                LOGGER.error(msg);
-            }
+            companyService.delete(Long.parseLong(id));
+            String msg = "Sucessfully deleted company : n°" + id;
+            RequestUtils.showMsg(req, true, msg);
+            LOGGER.info(msg);
         }
     }
-
 
     /**
      * @param req req containing parameters of computers to delete ("selection") or
@@ -118,14 +106,9 @@ public class Dashboard extends HttpServlet {
         Boolean result = ValidationUtils.isLongList(computerSelection, ids);
 
         if (result) {
-            try {
-                computerService.deleteComputers(ids);
-                RequestUtils.showMsg(req, true, "Success, " + ids.size() + " computer ids deleted");
-            } catch (DaoException e) {
-                String msg = "failed to execute deletion, reason :" + e.getMessage();
-                RequestUtils.showMsg(req, false, msg);
-                LOGGER.error(msg);
-            }
+            computerService.deleteComputers(ids);
+            RequestUtils.showMsg(req, true, "Success, " + ids.size() + " computer ids deleted");
+            req.setAttribute("page", 1);
         } else {
             RequestUtils.showMsg(req, false, "all ids are not valid");
         }

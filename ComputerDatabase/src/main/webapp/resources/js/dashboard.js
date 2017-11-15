@@ -64,7 +64,6 @@ $(function() {
         if (confirm("Are you sure you want to delete the selected computers?")) { 
             $('#deleteComputerForm input[name=computer_selection_delete]').setCheckboxValues('selection','cb');
             $('#deleteComputerForm').submit();
-            alert("hello");
         }
     };
 }( jQuery ));

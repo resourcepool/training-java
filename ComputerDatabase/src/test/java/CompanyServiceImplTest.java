@@ -44,9 +44,8 @@ public class CompanyServiceImplTest {
     /**
      * @throws DaoException never thrown
      */
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testCompanyExistsWithNullObject() throws DaoException {
         service.exists(null);
     }
-
 }

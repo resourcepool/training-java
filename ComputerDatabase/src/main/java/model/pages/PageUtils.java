@@ -19,7 +19,7 @@ public class PageUtils {
      * @param page current page (not need to be loaded)
      * @return the start index of the db entity of the given page
      */
-    public static Long getStartElem(Page<?> page) {
+    public static Long getFirstEntityIndex(Page<?> page) {
         return (page.getCurrentPage() - 1) * page.getPageSize();
     }
 }

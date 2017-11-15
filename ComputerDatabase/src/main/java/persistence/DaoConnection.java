@@ -58,6 +58,7 @@ public class DaoConnection {
             } catch (SQLException ex) {
                 LOGGER.error("Connection could not be rollbacked");
             }
+
             throw new DaoException(e);
 
         } finally {

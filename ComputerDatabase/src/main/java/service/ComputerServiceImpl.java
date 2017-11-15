@@ -47,7 +47,12 @@ public class ComputerServiceImpl implements IComputerService {
      */
     @Override
     public Computer getComputerDetail(Long id) throws DaoException {
-        return computerDao.getComputerDetail(id);
+        try {
+            return computerDao.getComputerDetail(id);
+        } catch (DaoException e) {
+            LOGGER.error("Computer " + id + " could not be loaded");
+            throw e;
+        }
     }
 
     /**
@@ -57,7 +62,13 @@ public class ComputerServiceImpl implements IComputerService {
      */
     @Override
     public Long createComputer(Computer newComputer) throws DaoException {
-        return computerDao.createComputer(newComputer);
+        try {
+            return computerDao.createComputer(newComputer);
+        } catch (DaoException e) {
+            String msg = "Computer cannot be created, reason \"" + e.getMessage() + "\"";
+            LOGGER.error(msg);
+            throw e;
+        }
     }
 
     /**
@@ -66,7 +77,12 @@ public class ComputerServiceImpl implements IComputerService {
      */
     @Override
     public void updateComputer(Computer c) throws DaoException {
-        computerDao.updateComputer(c);
+        try {
+            computerDao.updateComputer(c);
+        } catch (DaoException e) {
+            String msg = "Computer cannot be edited, reason \"" + e.getMessage() + "\"";
+            LOGGER.error(msg);
+        }
     }
 
     /**
@@ -84,7 +100,14 @@ public class ComputerServiceImpl implements IComputerService {
      */
     @Override
     public void deleteComputers(List<Long> ids) throws DaoException {
-        computerDao.deleteComputers(ids);
+        try {
+            computerDao.deleteComputers(ids);
+
+        } catch (DaoException e) {
+            String msg = "failed to execute deletion, reason :" + e.getMessage();
+            LOGGER.error(msg);
+        }
+
     }
 
     /**

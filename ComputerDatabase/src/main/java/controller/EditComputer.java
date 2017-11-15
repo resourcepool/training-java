@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -17,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import model.Company;
 import model.Computer;
-import persistence.exceptions.DaoException;
 import service.CompanyServiceImpl;
 import service.ComputerServiceImpl;
 import service.ICompanyService;
@@ -92,17 +90,9 @@ public class EditComputer extends HttpServlet {
         } else {
 
             Computer c = new Computer(v.getId(), name, v.getIntroduced(), v.getDiscontinued(), v.getCompanyId());
-            try {
+            computerService.updateComputer(c);
+            RequestUtils.showMsg(req, true, "SUCCESS: Computer \"" + name + "\" successfully edited (id=" + v.getId() + ")");
 
-                computerService.updateComputer(c);
-                RequestUtils.showMsg(req, true, "SUCCESS: Computer \"" + name + "\" successfully edited (id=" + v.getId() + ")");
-
-            } catch (DaoException e) {
-
-                String msg = "Computer cannot be edited, reason \"" + e.getMessage() + "\"";
-                RequestUtils.showMsg(req, false, msg);
-                LOGGER.error(msg);
-            }
         }
 
         RequestUtils.putBackAttributes(req, name, introducedStr, discontinuedStr, companyIdStr);
@@ -135,14 +125,8 @@ public class EditComputer extends HttpServlet {
         }
 
         Long id = Long.parseLong(idStr);
-        Computer c;
-        try {
-            c = computerService.getComputerDetail(id);
-            RequestUtils.putBackAttributes(req, id, c.getName(), c.getIntroduced(), c.getDiscontinued(), c.getCompany().getId());
-        } catch (DaoException e) {
-            RequestUtils.showMsg(req, false, "Computer could not be loaded");
-            return false;
-        }
+        Computer c = computerService.getComputerDetail(id);
+        RequestUtils.putBackAttributes(req, id, c.getName(), c.getIntroduced(), c.getDiscontinued(), c.getCompany().getId());
 
         return true;
     }
@@ -151,15 +135,7 @@ public class EditComputer extends HttpServlet {
      * @param req servletRequest
      */
     private void loadCompanies(HttpServletRequest req) {
-        List<Company> companies;
-
-        try {
-            companies = companyService.getList();
-        } catch (DaoException e) {
-            companies = new ArrayList<Company>();
-            LOGGER.error("Companies list couldn't be loaded, reason \"" + e.getMessage() + "\"");
-        }
-
+        List<Company> companies = companyService.getList();
         req.setAttribute("companies", companies);
     }
 

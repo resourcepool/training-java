@@ -24,8 +24,6 @@ public class PageBuilder<T> {
     public PageBuilder() {
     }
 
-
-
     /**
      * @param req req
      * @return this
@@ -84,7 +82,7 @@ public class PageBuilder<T> {
      * @return this
      */
     private PageBuilder<T> withPageSize(Long pageSize) {
-        this.pageSize = pageSize;
+        this.pageSize = Math.min(pageSize, 150L);
         return this;
     }
 

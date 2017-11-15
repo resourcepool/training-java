@@ -113,7 +113,7 @@ public class ComputerDaoImpl {
      */
     public List<Computer> get(Page<Computer> page) throws DaoException {
         //TODO PrepareStatement
-        Long start = PageUtils.getStartElem(page);
+        Long start = PageUtils.getFirstEntityIndex(page);
         StringBuilder sb = new StringBuilder(SELECT_FROM_COMPUTER_WITH_COMPANY);
         sb.append(' ');
 
@@ -125,43 +125,13 @@ public class ComputerDaoImpl {
         if (page.getDbSort() != null) {
             sb.append(String.format("ORDER BY %s %s", page.getDbSort(), page.getOrder()));
         } else {
-            sb.append("ORDER BY CO.name");
+            sb.append("ORDER BY CO.id");
         }
         sb.append(' ');
 
         sb.append(String.format(" LIMIT %d,%d", start, page.getPageSize()));
 
         return DaoConnection.executeSelectQuery(sb.toString(), new ComputerMapper());
-    }
-
-    /**
-     * @param start element index to start
-     * @param splitSize number of total elements than can be loaded
-     * @param search companyName or computerName to search
-     * @return the content of one computer page from DB
-     * @throws DaoException content couldn't be loaded
-     */
-    public List<Computer> get(Long start, Long splitSize, String search) throws DaoException {
-
-        String where = String.format(SEARCH_FILTER, search);
-        String filter = String.format("ORDER BY name LIMIT %d,%d", start, splitSize);
-        String sql = SELECT_FROM_COMPUTER_WITH_COMPANY + ' ' + where + ' ' + filter;
-        return DaoConnection.executeSelectQuery(sql, new ComputerMapper());
-    }
-
-    /**
-     * @param start element index to start
-     * @param splitSize number of total elements than can be loaded
-     * @param column column_name to order
-     * @param order ASC or DESC
-     * @return the content of one computer page from DB
-     * @throws DaoException content couldn't be loaded
-     */
-    public List<Computer> get(Long start, Long splitSize, String column, String order) throws DaoException {
-        String sort = String.format("order by %s %s", column, order);
-        String filter = String.format("LIMIT %d,%d", start, splitSize);
-        String sql = SELECT_FROM_COMPUTER_WITH_COMPANY + ' ' + sort + ' ' + filter;
-        return DaoConnection.executeSelectQuery(sql, new ComputerMapper());
     }
 
     // ########################## CREATE, UPDATE and DELETE #################
@@ -254,6 +224,7 @@ public class ComputerDaoImpl {
      * @throws DaoException failed
      */
     public void deleteComputers(List<Long> ids) throws DaoException {
+
         String filter = ids.stream().map(number -> String.valueOf(number)).collect(Collectors.joining(","));
 
         DaoConnection.executeQuery((Connection conn) -> {

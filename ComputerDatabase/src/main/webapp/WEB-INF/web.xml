@@ -56,6 +56,10 @@
 		<error-code>500</error-code>
 		<location>/WEB-INF/pages/500.jsp</location>
 	</error-page>
+	<error-page>
+		<exception-type>persistence.exceptions.DaoException</exception-type>
+		<location>/WEB-INF/pages/500.jsp</location>
+	</error-page>
 
 	<!-- ################################## DISABLE JAVA in JSP ######################################## -->
 

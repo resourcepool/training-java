@@ -69,7 +69,7 @@ public class CompanyDaoImpl {
         Long size = getCompanyCount();
 
         PageQuery<Company> command = (Page<Company> p) -> {
-            Long startElem = PageUtils.getStartElem(p);
+            Long startElem = PageUtils.getFirstEntityIndex(p);
             String filter = String.format(" ORDER BY id LIMIT %d,%d", startElem, p.getPageSize());
             return DaoConnection.executeSelectQuery(SELECT_ID_NAME_FROM_COMPANY + filter, new CompanyMapper());
         };

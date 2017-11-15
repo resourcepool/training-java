@@ -3,6 +3,9 @@ package service;
 import java.sql.Connection;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import model.Company;
 import model.pages.Page;
 import persistence.CompanyDaoImpl;
@@ -11,9 +14,9 @@ import persistence.exceptions.DaoException;
 
 public class CompanyServiceImpl implements ICompanyService {
 
-
     private static CompanyServiceImpl instance;
-    private CompanyDaoImpl companyDao;
+    private CompanyDaoImpl            companyDao;
+    private static final Logger       LOGGER = LoggerFactory.getLogger(CompanyServiceImpl.class);
 
     /**
      * Private ctor.
@@ -40,7 +43,13 @@ public class CompanyServiceImpl implements ICompanyService {
      */
     @Override
     public List<Company> getList() throws DaoException {
-        return companyDao.getCompanyList();
+        try {
+            return companyDao.getCompanyList();
+
+        } catch (DaoException e) {
+            LOGGER.error("Companies list couldn't be loaded, reason \"" + e.getMessage() + "\"");
+            throw e;
+        }
     }
 
     /**
@@ -51,7 +60,7 @@ public class CompanyServiceImpl implements ICompanyService {
     @Override
     public boolean exists(Long idCompany) throws DaoException {
         if (idCompany == null) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
         return companyDao.companyExists(idCompany);
     }
@@ -72,11 +81,17 @@ public class CompanyServiceImpl implements ICompanyService {
      */
     @Override
     public void delete(Long id) throws DaoException {
-        Connection conn = Transaction.openTransaction();
+        try {
+            Connection conn = Transaction.openTransaction();
 
-        ComputerServiceImpl.getInstance().deleteComputerByCompany(id);
-        companyDao.deleteCompany(id);
+            ComputerServiceImpl.getInstance().deleteComputerByCompany(id);
+            companyDao.deleteCompany(id);
 
-        Transaction.releaseTransaction(conn);
+            Transaction.releaseTransaction(conn);
+        } catch (DaoException e) {
+            String msg = "failed to delete : " + e.getMessage();
+            LOGGER.error(msg);
+        }
+
     }
 }
