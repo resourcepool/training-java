@@ -1,0 +1,100 @@
+ 1060  mv dockerfile Dockerfile
+ 1061  docker build --help
+ 1062  docker build --t test .
+ 1063  docker build -t test .
+ 1064  sudo docker build -t test .
+ 1065  sudo docker build -t my-maven .
+ 1067  rm dockerfile 
+ 1071  sudo docker build -t my-maven .
+ 1073  sudo docker build -t my-maven .
+ 1075  sudo docker build -t my-maven .
+ 1077  sudo docker build -t my-maven .
+ 1083* sudo docker 
+ 1085  docker container ls
+ 1086  sudo docker container ls
+ 1087  sudo docker build -t my-maven .
+ 1088  sudo docker build -t my-maven . < Dockerfile 
+ 1089  sudo docker build -t my-maven < Dockerfile 
+ 1090  sudo docker build -t my-maven .
+ 1091  sudo docker build -t my-maven . < Dockerfile 
+ 1094  sudo docker build -t my-maven . < Dockerfile 
+ 1095  ls /var/lib/docker/tmp/
+ 1096  sudo ls /var/lib/docker/tmp/
+ 1097  sudo ls /var/lib/docker/
+ 1098  sudo ls /var/lib/docker/tmp
+ 1099  sudo docker build -t my-maven . < Dockerfile 
+ 1100  sudo docker build -t my-maven .
+ 1101  docker container ls
+ 1102  sudo docker container ls
+ 1103  sudo docker build -t my-maven .
+ 1105  sudo docker build -t my-maven .
+ 1108  sudo docker build -t my-maven .
+ 1110  sudo docker container ls
+ 1111  docker run -it --name my-maven-script my-maven
+ 1112  sudo docker run -it --name my-maven-script my-maven
+ 1113  docker run --help
+ 1114  sudo docker run -it --name my-maven-script my-maven
+ 1115  sudo docker build -t my-maven .
+ 1116  sudo docker container ls
+ 1117  sudo docker container ls IMAGE
+ 1118  sudo docker container ls --help
+ 1119  sudo docker container ls -a
+ 1120  sudo docker run -it --name my-maven-script my-maven
+ 1121  docker remove 4de5da2531981caef5d99359842b1739e23b957d75366753f4962e361894a1f4
+ 1122  docker --help
+ 1123  docker container remove 4de5da2531981caef5d99359842b1739e23b957d75366753f4962e361894a1f4
+ 1124  docker container rename 4de5da2531981caef5d99359842b1739e23b957d75366753f4962e361894a1f4 old
+ 1125  sudo docker container rename 4de5da2531981caef5d99359842b1739e23b957d75366753f4962e361894a1f4 old
+ 1126  sudo docker run -it --name my-maven-script my-maven
+ 1127  sudo docker run -it --name my-maven-script my-maven mvn clean install
+ 1128  sudo docker container --help
+ 1129  sudo docker container rm 4de5da2531981caef5d99359842b1739e23b957d75366753f4962e361894a1f4 old
+ 1130  sudo docker container rename 4de5da2531981caef5d99359842b1739e23b957d75366753f4962e361894a1f4 old
+ 1131  sudo docker run -it --name my-maven-script my-maven
+ 1132  sudo docker container rename "0f7c214f42a3cd7db95d93ea449f8da71a22a1f758dfa080ca09a8f4c5a9b67c" old2
+ 1133  sudo docker run -it --name ComputerDatabase my-maven mvn clean install
+ 1134  sudo docker container ls -a
+ 1135  sudo docker container ls
+ 1136  sudo docker container ls /usr/src/app
+ 1137  sudo docker container ls --help
+ 1138  sudo docker container ls -l
+ 1139  sudo docker container ls -ls
+ 1140  sudo docker container --help
+ 1141  sudo docker container exec ls
+ 1142  sudo docker container exec my-maven ls
+ 1143  sudo docker container exec ComputerDatabase ls
+ 1144  sudo docker container run ComputerDatabase ls
+ 1145  sudo docker container run ls
+ 1146  sudo docker container run ComputerDatabase
+ 1147  sudo docker container run 69f683675f91
+ 1148  sudo docker container run my-mave,
+ 1149  sudo docker container run my-maven
+ 1150  sudo docker container run my-maven l
+ 1151  sudo docker container run my-maven ls
+ 1152  sudo docker container run my-maven ll
+ 1153  sudo docker container run my-maven l
+ 1154  sudo docker container run my-maven ls
+ 1157  sudo docker container run my-maven ls
+ 1170  history | grep docker | tail -n 10
+ 1171  history | grep docker | tail -n 50
+ 1173  sudo docker container run my-maven ls -l
+ 1174* sudo docker container run my-maven 
+ 1176  sudo docker build -t my-maven .
+ 1177  docker clean
+ 1178  docker --help$
+ 1179  docker images
+ 1180  docker build -t my-maven .
+ 1181  sudo docker build -t my-maven .
+ 1182  usermod -aG docker ${USER}
+ 1183  sudo usermod -aG docker ${USER}
+ 1184  docker build -t my-maven .
+ 1185  sudo service docker stop
+ 1186  sudo service docker start
+ 1187  docker build -t my-maven .
+ 1188  sudo docker build -t my-maven .
+ 1189  sudo docker run -it --name my-maven-script my-maven
+ 1190  sudo docker run -it --name ComputerDatabase my-maven
+ 1191  history | grep docker | tail -n 50
+ 1192  history | grep docker | tail -n 50 > save.txt
+ 1193  history | grep docker | tail -n 100 > save.txt && car save.txt 
+ 1194  history | grep docker | tail -n 100 > save.txt && cat save.txt 

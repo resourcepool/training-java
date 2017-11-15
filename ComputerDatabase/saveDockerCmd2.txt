@@ -1,0 +1,200 @@
+ 1045  apt-cache madison docker-ce
+ 1046  sudo docker run hello-world
+ 1047  docker --version
+ 1048  docker pull maven
+ 1049  sudo docker pull maven
+ 1053  cd eclipse-workspace/training-java/docker/
+ 1055  docker run 
+ 1057  docker run dockerfile
+ 1058  sudo docker run dockerfile
+ 1059  docker help
+ 1060  mv dockerfile Dockerfile
+ 1061  docker build --help
+ 1062  docker build --t test .
+ 1063  docker build -t test .
+ 1064  sudo docker build -t test .
+ 1065  sudo docker build -t my-maven .
+ 1067  rm dockerfile 
+ 1071  sudo docker build -t my-maven .
+ 1073  sudo docker build -t my-maven .
+ 1075  sudo docker build -t my-maven .
+ 1077  sudo docker build -t my-maven .
+ 1083* sudo docker 
+ 1085  docker container ls
+ 1086  sudo docker container ls
+ 1087  sudo docker build -t my-maven .
+ 1088  sudo docker build -t my-maven . < Dockerfile 
+ 1089  sudo docker build -t my-maven < Dockerfile 
+ 1090  sudo docker build -t my-maven .
+ 1091  sudo docker build -t my-maven . < Dockerfile 
+ 1094  sudo docker build -t my-maven . < Dockerfile 
+ 1095  ls /var/lib/docker/tmp/
+ 1096  sudo ls /var/lib/docker/tmp/
+ 1097  sudo ls /var/lib/docker/
+ 1098  sudo ls /var/lib/docker/tmp
+ 1099  sudo docker build -t my-maven . < Dockerfile 
+ 1100  sudo docker build -t my-maven .
+ 1101  docker container ls
+ 1102  sudo docker container ls
+ 1103  sudo docker build -t my-maven .
+ 1105  sudo docker build -t my-maven .
+ 1108  sudo docker build -t my-maven .
+ 1110  sudo docker container ls
+ 1111  docker run -it --name my-maven-script my-maven
+ 1112  sudo docker run -it --name my-maven-script my-maven
+ 1113  docker run --help
+ 1114  sudo docker run -it --name my-maven-script my-maven
+ 1115  sudo docker build -t my-maven .
+ 1116  sudo docker container ls
+ 1117  sudo docker container ls IMAGE
+ 1118  sudo docker container ls --help
+ 1119  sudo docker container ls -a
+ 1120  sudo docker run -it --name my-maven-script my-maven
+ 1121  docker remove 4de5da2531981caef5d99359842b1739e23b957d75366753f4962e361894a1f4
+ 1122  docker --help
+ 1123  docker container remove 4de5da2531981caef5d99359842b1739e23b957d75366753f4962e361894a1f4
+ 1124  docker container rename 4de5da2531981caef5d99359842b1739e23b957d75366753f4962e361894a1f4 old
+ 1125  sudo docker container rename 4de5da2531981caef5d99359842b1739e23b957d75366753f4962e361894a1f4 old
+ 1126  sudo docker run -it --name my-maven-script my-maven
+ 1127  sudo docker run -it --name my-maven-script my-maven mvn clean install
+ 1128  sudo docker container --help
+ 1129  sudo docker container rm 4de5da2531981caef5d99359842b1739e23b957d75366753f4962e361894a1f4 old
+ 1130  sudo docker container rename 4de5da2531981caef5d99359842b1739e23b957d75366753f4962e361894a1f4 old
+ 1131  sudo docker run -it --name my-maven-script my-maven
+ 1132  sudo docker container rename "0f7c214f42a3cd7db95d93ea449f8da71a22a1f758dfa080ca09a8f4c5a9b67c" old2
+ 1133  sudo docker run -it --name ComputerDatabase my-maven mvn clean install
+ 1134  sudo docker container ls -a
+ 1135  sudo docker container ls
+ 1136  sudo docker container ls /usr/src/app
+ 1137  sudo docker container ls --help
+ 1138  sudo docker container ls -l
+ 1139  sudo docker container ls -ls
+ 1140  sudo docker container --help
+ 1141  sudo docker container exec ls
+ 1142  sudo docker container exec my-maven ls
+ 1143  sudo docker container exec ComputerDatabase ls
+ 1144  sudo docker container run ComputerDatabase ls
+ 1145  sudo docker container run ls
+ 1146  sudo docker container run ComputerDatabase
+ 1147  sudo docker container run 69f683675f91
+ 1148  sudo docker container run my-mave,
+ 1149  sudo docker container run my-maven
+ 1150  sudo docker container run my-maven l
+ 1151  sudo docker container run my-maven ls
+ 1152  sudo docker container run my-maven ll
+ 1153  sudo docker container run my-maven l
+ 1154  sudo docker container run my-maven ls
+ 1157  sudo docker container run my-maven ls
+ 1170  history | grep docker | tail -n 10
+ 1171  history | grep docker | tail -n 50
+ 1173  sudo docker container run my-maven ls -l
+ 1174* sudo docker container run my-maven 
+ 1176  sudo docker build -t my-maven .
+ 1177  docker clean
+ 1178  docker --help$
+ 1179  docker images
+ 1180  docker build -t my-maven .
+ 1181  sudo docker build -t my-maven .
+ 1182  usermod -aG docker ${USER}
+ 1183  sudo usermod -aG docker ${USER}
+ 1184  docker build -t my-maven .
+ 1185  sudo service docker stop
+ 1186  sudo service docker start
+ 1187  docker build -t my-maven .
+ 1188  sudo docker build -t my-maven .
+ 1189  sudo docker run -it --name my-maven-script my-maven
+ 1190  sudo docker run -it --name ComputerDatabase my-maven
+ 1191  history | grep docker | tail -n 50
+ 1192  history | grep docker | tail -n 50 > save.txt
+ 1193  history | grep docker | tail -n 100 > save.txt && car save.txt 
+ 1194  history | grep docker | tail -n 100 > save.txt && cat save.txt 
+ 1195  133  sudo docker run -it --name ComputerDatabase my-maven mvn clean install
+ 1196  sudo docker run -it --name ComputerDatabase my-maven mvn clean install
+ 1197  sudo docker container rm "69f683675f91a9bc1f6358984de1d566645b4f385f4ac544df5be16664e73120"
+ 1198  sudo docker container ls
+ 1199* sudo docker run -t
+ 1200  sudo docker run my-maven ls -l
+ 1202  sudo docker container rm "my-maven"
+ 1203  sudo docker container rm "my-maven-scripy"
+ 1204  sudo docker container rm "my-maven-script"
+ 1205  sudo docker run my-maven ls -l
+ 1206  sudo docker container ls -a
+ 1207  sudo docker container ls -a --no-trunck
+ 1208  sudo docker container ls -h
+ 1209  sudo docker container ls -a --no-trunc
+ 1210  docker ps --filter "status!=exited"
+ 1211  sudo docker ps --filter "status!=exited"
+ 1212  sudo docker ps --filter "status<>exited"
+ 1213  sudo docker ps --help
+ 1214  sudo docker ps --help -f
+ 1215  sudo docker container rm 75090b11d548d81b41b8eaa1f5183e66cbb7c40cf985c67a38f5d1f046de0946
+ 1216  sudo docker container rm 76fea6d591b6ad6b2c4f35578aebcb36eeb1ac14b03536a6789ba34409217bf0 
+ 1217  sudo docker ps --filter "status not exited"
+ 1218  sudo docker ps -n -f "status=running"
+ 1219  sudo docker ps -n 2 -f "status=running"
+ 1220  sudo docker rm `docker ps -aq -f status=exited`
+ 1221  sudo docker rm `sudo docker ps -aq -f status=exited`
+ 1222  sudo docker ps -a
+ 1223  sudo docker build -t my-maven .
+ 1225  sudo docker ps -a
+ 1226  sudo docker ps -l
+ 1227  sudo docker run -it -name ComputerDatabase my-maven ls
+ 1228  sudo docker run -it --name ComputerDatabase my-maven ls
+ 1229  sudo docker run -it my-maven ls
+ 1230  sudo docker run -it my-maven ls - l
+ 1231  sudo docker run -it my-maven ls -l
+ 1233  sudo docker run -it --name ComputerDatabase my-maven mvn clean install
+ 1234  sudo docker ps -a
+ 1235  sudo docker container ps -no-trunc
+ 1236  sudo docker container ps --no-trunc
+ 1237  sudo docker container ps -a --no-trunc
+ 1238  sudo docker container rm a4d1e9b858a5ee584fdeb3d05309d9b9a68c08239914853079949c5e9f1648b1 
+ 1239  sudo docker run -it my-maven mvn clean install
+ 1240  #sudo docker build -t my-maven .
+ 1241  sudo docker build -t my-maven .
+ 1242  sudo docker ps -l
+ 1243  sudo docker ps -l --no-trunc
+ 1244  sudo docker run -it my-maven mvn clean install
+ 1245  sudo docker run -it my-maven ls
+ 1246  sudo docker run -it my-maven ls ..
+ 1247  sudo docker run -it my-maven ls 
+ 1248  sudo docker run -it my-maven mvn clean install package
+ 1249  sudo docker run -it my-maven ls 
+ 1250  sudo docker run -it my-maven mvn clean install package war:war
+ 1251  sudo docker run -it my-maven ls 
+ 1252  sudo docker run -it my-maven ls target
+ 1253  sudo docker ps -a
+ 1254  sudo docker ps -a --help
+ 1255  sudo docker ps -a --no-trunc
+ 1259  docker run -v src:/usr/src/cdb -w /usr/src/cdb maven:3.5-jdk-8 mvn package
+ 1260  sudo docker run -v src:/usr/src/cdb -w /usr/src/cdb maven:3.5-jdk-8 mvn package
+ 1261  sudo docker run -v $(pwd)/src:/usr/src/cdb -w /usr/src/cdb maven:3.5-jdk-8 mvn package
+ 1262  sudo docker run -v ./src:/usr/src/cdb -w /usr/src/cdb maven:3.5-jdk-8 mvn package
+ 1264  sudo docker run -v src:/usr/src/cdb -w /usr/src/cdb maven:3.5-jdk-8 mvn package
+ 1266  sudo docker run -v .:/usr/src/cdb -w /usr/src/cdb maven:3.5-jdk-8 mvn package
+ 1267  sudo docker run -v $(pwd):/usr/src/cdb -w /usr/src/cdb maven:3.5-jdk-8 mvn package
+ 1274  sudo docker run -v $(pwd)/target:/usr/src/cdb/target -v $(pwd):/usr/src/cdb -w /usr/src/cdb maven:3.5-jdk-8 mvn package
+ 1277  sudo docker run -v $(pwd)/target:/usr/src/cdb/target -v $(pwd):/usr/src/cdb -w /usr/src/cdb maven:3.5-jdk-8 mvn package
+ 1279  docker ps
+ 1280  sudo docker ps
+ 1281  sudo docker ps -a
+ 1282  sudo docker container prune
+ 1283  sudo docker run --name cdb-builder -v $(pwd)/target:/usr/src/cdb/target -v $(pwd):/usr/src/cdb -w /usr/src/cdb maven:3.5-jdk-8 mvn package
+ 1284  sudo docker start -a cdb-builder
+ 1287  sudo docker create --name cdb-builder -v $(pwd)/target:/usr/src/cdb/target -v $(pwd):/usr/src/cdb -w /usr/src/cdb maven:3.5-jdk-8 mvn package
+ 1288  sudo docker create --name cdb-builder -v $(pwd)/target:/usr/src/cdb/target -v $(pwd):/usr/src/cdb -w /usr/src/cdb maven:3.5-jdk-8 mvn package || true
+ 1289  sudo docker create --name cdb-builder -v $(pwd)/target:/usr/src/cdb/target -v $(pwd):/usr/src/cdb -w /usr/src/cdb maven:3.5-jdk-8 mvn package || sudo true
+ 1291  sudo docker create --name cdb-builder -v $(pwd)/target:/usr/src/cdb/target -v $(pwd):/usr/src/cdb -w /usr/src/cdb maven:3.5-jdk-8 mvn package 2> /dev/null || sudo true
+ 1293  docker ps -ai 
+ 1294  docker ps -a --filter name=cdb-builder
+ 1295  sudo docker ps -a --filter name=cdb-builder
+ 1296  sudo docker ps -ai --filter name=cdb-builder
+ 1297  docker ps help
+ 1298  docker ps --help
+ 1299  sudo docker ps -aq --filter name=cdb-builder
+ 1300  sudo docker start --help
+ 1301  sudo docker run --help
+ 1306  rmdir ../docker/
+ 1307  ls ../docker/
+ 1308  rm -r ../docker/
+ 1325  history | grep docker | tail -n 200 > save2.txt
