@@ -33,9 +33,17 @@ public class ComputerServiceImpl implements IComputerService {
      *
      * @return a loaded Service, ready to work
      */
-    public static IComputerService getInstance() {
+    public static synchronized IComputerService getInstance() {
+        return instance;
+    }
+
+    /**
+     * @param dao dao to use to initialize service
+     * @return return instance
+     */
+    public static IComputerService createInstance(ComputerDaoImpl dao) {
         if (instance == null) {
-            instance = new ComputerServiceImpl(ComputerDaoImpl.getInstance());
+            instance = new ComputerServiceImpl(dao);
         }
         return instance;
     }
