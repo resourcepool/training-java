@@ -14,27 +14,19 @@ import persistence.exceptions.DaoException;
 
 public class CompanyServiceImpl implements ICompanyService {
 
-    private static CompanyServiceImpl instance;
-    private CompanyDaoImpl            companyDao;
     private static final Logger       LOGGER = LoggerFactory.getLogger(CompanyServiceImpl.class);
+    private CompanyDaoImpl            companyDao;
+    private IComputerService          computerService;
 
     /**
      * Private ctor.
      *
      * @param dao CompanyDao to access Data
+     * @param computerService computerService to handle transactions
      */
-    private CompanyServiceImpl(CompanyDaoImpl dao) {
-        companyDao = dao;
-    }
-
-    /**
-     * @return a loaded Service, ready to work
-     */
-    public static ICompanyService getInstance() {
-        if (instance == null) {
-            instance = new CompanyServiceImpl(CompanyDaoImpl.getInstance());
-        }
-        return instance;
+    private CompanyServiceImpl(CompanyDaoImpl dao, IComputerService computerService) {
+        this.companyDao = dao;
+        this.computerService = computerService;
     }
 
     /**
@@ -84,7 +76,7 @@ public class CompanyServiceImpl implements ICompanyService {
         try {
             Connection conn = Transaction.openTransaction();
 
-            ComputerServiceImpl.getInstance().deleteComputerByCompany(id);
+            computerService.deleteComputerByCompany(id);
             companyDao.deleteCompany(id);
 
             Transaction.releaseTransaction(conn);

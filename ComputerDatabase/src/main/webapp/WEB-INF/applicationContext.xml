@@ -9,16 +9,23 @@
     http://www.springframework.org/schema/tx
     http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
 
-
-	<!-- Manager -->
-	<bean id="computerService" class="service.ComputerServiceImpl"
-		factory-method="createInstance" scope="singleton" lazy-init="true">
+	<!-- Service -->
+	<bean id="companyService" class="service.CompanyServiceImpl" lazy-init="true">
+		<constructor-arg>
+			<ref bean="companyDao" />
+		</constructor-arg>
+		<constructor-arg>
+			<ref bean="computerService" />
+		</constructor-arg>
+	</bean>
+	<bean id="computerService" class="service.ComputerServiceImpl" lazy-init="true">
 		<constructor-arg>
 			<ref bean="computerDao" />
 		</constructor-arg>
 	</bean>
 
 	<!-- Dao -->
+	<bean id="companyDao" class="persistence.CompanyDaoImpl"></bean>
 	<bean id="computerDao" class="persistence.ComputerDaoImpl"></bean>
 
 </beans>

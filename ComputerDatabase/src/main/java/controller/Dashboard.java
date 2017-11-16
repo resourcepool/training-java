@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,11 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import model.Computer;
 import model.pages.Page;
-import service.CompanyServiceImpl;
-import service.ComputerServiceImpl;
 import service.ICompanyService;
 import service.IComputerService;
 import service.PageBuilder;
@@ -32,11 +33,17 @@ public class Dashboard extends HttpServlet {
     private ICompanyService companyService;
 
     /**
-     * Default constructor.
+     * @param config ServletConfig
+     * @see javax.servlet.GenericServlet#init(javax.servlet.ServletConfig)
+     * @throws ServletException exception
      */
-    public Dashboard() {
-        computerService = ComputerServiceImpl.getInstance();
-        companyService = CompanyServiceImpl.getInstance();
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        WebApplicationContext wc = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+        this.companyService = (ICompanyService) wc.getBean("companyService");
+        this.computerService = (IComputerService) wc.getBean("computerService");
     }
 
     /**

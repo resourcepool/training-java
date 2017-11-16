@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,11 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 
 import model.Company;
 import model.Computer;
-import service.CompanyServiceImpl;
-import service.ComputerServiceImpl;
 import service.ICompanyService;
 import service.IComputerService;
 import validators.ComputerValidator;
@@ -35,11 +35,17 @@ public class EditComputer extends HttpServlet {
     private IComputerService computerService;
 
     /**
-     * ctor.
+     * @param config ServletConfig
+     * @see javax.servlet.GenericServlet#init(javax.servlet.ServletConfig)
+     * @throws ServletException exception
      */
-    public EditComputer() {
-        computerService = ComputerServiceImpl.getInstance();
-        companyService = CompanyServiceImpl.getInstance();
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        ApplicationContext ac = (ApplicationContext) config.getServletContext().getAttribute("applicationContext");
+        this.companyService = (ICompanyService) ac.getBean("companyService");
+        this.computerService = (IComputerService) ac.getBean("computerService");
     }
 
     /**

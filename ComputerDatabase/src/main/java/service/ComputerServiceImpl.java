@@ -14,7 +14,6 @@ import persistence.querycommands.PageQuery;
 public class ComputerServiceImpl implements IComputerService {
 
     private static final Logger     LOGGER = LoggerFactory.getLogger(ComputerServiceImpl.class);
-    private static IComputerService instance;
     private ComputerDaoImpl         computerDao;
 
     /**
@@ -24,28 +23,6 @@ public class ComputerServiceImpl implements IComputerService {
      */
     private ComputerServiceImpl(ComputerDaoImpl dao) {
         computerDao = dao;
-    }
-
-    /**
-     *
-     *
-     * /**
-     *
-     * @return a loaded Service, ready to work
-     */
-    public static synchronized IComputerService getInstance() {
-        return instance;
-    }
-
-    /**
-     * @param dao dao to use to initialize service
-     * @return return instance
-     */
-    public static IComputerService createInstance(ComputerDaoImpl dao) {
-        if (instance == null) {
-            instance = new ComputerServiceImpl(dao);
-        }
-        return instance;
     }
 
     /**

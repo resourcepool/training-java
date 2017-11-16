@@ -26,25 +26,6 @@ public class ComputerDaoImpl {
     private static final String    NAME_FILTER                           = " where CO.name = \"?\"";
     private static final String    DELETE_FROM_COMPUTER_WHERE_COMPANY_ID = "delete from computer where company_id = ?";
 
-    // ######################### SINGLETON ###################################
-    private static ComputerDaoImpl instance;
-
-    /**
-     * private ctor.
-     */
-    private ComputerDaoImpl() {
-    }
-
-    /**
-     * @return unique instance of this dao
-     */
-    public static ComputerDaoImpl getInstance() {
-        if (instance == null) {
-            instance = new ComputerDaoImpl();
-        }
-        return instance;
-    }
-
     // ########################## SELECT, GETTERS #################
 
     /**

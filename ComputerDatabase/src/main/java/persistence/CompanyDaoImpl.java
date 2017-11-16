@@ -14,27 +14,9 @@ import service.PageUtils;
 
 public class CompanyDaoImpl {
     private static final String DELETE_FROM_COMPANY_WHERE_ID = "delete from company where id = ?";
-
     private static final String SELECT_COUNT_FROM_COMPANY = "select count(*) from company";
     private static final String SELECT_COUNT_FROM_COMPANY_WHERE_ID = "select count(*) from company where id = ?";
     private static final String SELECT_ID_NAME_FROM_COMPANY = "select id, name from company order by name";
-    private static CompanyDaoImpl instance;
-
-    /**
-     * private ctor.
-     */
-    private CompanyDaoImpl() {
-    }
-
-    /**
-     * @return unique dao instance.
-     */
-    public static CompanyDaoImpl getInstance() {
-        if (instance == null) {
-            instance = new CompanyDaoImpl();
-        }
-        return instance;
-    }
 
     /**
      * @return Full company list from DB
