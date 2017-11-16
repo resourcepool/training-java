@@ -121,8 +121,9 @@ public class PageBuilder<T> {
      * @return the resulting page
      */
     public Page<T> build(PageQuery<T> pageQuery, Long size) {
-        if (PageUtils.getFirstEntityIndex(this.nbPage, this.pageSize) > size) {
-            this.nbPage = size / this.pageSize - 1;
+        Long firstEntityIndex = PageUtils.getFirstEntityIndex(this.nbPage, this.pageSize);
+        if (firstEntityIndex >= size) {
+            this.nbPage = size / this.pageSize;
         }
         return new Page<T>(pageQuery, size, this);
     }
