@@ -15,7 +15,7 @@ public class PageBuilder<T> {
     private Long              pageSize;
     private Long              nbPage;
     private String            search;
-    private ComputerMapping            columnSort;
+    private ComputerMapping   columnSort;
     private String            order;
 
     /**
@@ -121,6 +121,9 @@ public class PageBuilder<T> {
      * @return the resulting page
      */
     public Page<T> build(PageQuery<T> pageQuery, Long size) {
+        if (PageUtils.getFirstEntityIndex(this.nbPage, this.pageSize) > size) {
+            this.nbPage = size / this.pageSize - 1;
+        }
         return new Page<T>(pageQuery, size, this);
     }
 }

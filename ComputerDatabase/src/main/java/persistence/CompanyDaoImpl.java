@@ -8,9 +8,9 @@ import java.util.List;
 import mapper.CompanyMapper;
 import model.Company;
 import model.pages.Page;
-import model.pages.PageUtils;
 import persistence.exceptions.DaoException;
 import persistence.querycommands.PageQuery;
+import service.PageUtils;
 
 public class CompanyDaoImpl {
     private static final String DELETE_FROM_COMPANY_WHERE_ID = "delete from company where id = ?";

@@ -117,12 +117,11 @@ public class ComputerServiceImpl implements IComputerService {
      */
     @Override
     public Page<Computer> loadPage(PageBuilder<Computer> pageBuilder) {
-        PageQuery<Computer> pageQuery = getPageQuery();
-
         try {
+            PageQuery<Computer> pageQuery = (Page<Computer> page) -> computerDao.get(page);
             Long size = getCount(pageBuilder.getSearch());
-            Page<Computer> page = pageBuilder.build(pageQuery, size);
-            return page.load();
+            return pageBuilder.build(pageQuery, size).load();
+
         } catch (DaoException e) {
             LOGGER.error(e.getMessage());
             return null;
@@ -136,12 +135,6 @@ public class ComputerServiceImpl implements IComputerService {
      */
     private Long getCount(String search) throws DaoException {
         return search == null ? computerDao.getComputerTotalCount() : computerDao.getComputerTotalCount(search);
-    }
-
-    private PageQuery<Computer> getPageQuery() {
-        return (Page<Computer> page) -> {
-            return computerDao.get(page);
-        };
     }
 
     /**

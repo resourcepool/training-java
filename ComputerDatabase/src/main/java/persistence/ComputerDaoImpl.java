@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 import mapper.ComputerMapper;
 import model.Computer;
 import model.pages.Page;
-import model.pages.PageUtils;
 import persistence.exceptions.DaoException;
+import service.PageUtils;
 
 public class ComputerDaoImpl {
 

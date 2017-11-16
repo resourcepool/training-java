@@ -1,13 +1,27 @@
+# sudo apt-get update
+# sudo apt-get install     apt-transport-https     ca-certificates     curl     software-properties-common
+# curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+# sudo apt-key fingerprint 0EBFCD88
+# sudo add-apt-repository    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+#   $(lsb_release -cs) \
+#   stable"
+# sudo apt-get install docker-ce
+# sudo apt update
+# sudo apt-get install docker-ce
+# apt-cache madison docker-ce
+# sudo docker run hello-world
+# docker --version
+# docker pull maven
+# sudo docker pull maven
 
-# FROM maven:3.5-jdk-8
-# WORKDIR /app
-# ADD . /app
+#---------------------------------------------------------
 
-## sudo docker build -t my-maven .
-## sudo docker run -it --name my-maven-script my-maven mvn install
-# http://blog.moncoindunet.fr/docker/dockerfile-add-ou-copy/
-
-
+# export DOCKER_ID_USER="username"
+# sudo docker login
+# sudo docker images
+# sudo docker commit cdb-db sebeq33:cdb-db
+# sudo docker tag sebeq33:cdb-db $DOCKER_ID_USER/cdb-db
+# sudo docker push $DOCKER_ID_USER/cdb-db
 
 #---------------------------------------------------------
 # (run as CMD)
@@ -23,6 +37,8 @@
 # sudo docker create --name cdb-builder -v $(pwd)/target:/usr/src/cdb/target -v $(pwd):/usr/src/cdb -w /usr/src/cdb maven:3.5-jdk-8 mvn package || # sudo true
 # > sudo docker create --name cdb-builder -v $(pwd)/target:/usr/src/cdb/target -v $(pwd):/usr/src/cdb -w /usr/src/cdb maven:3.5-jdk-8 mvn package 2> /dev/null || # sudo true
 # sudo docker ps -aq --filter name=cdb-builder
+
+
 
 #---------------------------------------------------------
 ### IMAGE MYSQL
@@ -49,5 +65,15 @@
 # sudo docker exec -it cdb-db mysql -u admincdb -p
 
 
+
 #---------------------------------------------------------
-## IMAGE TOMCAT
+### IMAGE TOMCAT
+
+#TODO
+
+
+
+#---------------------------------------------------------
+## DOCS
+# http://blog.moncoindunet.fr/docker/dockerfile-add-ou-copy/
+

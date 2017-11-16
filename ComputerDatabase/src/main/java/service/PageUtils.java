@@ -1,4 +1,6 @@
-package model.pages;
+package service;
+
+import model.pages.Page;
 
 public class PageUtils {
 
@@ -20,6 +22,15 @@ public class PageUtils {
      * @return the start index of the db entity of the given page
      */
     public static Long getFirstEntityIndex(Page<?> page) {
-        return (page.getCurrentPage() - 1) * page.getPageSize();
+        return (getFirstEntityIndex(page.getCurrentPage(), page.getPageSize()));
+    }
+
+    /**
+     * @param pageNumber current page nb
+     * @param pageSize size of a page
+     * @return the start index of the db entity of the given page
+     */
+    public static Long getFirstEntityIndex(Long pageNumber, Long pageSize) {
+        return (pageNumber - 1) * pageSize;
     }
 }
