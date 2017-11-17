@@ -9,7 +9,7 @@
     http://www.springframework.org/schema/tx
     http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
 
-	<!-- Service -->
+	<!-- #### SERVICES #########################################-->
 	<bean id="companyService" class="service.CompanyServiceImpl"
 		lazy-init="true">
 		<constructor-arg>
@@ -17,9 +17,6 @@
 		</constructor-arg>
 		<constructor-arg>
 			<ref bean="computerService" />
-		</constructor-arg>
-		<constructor-arg>
-			<ref bean="transaction" />
 		</constructor-arg>
 	</bean>
 	<bean id="computerService" class="service.ComputerServiceImpl"
@@ -29,7 +26,9 @@
 		</constructor-arg>
 	</bean>
 
-	<!-- Dao -->
+
+
+	<!-- #### DAOs ######################################### -->
 	<bean id="companyDao" class="persistence.CompanyDaoImpl">
 		<constructor-arg>
 			<ref bean="daoConnection" />
@@ -41,24 +40,51 @@
 		</constructor-arg>
 	</bean>
 
-	<!-- DaoConnection -->
+
+
+	<!-- #### DaoConnection ######################################### -->
 	<bean id="daoConnection" class="persistence.DaoConnection">
 		<constructor-arg>
 			<ref bean="dataSource" />
 		</constructor-arg>
-		<constructor-arg>
-			<ref bean="transaction" />
-		</constructor-arg>
 	</bean>
-	<bean id="transaction" class="persistence.Transaction">
-		<constructor-arg>
-			<ref bean="dataSource" />
-		</constructor-arg>
+	
+	
+
+	<!-- #### TRANSACTIONS ######################################### -->
+	<aop:config>
+		<aop:pointcut id="computerServiceOperation" expression="execution(* service.IComputerService.*(..))" />
+		<aop:pointcut id="companyServiceOperation" expression="execution(* service.ICompanyService.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="computerServiceOperation" />
+		<aop:advisor advice-ref="defaultAdvice" pointcut-ref="companyServiceOperation" />
+	</aop:config>
+
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<!-- all methods starting with 'get' are read-only -->
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="delete*" isolation="DEFAULT" rollback-for="persistence.exceptions.DaoException"/>
+			<tx:method name="*" />
+		</tx:attributes>
+	</tx:advice>
+	<tx:advice id="defaultAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="*" />
+		</tx:attributes>
+	</tx:advice>
+
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-	<!-- HikariCP configuration -->
-	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location" value="classpath:config.properties"/>
+
+
+	<!-- #### HikariCP configuration ######################################### -->
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:config.properties" />
 	</bean>
 
 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">

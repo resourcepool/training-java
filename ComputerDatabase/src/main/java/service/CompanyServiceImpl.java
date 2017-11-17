@@ -1,6 +1,5 @@
 package service;
 
-import java.sql.Connection;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -8,28 +7,24 @@ import org.slf4j.LoggerFactory;
 
 import model.Company;
 import model.pages.Page;
-import persistence.CompanyDaoImpl;
-import persistence.Transaction;
+import persistence.ICompanyDao;
 import persistence.exceptions.DaoException;
 
 public class CompanyServiceImpl implements ICompanyService {
 
-    private static final Logger       LOGGER = LoggerFactory.getLogger(CompanyServiceImpl.class);
-    private CompanyDaoImpl            companyDao;
-    private IComputerService          computerService;
-    private Transaction tr;
+    private static final Logger LOGGER = LoggerFactory.getLogger(CompanyServiceImpl.class);
+    private ICompanyDao         companyDao;
+    private IComputerService    computerService;
 
     /**
      * Private ctor.
      *
      * @param dao CompanyDao to access Data
      * @param computerService computerService to handle transactions
-     * @param transaction transaction
      */
-    private CompanyServiceImpl(CompanyDaoImpl dao, IComputerService computerService, Transaction transaction) {
+    private CompanyServiceImpl(ICompanyDao dao, IComputerService computerService) {
         this.companyDao = dao;
         this.computerService = computerService;
-        this.tr = transaction;
     }
 
     /**
@@ -71,21 +66,20 @@ public class CompanyServiceImpl implements ICompanyService {
     }
 
     /**
+     * Transactional. see applicationContext.xml
      * @param id id to delete
      * @throws DaoException failed to delete
      */
     @Override
     public void delete(Long id) throws DaoException {
-        try {
-            Connection conn = tr.open();
 
+        try {
             computerService.deleteComputerByCompany(id);
             companyDao.deleteCompany(id);
-
-            tr.release(conn);
         } catch (DaoException e) {
             String msg = "failed to delete : " + e.getMessage();
             LOGGER.error(msg);
+            throw e;
         }
 
     }

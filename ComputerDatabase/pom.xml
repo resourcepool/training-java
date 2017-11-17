@@ -29,6 +29,7 @@
 		<hikariCP.version>2.6.1</hikariCP.version>
 		<spring.version>5.0.1.RELEASE</spring.version>
 		<jcloverslf4j.version>1.7.25</jcloverslf4j.version>
+		<spring.aspectweaver.version>1.8.13</spring.aspectweaver.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -75,7 +76,7 @@
 			<version>${taglib.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>
@@ -107,6 +108,26 @@
 				</exclusion>
 			</exclusions>
 			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>${spring.aspectweaver.version}</version>
 		</dependency>
 
 		<!-- TEST -->

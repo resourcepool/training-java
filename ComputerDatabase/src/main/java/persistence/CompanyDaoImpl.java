@@ -12,7 +12,8 @@ import persistence.exceptions.DaoException;
 import persistence.querycommands.PageQuery;
 import service.PageUtils;
 
-public class CompanyDaoImpl {
+public class CompanyDaoImpl implements ICompanyDao {
+
     private static final String DELETE_FROM_COMPANY_WHERE_ID = "delete from company where id = ?";
     private static final String SELECT_COUNT_FROM_COMPANY = "select count(*) from company";
     private static final String SELECT_COUNT_FROM_COMPANY_WHERE_ID = "select count(*) from company where id = ?";
@@ -31,6 +32,7 @@ public class CompanyDaoImpl {
      * @return Full company list from DB
      * @throws DaoException content couldn't be loaded
      */
+    @Override
     public List<Company> getCompanyList() throws DaoException {
         return conn.executeSelectQuery(SELECT_ID_NAME_FROM_COMPANY, new CompanyMapper());
     }
@@ -40,6 +42,7 @@ public class CompanyDaoImpl {
      * @return true is company id is present in DB
      * @throws DaoException content couldn't be loaded
      */
+    @Override
     public boolean companyExists(Long idCompany) throws DaoException {
         return conn.executeQuery((Connection conn) -> {
             try (PreparedStatement s = conn.prepareStatement(SELECT_COUNT_FROM_COMPANY_WHERE_ID)) {
@@ -56,6 +59,7 @@ public class CompanyDaoImpl {
      * @return the first page of the full company list from DB
      * @throws DaoException content couldn't be loaded
      */
+    @Override
     public Page<Company> getCompanyPage() throws DaoException {
         Long size = getCompanyCount();
 
@@ -72,6 +76,7 @@ public class CompanyDaoImpl {
      * @return the number of company in DB
      * @throws DaoException content couldn't be loaded
      */
+    @Override
     public Long getCompanyCount() throws DaoException {
         Long size = conn.executeSelectQuery(SELECT_COUNT_FROM_COMPANY, (ResultSet r) -> {
             return (r.next() ? r.getLong(1) : null);
@@ -83,6 +88,7 @@ public class CompanyDaoImpl {
      * @param id id to delete
      * @throws DaoException failed to delete
      */
+    @Override
     public void deleteCompany(Long id) throws DaoException {
 
         conn.executeQuery((Connection conn) -> {

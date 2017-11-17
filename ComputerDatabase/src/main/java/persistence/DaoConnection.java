@@ -4,46 +4,23 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 
 import javax.sql.DataSource;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import mapper.IResultMapper;
 import persistence.exceptions.DaoException;
 import persistence.querycommands.QueryCommand;
 
 public class DaoConnection {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DaoConnection.class);
     private DataSource          ds;
-    private Transaction         transaction;
 
     /**
      * @param ds HikariDatasource
-     * @param t Transaction
      */
-    public DaoConnection(DataSource ds, Transaction t) {
+    public DaoConnection(DataSource ds) {
         this.ds = ds;
-        this.transaction = t;
     }
 
-    /**
-     * @param queries queries using the same connection before commit atomicly
-     * @throws DaoException one or more query failed, each request is rollbacked
-     */
-    public void executeTransation(List<QueryCommand<?>> queries) throws DaoException {
-        Connection conn = transaction.open();
-        QueryCommand<?> query = (Connection c) -> {
-            for (QueryCommand<?> queryCommand : queries) {
-                queryCommand.execute(c);
-            }
-            return true;
-        };
-        executeQuery(query);
-        transaction.release(conn);
-    }
 
     /**
      * @param query the query to execute
@@ -52,36 +29,14 @@ public class DaoConnection {
      * @throws DaoException content couldn't be loaded
      */
     public <T> T executeQuery(QueryCommand<T> query) throws DaoException {
-        Connection conn = null;
 
         try {
-
-            Connection t = transaction.getCurrent();
-            conn = t == null ? ds.getConnection() : t;
+            Connection conn = ds.getConnection();
             return query.execute(conn);
-
         } catch (SQLException e) {
-
-            if (transaction.isOpen(conn)) {
-                try {
-                    conn.rollback();
-                    conn.setAutoCommit(true);
-                } catch (SQLException ex) {
-                    LOGGER.error("Connection could not be rollbacked");
-                }
-            }
             throw new DaoException(e);
-
-        } finally {
-
-            try {
-                if (conn != null && !transaction.isOpen(conn)) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                LOGGER.warn("Connection failed to close");
-            }
         }
+
     }
 
     /**

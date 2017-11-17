@@ -7,21 +7,21 @@ import org.slf4j.LoggerFactory;
 
 import model.Computer;
 import model.pages.Page;
-import persistence.ComputerDaoImpl;
+import persistence.IComputerDao;
 import persistence.exceptions.DaoException;
 import persistence.querycommands.PageQuery;
 
 public class ComputerServiceImpl implements IComputerService {
 
-    private static final Logger     LOGGER = LoggerFactory.getLogger(ComputerServiceImpl.class);
-    private ComputerDaoImpl         computerDao;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ComputerServiceImpl.class);
+    private IComputerDao        computerDao;
 
     /**
      * Private ctor.
      *
      * @param dao CompanyDao to access Data
      */
-    private ComputerServiceImpl(ComputerDaoImpl dao) {
+    private ComputerServiceImpl(IComputerDao dao) {
         computerDao = dao;
     }
 
