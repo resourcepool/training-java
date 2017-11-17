@@ -18,12 +18,21 @@ public class CompanyDaoImpl {
     private static final String SELECT_COUNT_FROM_COMPANY_WHERE_ID = "select count(*) from company where id = ?";
     private static final String SELECT_ID_NAME_FROM_COMPANY = "select id, name from company order by name";
 
+    private DaoConnection conn;
+
+    /**
+     * @param conn Dao Connection Manager
+     */
+    public CompanyDaoImpl(DaoConnection conn) {
+        this.conn = conn;
+    }
+
     /**
      * @return Full company list from DB
      * @throws DaoException content couldn't be loaded
      */
     public List<Company> getCompanyList() throws DaoException {
-        return DaoConnection.executeSelectQuery(SELECT_ID_NAME_FROM_COMPANY, new CompanyMapper());
+        return conn.executeSelectQuery(SELECT_ID_NAME_FROM_COMPANY, new CompanyMapper());
     }
 
     /**
@@ -32,7 +41,7 @@ public class CompanyDaoImpl {
      * @throws DaoException content couldn't be loaded
      */
     public boolean companyExists(Long idCompany) throws DaoException {
-        return DaoConnection.executeQuery((Connection conn) -> {
+        return conn.executeQuery((Connection conn) -> {
             try (PreparedStatement s = conn.prepareStatement(SELECT_COUNT_FROM_COMPANY_WHERE_ID)) {
                 s.setLong(1, idCompany);
 
@@ -53,7 +62,7 @@ public class CompanyDaoImpl {
         PageQuery<Company> command = (Page<Company> p) -> {
             Long startElem = PageUtils.getFirstEntityIndex(p);
             String filter = String.format(" ORDER BY id LIMIT %d,%d", startElem, p.getPageSize());
-            return DaoConnection.executeSelectQuery(SELECT_ID_NAME_FROM_COMPANY + filter, new CompanyMapper());
+            return conn.executeSelectQuery(SELECT_ID_NAME_FROM_COMPANY + filter, new CompanyMapper());
         };
 
         return new Page<Company>(command, size, 10L, 1L);
@@ -64,7 +73,7 @@ public class CompanyDaoImpl {
      * @throws DaoException content couldn't be loaded
      */
     public Long getCompanyCount() throws DaoException {
-        Long size = DaoConnection.executeSelectQuery(SELECT_COUNT_FROM_COMPANY, (ResultSet r) -> {
+        Long size = conn.executeSelectQuery(SELECT_COUNT_FROM_COMPANY, (ResultSet r) -> {
             return (r.next() ? r.getLong(1) : null);
         });
         return size;
@@ -76,7 +85,7 @@ public class CompanyDaoImpl {
      */
     public void deleteCompany(Long id) throws DaoException {
 
-        DaoConnection.executeQuery((Connection conn) -> {
+        conn.executeQuery((Connection conn) -> {
 
             PreparedStatement deleteCompany = null;
 

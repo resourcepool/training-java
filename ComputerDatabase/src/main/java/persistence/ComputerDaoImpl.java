@@ -25,6 +25,14 @@ public class ComputerDaoImpl {
     private static final String    ID_FILTER                             = " where CO.id = ?";
     private static final String    NAME_FILTER                           = " where CO.name = \"?\"";
     private static final String    DELETE_FROM_COMPUTER_WHERE_COMPANY_ID = "delete from computer where company_id = ?";
+    private DaoConnection conn;
+
+    /**
+     * @param conn Dao Connection Manager
+     */
+    public ComputerDaoImpl(DaoConnection conn) {
+        this.conn = conn;
+    }
 
     // ########################## SELECT, GETTERS #################
 
@@ -33,7 +41,7 @@ public class ComputerDaoImpl {
      * @throws DaoException content couldn't be loaded
      */
     public Long getComputerTotalCount() throws DaoException {
-        return DaoConnection.getCount(COUNT_FROM_COMPUTER);
+        return conn.getCount(COUNT_FROM_COMPUTER);
     }
 
     /**
@@ -43,7 +51,7 @@ public class ComputerDaoImpl {
      */
     public Long getComputerTotalCount(String search) throws DaoException {
         String req = COUNT_FROM_COMPUTER_WITH_COMPANY + ' ' + String.format(SEARCH_FILTER, search);
-        return DaoConnection.getCount(req);
+        return conn.getCount(req);
     }
 
     /**
@@ -72,7 +80,7 @@ public class ComputerDaoImpl {
      * @throws DaoException content couldn't be loaded
      */
     private Computer getComputerDetail(String queryFilter, String param) throws DaoException {
-        return DaoConnection.executeQuery((Connection conn) -> {
+        return conn.executeQuery((Connection conn) -> {
             PreparedStatement s = conn.prepareStatement(SELECT_FROM_COMPUTER_WITH_COMPANY + queryFilter);
             s.setString(1, param);
             ResultSet r = s.executeQuery();
@@ -112,7 +120,7 @@ public class ComputerDaoImpl {
 
         sb.append(String.format(" LIMIT %d,%d", start, page.getPageSize()));
 
-        return DaoConnection.executeSelectQuery(sb.toString(), new ComputerMapper());
+        return conn.executeSelectQuery(sb.toString(), new ComputerMapper());
     }
 
     // ########################## CREATE, UPDATE and DELETE #################
@@ -123,7 +131,7 @@ public class ComputerDaoImpl {
      * @throws DaoException content couldn't be loaded
      */
     public Long createComputer(Computer newComputer) throws DaoException {
-        return DaoConnection.executeQuery((Connection c) -> {
+        return conn.executeQuery((Connection c) -> {
             PreparedStatement s = c.prepareStatement(INSERT_INTO_COMPUTER_VALUES, Statement.RETURN_GENERATED_KEYS);
 
             s.setString(1, newComputer.getName());
@@ -152,7 +160,7 @@ public class ComputerDaoImpl {
      * @throws DaoException content couldn't be loaded
      */
     public void updateComputer(Computer c) throws DaoException {
-        DaoConnection.executeQuery((Connection conn) -> {
+        conn.executeQuery((Connection conn) -> {
             PreparedStatement s = conn.prepareStatement(
                     "update computer set name = ?, introduced = ?, discontinued = ?, company_id = ? where id = ?");
             s.setString(1, c.getName());
@@ -178,7 +186,7 @@ public class ComputerDaoImpl {
      * @throws DaoException content couldn't be loaded
      */
     public void deleteComputer(Long id) throws DaoException {
-        DaoConnection.executeQuery((Connection conn) -> {
+        conn.executeQuery((Connection conn) -> {
             try (Statement s = conn.createStatement()) {
                 s.executeUpdate("delete from computer where id = " + id);
             }
@@ -191,7 +199,7 @@ public class ComputerDaoImpl {
      * @throws DaoException content couldn't be loaded
      */
     public void deleteComputerByCompany(Long id) throws DaoException {
-        DaoConnection.executeQuery((Connection conn) -> {
+        conn.executeQuery((Connection conn) -> {
             try (PreparedStatement s = conn.prepareStatement(DELETE_FROM_COMPUTER_WHERE_COMPANY_ID)) {
                 s.setObject(1, id);
                 s.executeUpdate();
@@ -208,7 +216,7 @@ public class ComputerDaoImpl {
 
         String filter = ids.stream().map(number -> String.valueOf(number)).collect(Collectors.joining(","));
 
-        DaoConnection.executeQuery((Connection conn) -> {
+        conn.executeQuery((Connection conn) -> {
             try (Statement s = conn.createStatement()) {
                 s.executeUpdate("delete from computer where id in (" + filter + ")");
             }

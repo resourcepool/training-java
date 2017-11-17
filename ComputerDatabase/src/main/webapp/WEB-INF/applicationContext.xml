@@ -10,22 +10,78 @@
     http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
 
 	<!-- Service -->
-	<bean id="companyService" class="service.CompanyServiceImpl" lazy-init="true">
+	<bean id="companyService" class="service.CompanyServiceImpl"
+		lazy-init="true">
 		<constructor-arg>
 			<ref bean="companyDao" />
 		</constructor-arg>
 		<constructor-arg>
 			<ref bean="computerService" />
 		</constructor-arg>
+		<constructor-arg>
+			<ref bean="transaction" />
+		</constructor-arg>
 	</bean>
-	<bean id="computerService" class="service.ComputerServiceImpl" lazy-init="true">
+	<bean id="computerService" class="service.ComputerServiceImpl"
+		lazy-init="true">
 		<constructor-arg>
 			<ref bean="computerDao" />
 		</constructor-arg>
 	</bean>
 
 	<!-- Dao -->
-	<bean id="companyDao" class="persistence.CompanyDaoImpl"></bean>
-	<bean id="computerDao" class="persistence.ComputerDaoImpl"></bean>
+	<bean id="companyDao" class="persistence.CompanyDaoImpl">
+		<constructor-arg>
+			<ref bean="daoConnection" />
+		</constructor-arg>
+	</bean>
+	<bean id="computerDao" class="persistence.ComputerDaoImpl">
+		<constructor-arg>
+			<ref bean="daoConnection" />
+		</constructor-arg>
+	</bean>
 
+	<!-- DaoConnection -->
+	<bean id="daoConnection" class="persistence.DaoConnection">
+		<constructor-arg>
+			<ref bean="dataSource" />
+		</constructor-arg>
+		<constructor-arg>
+			<ref bean="transaction" />
+		</constructor-arg>
+	</bean>
+	<bean id="transaction" class="persistence.Transaction">
+		<constructor-arg>
+			<ref bean="dataSource" />
+		</constructor-arg>
+	</bean>
+
+	<!-- HikariCP configuration -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:config.properties"/>
+	</bean>
+
+	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+		<property name="poolName" value="springHikariCP" />
+		<property name="connectionTestQuery" value="SELECT 1" />
+		<property name="driverClassName" value="${driverClassName}" />
+		<property name="maximumPoolSize" value="${maximumPoolSize}" />
+		<property name="jdbcUrl" value="${jdbcUrl}" />
+
+		<property name="dataSourceProperties">
+			<props>
+				<prop key="user">${dataSource.user}</prop>
+				<prop key="password">${dataSource.password}</prop>
+				<prop key="cachePrepStmts">${dataSource.cachePrepStmts}</prop>
+				<prop key="prepStmtCacheSize">${dataSource.prepStmtCacheSize}</prop>
+				<prop key="prepStmtCacheSqlLimit">${dataSource.prepStmtCacheSqlLimit}</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- HIKARI Datasource (connection pool) -->
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"
+		destroy-method="close">
+		<constructor-arg ref="hikariConfig" />
+	</bean>
 </beans>

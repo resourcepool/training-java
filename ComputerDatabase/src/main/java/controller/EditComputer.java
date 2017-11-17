@@ -14,7 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import model.Company;
 import model.Computer;
@@ -43,9 +44,9 @@ public class EditComputer extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
-        ApplicationContext ac = (ApplicationContext) config.getServletContext().getAttribute("applicationContext");
-        this.companyService = (ICompanyService) ac.getBean("companyService");
-        this.computerService = (IComputerService) ac.getBean("computerService");
+        WebApplicationContext wc = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+        this.companyService = (ICompanyService) wc.getBean("companyService");
+        this.computerService = (IComputerService) wc.getBean("computerService");
     }
 
     /**

@@ -1,26 +1,35 @@
 package persistence;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+
+import javax.sql.DataSource;
 
 import persistence.exceptions.DaoException;
 
 public class Transaction {
 
     private static ThreadLocal<Connection> tconn = new ThreadLocal<Connection>();
+    private DataSource ds;
+
+    /**
+     * @param ds HikariDataSource
+     */
+    public Transaction(DataSource ds) {
+        this.ds = ds;
+    }
 
     /**
      * @return get current ThreadLocal Connection
      * @throws DaoException connection could't be opened
      */
-    public static Connection openTransaction() throws DaoException {
+    public Connection open() throws DaoException {
         if (tconn.get() == null) {
             try {
-                Connection conn = HikariPool.getConnection();
+                Connection conn = ds.getConnection();
                 conn.setAutoCommit(false);
                 tconn.set(conn);
-            } catch (SQLException | IOException e) {
+            } catch (SQLException e) {
                 throw new DaoException(e);
             }
         }
@@ -31,7 +40,7 @@ public class Transaction {
      * @param conn conn to commit, set auto-commit = true, and then release if needed
      * @throws DaoException failed to commit
      */
-    public static void releaseTransaction(Connection conn) throws DaoException {
+    public void release(Connection conn) throws DaoException {
 
         try {
             if (conn.isClosed() || tconn.get() != conn) {
@@ -48,7 +57,7 @@ public class Transaction {
     /**
      * @return saved transaction or null
      */
-    public static Connection getCurrent() {
+    public Connection getCurrent() {
         return tconn.get();
     }
 
@@ -58,7 +67,7 @@ public class Transaction {
      * @param conn the connection to check
      * @return true if the connection is the currently open Transaction for this thread
      */
-    public static boolean isOpen(Connection conn) {
+    public boolean isOpen(Connection conn) {
         return conn != null && conn == tconn.get();
     }
 }

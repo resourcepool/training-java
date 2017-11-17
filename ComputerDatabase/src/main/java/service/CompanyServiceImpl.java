@@ -17,16 +17,19 @@ public class CompanyServiceImpl implements ICompanyService {
     private static final Logger       LOGGER = LoggerFactory.getLogger(CompanyServiceImpl.class);
     private CompanyDaoImpl            companyDao;
     private IComputerService          computerService;
+    private Transaction tr;
 
     /**
      * Private ctor.
      *
      * @param dao CompanyDao to access Data
      * @param computerService computerService to handle transactions
+     * @param transaction transaction
      */
-    private CompanyServiceImpl(CompanyDaoImpl dao, IComputerService computerService) {
+    private CompanyServiceImpl(CompanyDaoImpl dao, IComputerService computerService, Transaction transaction) {
         this.companyDao = dao;
         this.computerService = computerService;
+        this.tr = transaction;
     }
 
     /**
@@ -74,12 +77,12 @@ public class CompanyServiceImpl implements ICompanyService {
     @Override
     public void delete(Long id) throws DaoException {
         try {
-            Connection conn = Transaction.openTransaction();
+            Connection conn = tr.open();
 
             computerService.deleteComputerByCompany(id);
             companyDao.deleteCompany(id);
 
-            Transaction.releaseTransaction(conn);
+            tr.release(conn);
         } catch (DaoException e) {
             String msg = "failed to delete : " + e.getMessage();
             LOGGER.error(msg);
