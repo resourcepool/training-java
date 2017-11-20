@@ -1,4 +1,4 @@
-package service;
+package service.impl;
 
 import java.util.List;
 
@@ -10,6 +10,8 @@ import model.pages.Page;
 import persistence.IComputerDao;
 import persistence.exceptions.DaoException;
 import persistence.querycommands.PageQuery;
+import service.IComputerService;
+import service.PageRequest;
 
 public class ComputerServiceImpl implements IComputerService {
 
@@ -31,7 +33,7 @@ public class ComputerServiceImpl implements IComputerService {
      * @throws DaoException content couldn't be loaded
      */
     @Override
-    public Computer getComputerDetail(Long id) throws DaoException {
+    public Computer getDetail(Long id) throws DaoException {
         try {
             return computerDao.getComputerDetail(id);
         } catch (DaoException e) {
@@ -46,7 +48,7 @@ public class ComputerServiceImpl implements IComputerService {
      * @throws DaoException content couldn't be loaded
      */
     @Override
-    public Long createComputer(Computer newComputer) throws DaoException {
+    public Long create(Computer newComputer) throws DaoException {
         try {
             return computerDao.createComputer(newComputer);
         } catch (DaoException e) {
@@ -61,7 +63,7 @@ public class ComputerServiceImpl implements IComputerService {
      * @throws DaoException content couldn't be loaded
      */
     @Override
-    public void updateComputer(Computer c) throws DaoException {
+    public void update(Computer c) throws DaoException {
         try {
             computerDao.updateComputer(c);
         } catch (DaoException e) {
@@ -75,7 +77,7 @@ public class ComputerServiceImpl implements IComputerService {
      * @throws DaoException content couldn't be loaded
      */
     @Override
-    public void deleteComputer(Long id) throws DaoException {
+    public void delete(Long id) throws DaoException {
         computerDao.deleteComputer(id);
     }
 
@@ -84,7 +86,7 @@ public class ComputerServiceImpl implements IComputerService {
      * @throws DaoException content couldn't be loaded
      */
     @Override
-    public void deleteComputers(List<Long> ids) throws DaoException {
+    public void delete(List<Long> ids) throws DaoException {
         try {
             computerDao.deleteComputers(ids);
 
@@ -96,16 +98,16 @@ public class ComputerServiceImpl implements IComputerService {
     }
 
     /**
-     * @param pageBuilder page request
+     * @param request page request
      * @return the first page of the full computer preview list from DB
      * @throws DaoException content couldn't be loaded
      */
     @Override
-    public Page<Computer> loadPage(PageBuilder<Computer> pageBuilder) {
+    public Page<Computer> loadPage(PageRequest<Computer> request) {
         try {
             PageQuery<Computer> pageQuery = (Page<Computer> page) -> computerDao.get(page);
-            Long size = getCount(pageBuilder.getSearch());
-            return pageBuilder.build(pageQuery, size).load();
+            Long size = getCount(request.getSearch());
+            return request.build(pageQuery, size).load();
 
         } catch (DaoException e) {
             LOGGER.error(e.getMessage());
@@ -127,8 +129,8 @@ public class ComputerServiceImpl implements IComputerService {
      * @throws DaoException deletion failed
      */
     @Override
-    public void deleteComputerByCompany(Long id) throws DaoException {
-        computerDao.deleteComputerByCompany(id);
+    public void deleteByCompany(Long id) throws DaoException {
+        computerDao.deleteByCompany(id);
     }
 
 }

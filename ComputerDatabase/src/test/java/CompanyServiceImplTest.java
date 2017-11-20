@@ -12,7 +12,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import persistence.CompanyDaoImpl;
 import persistence.exceptions.DaoException;
-import service.CompanyServiceImpl;
+import service.impl.CompanyServiceImpl;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CompanyServiceImplTest {

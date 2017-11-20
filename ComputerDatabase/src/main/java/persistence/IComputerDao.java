@@ -58,7 +58,7 @@ public interface IComputerDao {
      * @param id id of the computer to delete
      * @throws DaoException content couldn't be loaded
      */
-    void deleteComputerByCompany(Long id) throws DaoException;
+    void deleteByCompany(Long id) throws DaoException;
 
     /**
      * @param ids ids to delete

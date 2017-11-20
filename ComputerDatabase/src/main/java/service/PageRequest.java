@@ -8,7 +8,7 @@ import model.pages.Page;
 import persistence.querycommands.PageQuery;
 import validators.ValidationUtils;
 
-public class PageBuilder<T> {
+public class PageRequest<T> {
     private static final Long DEFAULT_PAGESIZE      = 20L;
     private static final Long DEFAULT_STARTING_PAGE = 1L;
 
@@ -21,14 +21,14 @@ public class PageBuilder<T> {
     /**
      * default ctor.
      */
-    public PageBuilder() {
+    public PageRequest() {
     }
 
     /**
      * @param req req
      * @return this
      */
-    public PageBuilder<T> with(HttpServletRequest req) {
+    public PageRequest<T> with(HttpServletRequest req) {
         Long pageSize = ValidationUtils.retrieveLong(req.getParameter("pagination"), DEFAULT_PAGESIZE);
         Long pageNumber = ValidationUtils.retrieveLong(req.getParameter("page"), DEFAULT_STARTING_PAGE);
         this.atPage(pageNumber);
@@ -43,7 +43,7 @@ public class PageBuilder<T> {
      * @param parameter order as String ASC/DESC
      * @return this
      */
-    private PageBuilder<T> withOrder(String parameter) {
+    private PageRequest<T> withOrder(String parameter) {
         if (parameter == null || parameter.isEmpty()) {
             return this;
         }
@@ -56,7 +56,7 @@ public class PageBuilder<T> {
      * @param parameter sort column (see ComputerMapper)
      * @return this
      */
-    private PageBuilder<T> withSort(String parameter) {
+    private PageRequest<T> withSort(String parameter) {
         if (parameter == null || parameter.isEmpty()) {
             return this;
         }
@@ -68,7 +68,7 @@ public class PageBuilder<T> {
      * @param parameter search String
      * @return this
      */
-    private PageBuilder<T> withSearch(String parameter) {
+    private PageRequest<T> withSearch(String parameter) {
         if (parameter == null || parameter.isEmpty()) {
             return this;
         }
@@ -81,7 +81,7 @@ public class PageBuilder<T> {
      * @param pageSize pageSize
      * @return this
      */
-    private PageBuilder<T> withPageSize(Long pageSize) {
+    private PageRequest<T> withPageSize(Long pageSize) {
         this.pageSize = Math.min(pageSize, 150L);
         return this;
     }
@@ -90,7 +90,7 @@ public class PageBuilder<T> {
      * @param pageNumber pageNumber
      * @return this
      */
-    private PageBuilder<T> atPage(Long pageNumber) {
+    private PageRequest<T> atPage(Long pageNumber) {
         this.nbPage = pageNumber;
         return this;
     }

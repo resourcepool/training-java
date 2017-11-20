@@ -20,7 +20,7 @@ import model.pages.Page;
 import persistence.CompanyDaoImpl;
 import persistence.exceptions.DaoException;
 import persistence.querycommands.PageQuery;
-import service.CompanyServiceImpl;
+import service.impl.CompanyServiceImpl;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PageLoadingTest {

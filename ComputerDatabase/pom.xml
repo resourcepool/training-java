@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>Sebeq33</groupId>
+	<groupId>com.fr.ebiz.sebeq33</groupId>
 	<artifactId>ComputerDatabase</artifactId>
-	<version>1.3</version>
+	<version>1.6.1-SNAPSHOT</version>
 	<description>A 2-month fulltime java training around an incremental project. Java / JSP / Servlet / Maven / JUnit / Mockito / Selenium / Spring / Hibernate / JPA / Hikari CP / Jackson / Spring MVC / Spring Security / Gatling </description>
-	<name>ComputerDatabase</name>
+	<name>computer-database</name>
 	<organization>
 		<name>EBusiness Information</name>
 	</organization>
@@ -101,6 +101,7 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${spring.version}</version>
+			<!-- @ToSee empty99 from logback to retrieve/resolve empty dependancy without having to exclude -->
 			<exclusions>
 				<exclusion>
 					<groupId>commons-logging</groupId>
@@ -143,35 +144,7 @@
 			<version>${mockito.version}</version>
 			<scope>test</scope>
 		</dependency>
-
-
 	</dependencies>
-
-	<!-- <build> -->
-	<!-- <plugins> -->
-	<!-- <plugin> -->
-	<!-- <groupId>org.apache.maven.plugins</groupId> -->
-	<!-- <artifactId>maven-checkstyle-plugin</artifactId> -->
-	<!-- <version>2.17</version> -->
-	<!-- <executions> -->
-	<!-- <execution> -->
-	<!-- <id>validate</id> -->
-	<!-- <phase>validate</phase> -->
-	<!-- <configuration> -->
-	<!-- <configLocation>checkstyle/checkstyle.xml</configLocation> -->
-	<!-- <encoding>UTF-8</encoding> -->
-	<!-- <consoleOutput>true</consoleOutput> -->
-	<!-- <failsOnError>true</failsOnError> -->
-	<!-- <linkXRef>false</linkXRef> -->
-	<!-- </configuration> -->
-	<!-- <goals> -->
-	<!-- <goal>check</goal> -->
-	<!-- </goals> -->
-	<!-- </execution> -->
-	<!-- </executions> -->
-	<!-- </plugin> -->
-	<!-- </plugins> -->
-	<!-- </build> -->
 
 	<build>
 		<plugins>
@@ -185,12 +158,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<distributionManagement>
-		<repository>
-			<id>tomcat8</id>
-			<name>DeployPath</name>
-			<url>.metadata/.plugins/org.eclipse.wst.server.core/tmp0</url>
-		</repository>
-	</distributionManagement>
 </project>

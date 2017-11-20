@@ -20,7 +20,7 @@ import model.Computer;
 import model.pages.Page;
 import service.ICompanyService;
 import service.IComputerService;
-import service.PageBuilder;
+import service.PageRequest;
 import validators.ValidationUtils;
 
 @WebServlet
@@ -113,7 +113,7 @@ public class Dashboard extends HttpServlet {
         Boolean result = ValidationUtils.isLongList(computerSelection, ids);
 
         if (result) {
-            computerService.deleteComputers(ids);
+            computerService.delete(ids);
             RequestUtils.showMsg(req, true, "Success, " + ids.size() + " computer ids deleted");
             req.setAttribute("page", 1);
         } else {
@@ -129,7 +129,7 @@ public class Dashboard extends HttpServlet {
      */
     private void loadDashboard(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        PageBuilder<Computer> builder = new PageBuilder<Computer>();
+        PageRequest<Computer> builder = new PageRequest<Computer>();
         Page<Computer> page = computerService.loadPage(builder.with(req));
 
         if (page != null) {

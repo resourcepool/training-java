@@ -11,6 +11,20 @@
 		<welcome-file>dashboard</welcome-file>
 	</welcome-file-list>
 
+
+	<!-- ################################## SPRING ######################################## -->
+
+ 	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/applicationContext.xml</param-value>
+    </context-param>
+ 
+    <listener>
+        <listener-class>
+    		org.springframework.web.context.ContextLoaderListener
+        </listener-class>
+    </listener>
+    
 	<!-- ################################## SERVLET ######################################## -->
 
 	<servlet>
@@ -35,11 +49,11 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>AddComputer</servlet-name>
-		<url-pattern>/addComputer</url-pattern>
+		<url-pattern>/add-computer</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>EditComputer</servlet-name>
-		<url-pattern>/editComputer</url-pattern>
+		<url-pattern>/edit-computer</url-pattern>
 	</servlet-mapping>
 	
 	<!-- ################################## ERROR PAGES ######################################## -->
@@ -61,7 +75,7 @@
 		<location>/WEB-INF/pages/500.jsp</location>
 	</error-page>
 
-	<!-- ################################## DISABLE JAVA in JSP ######################################## -->
+	<!-- ################################## DISABLE JAVA Scripts in JSP ######################################## -->
 
 	<jsp-config>
 		<jsp-property-group>
@@ -69,30 +83,5 @@
 			<scripting-invalid>true</scripting-invalid>
 		</jsp-property-group>
 	</jsp-config>
-
-<!-- <jsp-config> -->
-<!--    <jsp-property-group> -->
-<!--      <display-name>Display</display-name> -->
-<!--      <url-pattern>*.jsp</url-pattern> -->
-<!--      <el-ignored>false</el-ignored> -->
-<!--      <scripting-invalid>false</scripting-invalid> -->
-<!--      <is-xml>false</is-xml> -->
-<!--      <include-prelude>/template/header.jsp</include-prelude>header -->
-<!--      <include-coda>/template/footer.jsp</include-coda>footer -->
-<!--    </jsp-property-group> -->
-<!--  </jsp-config> -->
-
-	<!-- ################################## SPRING ######################################## -->
-
-	 <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/applicationContext*.xml</param-value>
-    </context-param>
- 
-    <listener>
-        <listener-class>
-    		org.springframework.web.context.ContextLoaderListener
-        </listener-class>
-    </listener>
  
 </web-app>

@@ -13,7 +13,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import model.Computer;
 import persistence.ComputerDaoImpl;
 import persistence.exceptions.DaoException;
-import service.ComputerServiceImpl;
+import service.impl.ComputerServiceImpl;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ComputerServiceImplTest {
@@ -38,7 +38,7 @@ public class ComputerServiceImplTest {
      */
     @Test
     public void testGetComputerList() throws DaoException {
-        assertNotNull(service.getComputerDetail(1L));
+        assertNotNull(service.getDetail(1L));
         verify(computerDao, times(1)).getComputerDetail(1L);
     }
 }

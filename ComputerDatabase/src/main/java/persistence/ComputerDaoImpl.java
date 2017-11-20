@@ -185,7 +185,7 @@ public class ComputerDaoImpl implements IComputerDao {
      * @throws DaoException content couldn't be loaded
      */
     @Override
-    public void deleteComputerByCompany(Long id) throws DaoException {
+    public void deleteByCompany(Long id) throws DaoException {
         conn.executeQuery((Connection conn) -> {
             try (PreparedStatement s = conn.prepareStatement(DELETE_FROM_COMPUTER_WHERE_COMPANY_ID)) {
                 s.setObject(1, id);

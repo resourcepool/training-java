@@ -27,8 +27,9 @@ import validators.ValidationUtils;
 @WebServlet
 public class AddComputer extends HttpServlet {
 
+    private static final String JSP_PAGE = "/WEB-INF/pages/computer_form.jsp";
     private static final long   serialVersionUID = -8465135918905858327L;
-    private static final Logger LOGGER           = LoggerFactory.getLogger(Dashboard.class);
+    private static final Logger LOGGER           = LoggerFactory.getLogger(AddComputer.class);
 
     private ICompanyService     companyService;
     private IComputerService    computerService;
@@ -56,7 +57,7 @@ public class AddComputer extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         loadCompanies(req);
-        req.getRequestDispatcher("/WEB-INF/pages/computerForm.jsp").forward(req, resp);
+        req.getRequestDispatcher(JSP_PAGE).forward(req, resp);
     }
 
     /**
@@ -99,12 +100,12 @@ public class AddComputer extends HttpServlet {
         } else {
 
             Computer c = new Computer(name, v.getIntroduced(), v.getDiscontinued(), v.getCompanyId());
-            Long id = computerService.createComputer(c);
+            Long id = computerService.create(c);
             RequestUtils.showMsg(req, true, "SUCCESS: Computer \"" + name + "\" successfully created (id=" + id + ")");
 
         }
 
         loadCompanies(req);
-        req.getRequestDispatcher("/WEB-INF/pages/computerForm.jsp").forward(req, resp);
+        req.getRequestDispatcher(JSP_PAGE).forward(req, resp);
     }
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import mapper.ComputerMapping;
 import persistence.exceptions.DaoException;
 import persistence.querycommands.PageQuery;
-import service.PageBuilder;
+import service.PageRequest;
 
 public class Page<T> {
 
@@ -26,7 +26,7 @@ public class Page<T> {
      * @param total total of elem
      * @param pageBuilder builder
      */
-    public Page(PageQuery<T> pageQuery, Long total, PageBuilder<T> pageBuilder) {
+    public Page(PageQuery<T> pageQuery, Long total, PageRequest<T> pageBuilder) {
         this(pageQuery, total);
         this.nbPage = pageBuilder.getNbPage();
         this.pageSize = pageBuilder.getPageSize();

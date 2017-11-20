@@ -1,4 +1,4 @@
-package service;
+package service.impl;
 
 import java.util.List;
 
@@ -9,6 +9,8 @@ import model.Company;
 import model.pages.Page;
 import persistence.ICompanyDao;
 import persistence.exceptions.DaoException;
+import service.ICompanyService;
+import service.IComputerService;
 
 public class CompanyServiceImpl implements ICompanyService {
 
@@ -74,7 +76,7 @@ public class CompanyServiceImpl implements ICompanyService {
     public void delete(Long id) throws DaoException {
 
         try {
-            computerService.deleteComputerByCompany(id);
+            computerService.deleteByCompany(id);
             companyDao.deleteCompany(id);
         } catch (DaoException e) {
             String msg = "failed to delete : " + e.getMessage();

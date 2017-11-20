@@ -27,7 +27,7 @@ import validators.ValidationUtils;
 @WebServlet
 public class EditComputer extends HttpServlet {
 
-    private static final String COMPUTER_FORM_JSP = "/WEB-INF/pages/computerForm.jsp";
+    private static final String COMPUTER_FORM_JSP = "/WEB-INF/pages/computer_form.jsp";
     private static final String ID_IS_NOT_VALID = "id is not valid";
     private static final long serialVersionUID = -7371267190245615780L;
     private static final Logger LOGGER = LoggerFactory.getLogger(Dashboard.class);
@@ -97,7 +97,7 @@ public class EditComputer extends HttpServlet {
         } else {
 
             Computer c = new Computer(v.getId(), name, v.getIntroduced(), v.getDiscontinued(), v.getCompanyId());
-            computerService.updateComputer(c);
+            computerService.update(c);
             RequestUtils.showMsg(req, true, "SUCCESS: Computer \"" + name + "\" successfully edited (id=" + v.getId() + ")");
 
         }
@@ -132,7 +132,7 @@ public class EditComputer extends HttpServlet {
         }
 
         Long id = Long.parseLong(idStr);
-        Computer c = computerService.getComputerDetail(id);
+        Computer c = computerService.getDetail(id);
         RequestUtils.putBackAttributes(req, id, c.getName(), c.getIntroduced(), c.getDiscontinued(), c.getCompany().getId());
 
         return true;
