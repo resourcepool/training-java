@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import model.Computer;
 import model.pages.Page;
@@ -13,6 +15,7 @@ import persistence.querycommands.PageQuery;
 import service.IComputerService;
 import service.PageRequest;
 
+@Service("computerService")
 public class ComputerService implements IComputerService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
@@ -23,6 +26,7 @@ public class ComputerService implements IComputerService {
      *
      * @param dao CompanyDao to access Data
      */
+    @Autowired
     private ComputerService(IComputerDao dao) {
         computerDao = dao;
     }

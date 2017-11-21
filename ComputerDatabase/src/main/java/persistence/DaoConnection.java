@@ -7,18 +7,23 @@ import java.sql.Statement;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.springframework.stereotype.Component;
 
 import mapper.IResultMapper;
 import persistence.querycommands.QueryCommand;
 
+@Component
 public class DaoConnection {
     private DataSource ds;
 
     /**
      * @param ds HikariDatasource
      */
-    public DaoConnection(DataSource ds) {
+    @Autowired
+    public DaoConnection(@Qualifier("dataSource") DataSource ds) {
         this.ds = ds;
     }
 

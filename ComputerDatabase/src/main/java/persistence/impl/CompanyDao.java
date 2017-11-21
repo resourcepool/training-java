@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import mapper.CompanyMapper;
 import model.Company;
 import model.pages.Page;
@@ -14,6 +17,7 @@ import persistence.ICompanyDao;
 import persistence.querycommands.PageQuery;
 import service.PageUtils;
 
+@Repository("companyDao")
 public class CompanyDao implements ICompanyDao {
 
     private static final String DELETE_FROM_COMPANY_WHERE_ID = "delete from company where id = ?";
@@ -26,6 +30,7 @@ public class CompanyDao implements ICompanyDao {
     /**
      * @param conn Dao Connection Manager
      */
+    @Autowired
     public CompanyDao(DaoConnection conn) {
         this.conn = conn;
     }

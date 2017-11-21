@@ -2,55 +2,20 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+    http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
     http://www.springframework.org/schema/aop
-    http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+    http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
     http://www.springframework.org/schema/tx
-    http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
+    http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<!-- #### SERVICES #########################################-->
-	<bean id="companyService" class="service.impl.CompanyService"
-		lazy-init="true">
-		<constructor-arg>
-			<ref bean="companyDao" />
-		</constructor-arg>
-		<constructor-arg>
-			<ref bean="computerService" />
-		</constructor-arg>
-	</bean>
-	<bean id="computerService" class="service.impl.ComputerService"
-		lazy-init="true">
-		<constructor-arg>
-			<ref bean="computerDao" />
-		</constructor-arg>
-	</bean>
-
-
-
-	<!-- #### DAOs ######################################### -->
-	<bean id="companyDao" class="persistence.impl.CompanyDao">
-		<constructor-arg>
-			<ref bean="daoConnection" />
-		</constructor-arg>
-	</bean>
-	<bean id="computerDao" class="persistence.impl.ComputerDao">
-		<constructor-arg>
-			<ref bean="daoConnection" />
-		</constructor-arg>
-	</bean>
-
-
-
-	<!-- #### DaoConnection ######################################### -->
-	<bean id="daoConnection" class="persistence.DaoConnection">
-		<constructor-arg>
-			<ref bean="dataSource" />
-		</constructor-arg>
-	</bean>
+	<context:component-scan base-package="persistence" />
+	<context:component-scan base-package="persistence.impl" />
+	<context:component-scan base-package="service.impl" />
 	
-	
-
 	<!-- #### TRANSACTIONS ######################################### -->
 	<aop:config>
 		<aop:pointcut id="computerServiceOperation" expression="execution(* service.IComputerService.*(..))" />
@@ -78,7 +43,6 @@
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-
 
 
 	<!-- #### HikariCP configuration ######################################### -->

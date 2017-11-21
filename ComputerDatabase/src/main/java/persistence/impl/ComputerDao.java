@@ -10,6 +10,9 @@ import java.sql.Types;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import mapper.ComputerMapper;
 import model.Computer;
 import model.pages.Page;
@@ -17,6 +20,7 @@ import persistence.DaoConnection;
 import persistence.IComputerDao;
 import service.PageUtils;
 
+@Repository("computerDao")
 public class ComputerDao implements IComputerDao {
 
     private static final String SEARCH_FILTER                         = "where lower(CO.name) like '%%%1$s%%' or lower(CA.name) like '%%%1$s%%'";
@@ -32,6 +36,7 @@ public class ComputerDao implements IComputerDao {
     /**
      * @param conn Dao Connection Manager
      */
+    @Autowired
     public ComputerDao(DaoConnection conn) {
         this.conn = conn;
     }
