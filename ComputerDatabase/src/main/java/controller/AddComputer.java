@@ -15,10 +15,10 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import model.Company;
 import model.Computer;
+import model.ComputerDto;
 import service.ICompanyService;
 import service.IComputerService;
 import validators.ComputerValidator;
-import validators.ValidationUtils;
 
 @WebServlet
 public class AddComputer extends HttpServlet {
@@ -72,23 +72,20 @@ public class AddComputer extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String name = req.getParameter(ValidationUtils.COMPUTER_NAME);
-        String introduced = req.getParameter(ValidationUtils.INTRODUCED);
-        String discontinued = req.getParameter(ValidationUtils.DISCONTINUED);
-        String companyId = req.getParameter(ValidationUtils.COMPANY_ID);
-
         ComputerValidator v = new ComputerValidator();
-        if (!v.validate(name, introduced, discontinued, companyId)) {
+        ComputerDto dto = new ComputerDto(req);
 
-            RequestUtils.putBackAttributes(req, name, introduced, discontinued, companyId);
+        if (!v.validate(dto)) {
+
+            RequestUtils.putBackAttributes(req, dto);
             RequestUtils.showMsg(req, false, "Computer cannot be added, ");
             req.setAttribute("errors", v.getErrors());
 
         } else {
 
-            Computer c = new Computer(name, v.getIntroduced(), v.getDiscontinued(), v.getCompanyId());
+            Computer c = new Computer(dto.getName(), v.getIntroduced(), v.getDiscontinued(), v.getCompanyId());
             computerService.create(c);
-            RequestUtils.showMsg(req, true, "SUCCESS: Computer \"" + name + "\" successfully created (id=" + c.getId() + ")");
+            RequestUtils.showMsg(req, true, "SUCCESS: Computer \"" + c.getName() + "\" successfully created (id=" + c.getId() + ")");
 
         }
 

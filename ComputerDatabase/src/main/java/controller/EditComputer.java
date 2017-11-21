@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -13,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import model.Company;
 import model.Computer;
+import model.ComputerDto;
 import service.ICompanyService;
 import service.IComputerService;
 import validators.ComputerValidator;
@@ -58,7 +57,6 @@ public class EditComputer extends HttpServlet {
             return;
         }
 
-        loadCompanies(req);
         loadPage(req, resp);
     }
 
@@ -71,28 +69,22 @@ public class EditComputer extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String idStr = req.getParameter(ValidationUtils.ID);
-        String name = req.getParameter(ValidationUtils.COMPUTER_NAME);
-        String introducedStr = req.getParameter(ValidationUtils.INTRODUCED);
-        String discontinuedStr = req.getParameter(ValidationUtils.DISCONTINUED);
-        String companyIdStr = req.getParameter(ValidationUtils.COMPANY_ID);
-
         ComputerValidator v = new ComputerValidator();
-        if (!v.validate(idStr, name, introducedStr, discontinuedStr, companyIdStr)) {
+        ComputerDto dto = new ComputerDto(req);
+        if (!v.validate(dto)) {
 
             RequestUtils.showMsg(req, false, "Computer cannot be edited, ");
             req.setAttribute("errors", v.getErrors());
 
         } else {
 
-            Computer c = new Computer(v.getId(), name, v.getIntroduced(), v.getDiscontinued(), v.getCompanyId());
+            Computer c = new Computer(v.getId(), dto.getName(), v.getIntroduced(), v.getDiscontinued(), v.getCompanyId());
             computerService.update(c);
-            RequestUtils.showMsg(req, true, "SUCCESS: Computer \"" + name + "\" successfully edited (id=" + v.getId() + ")");
+            RequestUtils.showMsg(req, true, "SUCCESS: Computer \"" + c.getName() + "\" successfully edited (id=" + v.getId() + ")");
 
         }
 
-        RequestUtils.putBackAttributes(req, name, introducedStr, discontinuedStr, companyIdStr);
-        loadCompanies(req);
+        RequestUtils.putBackAttributes(req, dto);
         loadPage(req, resp);
     }
 
@@ -104,6 +96,8 @@ public class EditComputer extends HttpServlet {
      * @throws IOException could not be loaded
      */
     private void loadPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        loadCompanies(req);
         req.setAttribute("edit", true);
         req.getRequestDispatcher(COMPUTER_FORM_JSP).forward(req, resp);
     }
@@ -122,7 +116,7 @@ public class EditComputer extends HttpServlet {
 
         Long id = Long.parseLong(idStr);
         Computer c = computerService.getDetail(id);
-        RequestUtils.putBackAttributes(req, id, c.getName(), c.getIntroduced(), c.getDiscontinued(), c.getCompany().getId());
+        RequestUtils.putAttributes(req, id, c.getName(), c.getIntroduced(), c.getDiscontinued(), c.getCompany().getId());
 
         return true;
     }
@@ -131,8 +125,7 @@ public class EditComputer extends HttpServlet {
      * @param req servletRequest
      */
     private void loadCompanies(HttpServletRequest req) {
-        List<Company> companies = companyService.getList();
-        req.setAttribute("companies", companies);
+        req.setAttribute("companies", companyService.getList());
     }
 
 }

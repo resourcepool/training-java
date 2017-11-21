@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 
 import javax.servlet.http.HttpServletRequest;
 
+import model.ComputerDto;
 import model.pages.Page;
 import validators.ValidationUtils;
 
@@ -22,7 +23,7 @@ public class RequestUtils {
      * @param discontinued discontinued
      * @param companyId idCompany
      */
-    public static void putBackAttributes(HttpServletRequest req, Long id, String name, LocalDate introduced,
+    public static void putAttributes(HttpServletRequest req, Long id, String name, LocalDate introduced,
             LocalDate discontinued, Long companyId) {
         req.setAttribute("id", id);
         req.setAttribute(ValidationUtils.COMPUTER_NAME, name);
@@ -34,18 +35,21 @@ public class RequestUtils {
     }
 
     /**
-     * @param req Request to fill for next .jsp form, keeping the values
-     * @param name name
-     * @param introduced introduced
-     * @param discontinued discontinued
-     * @param companyId companyId
+     * @param req req to fill
+     * @param dto dto to use
      */
-    public static void putBackAttributes(HttpServletRequest req, String name, String introduced, String discontinued,
-            String companyId) {
-        req.setAttribute(ValidationUtils.COMPUTER_NAME, name);
-        req.setAttribute(ValidationUtils.INTRODUCED, introduced);
-        req.setAttribute(ValidationUtils.DISCONTINUED, discontinued);
-        req.setAttribute(ValidationUtils.COMPANY_ID, companyId.equals("--") ? null : companyId);
+    public static void putBackAttributes(HttpServletRequest req, ComputerDto dto) {
+
+        if (dto.getId() != null) {
+            req.setAttribute(ValidationUtils.ID, dto.getId());
+        }
+
+        req.setAttribute(ValidationUtils.COMPUTER_NAME, dto.getName());
+        req.setAttribute(ValidationUtils.INTRODUCED, dto.getIntroduced());
+        req.setAttribute(ValidationUtils.DISCONTINUED, dto.getDiscontinued());
+
+        String companyId = dto.getCompanyId();
+        req.setAttribute(ValidationUtils.COMPANY_ID, companyId == null || companyId.equals("--") ? null : companyId);
     }
 
     /**
@@ -99,4 +103,6 @@ public class RequestUtils {
         req.setAttribute("sortparams", sortParams);
         req.setAttribute("pageparams", pageParam.toString());
     }
+
+
 }

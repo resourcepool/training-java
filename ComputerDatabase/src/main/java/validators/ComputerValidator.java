@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+import model.ComputerDto;
+
 public class ComputerValidator {
 
     private static final String NO_COMPANY       = "--";
@@ -14,6 +16,17 @@ public class ComputerValidator {
     private LocalDate           discontinuedDate;
     private Long                companyId        = null;
     private Long                id               = null;
+
+    /**
+     * @param dto to check, check id if != null
+     * @return the content given is valid, the different fields have been set.
+     */
+    public boolean validate(ComputerDto dto) {
+        if (dto.getId() == null) {
+            return validate(dto.getName(), dto.getIntroduced(), dto.getDiscontinued(), dto.getCompanyId());
+        }
+        return validate(dto.getId(), dto.getName(), dto.getIntroduced(), dto.getDiscontinued(), dto.getCompanyId());
+    }
 
     /**
      * validate a computer (id too).
@@ -104,6 +117,14 @@ public class ComputerValidator {
         return errors.isEmpty();
     }
 
+    /**
+     * @param s param to check
+     * @return true if null or empty
+     */
+    private Boolean isEmptyOrNull(String s) {
+        return s == null || s.isEmpty();
+    }
+
     public LocalDate getIntroduced() {
         return introducedDate;
     }
@@ -116,14 +137,6 @@ public class ComputerValidator {
         return companyId;
     }
 
-    /**
-     * @param s param to check
-     * @return true if null or empty
-     */
-    private Boolean isEmptyOrNull(String s) {
-        return s == null || s.isEmpty();
-    }
-
     public Map<String, String> getErrors() {
         return errors;
     }
@@ -131,5 +144,6 @@ public class ComputerValidator {
     public Long getId() {
         return id;
     }
+
 
 }

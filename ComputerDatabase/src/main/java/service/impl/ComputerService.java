@@ -81,7 +81,6 @@ public class ComputerService implements IComputerService {
     public void delete(Long id) {
         try {
             computerDao.deleteComputer(id);
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
