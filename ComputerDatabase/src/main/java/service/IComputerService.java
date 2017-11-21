@@ -15,9 +15,8 @@ public interface IComputerService {
 
     /**
      * @param newComputer complete computer to create, without id
-     * @return the id of the created computer
      */
-    Long create(Computer newComputer);
+    void create(Computer newComputer);
 
     /**
      * @param c full computer to update with id != null

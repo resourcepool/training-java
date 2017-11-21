@@ -87,8 +87,8 @@ public class AddComputer extends HttpServlet {
         } else {
 
             Computer c = new Computer(name, v.getIntroduced(), v.getDiscontinued(), v.getCompanyId());
-            Long id = computerService.create(c);
-            RequestUtils.showMsg(req, true, "SUCCESS: Computer \"" + name + "\" successfully created (id=" + id + ")");
+            computerService.create(c);
+            RequestUtils.showMsg(req, true, "SUCCESS: Computer \"" + name + "\" successfully created (id=" + c.getId() + ")");
 
         }
 

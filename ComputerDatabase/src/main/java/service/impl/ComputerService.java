@@ -44,13 +44,13 @@ public class ComputerService implements IComputerService {
 
     /**
      * @param newComputer complete computer to create, without id
-     * @return the id of the created computer
      * @throws SQLException content couldn't be loaded
      */
     @Override
-    public Long create(Computer newComputer) {
+    public void create(Computer newComputer) {
         try {
-            return computerDao.createComputer(newComputer);
+            Long id = computerDao.createComputer(newComputer);
+            newComputer.setId(id);
         } catch (SQLException e) {
             String msg = "Computer cannot be created, reason \"" + e.getMessage() + "\"";
             LOGGER.error(msg);
