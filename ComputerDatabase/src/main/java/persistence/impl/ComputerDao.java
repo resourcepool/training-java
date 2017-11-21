@@ -20,7 +20,7 @@ import persistence.DaoConnection;
 import persistence.IComputerDao;
 import service.PageUtils;
 
-@Repository("computerDao")
+@Repository
 public class ComputerDao implements IComputerDao {
 
     private static final String SEARCH_FILTER                         = "where lower(CO.name) like '%%%1$s%%' or lower(CA.name) like '%%%1$s%%'";

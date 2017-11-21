@@ -17,7 +17,7 @@ import persistence.ICompanyDao;
 import persistence.querycommands.PageQuery;
 import service.PageUtils;
 
-@Repository("companyDao")
+@Repository
 public class CompanyDao implements ICompanyDao {
 
     private static final String DELETE_FROM_COMPANY_WHERE_ID = "delete from company where id = ?";

@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -26,8 +28,10 @@ public class EditComputer extends HttpServlet {
     private static final String ID_IS_NOT_VALID = "id is not valid";
     private static final long serialVersionUID = -7371267190245615780L;
 
-    private ICompanyService companyService;
+    @Autowired
     private IComputerService computerService;
+    @Autowired
+    private ICompanyService companyService;
 
     /**
      * @param config ServletConfig
@@ -38,9 +42,10 @@ public class EditComputer extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
-        WebApplicationContext wc = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-        this.companyService = (ICompanyService) wc.getBean("companyService");
-        this.computerService = (IComputerService) wc.getBean("computerService");
+        WebApplicationContext wc = WebApplicationContextUtils
+                .getWebApplicationContext(getServletContext());
+        AutowireCapableBeanFactory ctx = wc.getAutowireCapableBeanFactory();
+        ctx.autowireBean(this);
     }
 
     /**
