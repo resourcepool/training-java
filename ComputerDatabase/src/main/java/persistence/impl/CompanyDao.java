@@ -1,18 +1,20 @@
-package persistence;
+package persistence.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import mapper.CompanyMapper;
 import model.Company;
 import model.pages.Page;
-import persistence.exceptions.DaoException;
+import persistence.DaoConnection;
+import persistence.ICompanyDao;
 import persistence.querycommands.PageQuery;
 import service.PageUtils;
 
-public class CompanyDaoImpl implements ICompanyDao {
+public class CompanyDao implements ICompanyDao {
 
     private static final String DELETE_FROM_COMPANY_WHERE_ID = "delete from company where id = ?";
     private static final String SELECT_COUNT_FROM_COMPANY = "select count(*) from company";
@@ -24,26 +26,26 @@ public class CompanyDaoImpl implements ICompanyDao {
     /**
      * @param conn Dao Connection Manager
      */
-    public CompanyDaoImpl(DaoConnection conn) {
+    public CompanyDao(DaoConnection conn) {
         this.conn = conn;
     }
 
     /**
      * @return Full company list from DB
-     * @throws DaoException content couldn't be loaded
+     * @throws SQLException content couldn't be loaded
      */
     @Override
-    public List<Company> getCompanyList() throws DaoException {
+    public List<Company> getCompanyList() throws SQLException {
         return conn.executeSelectQuery(SELECT_ID_NAME_FROM_COMPANY, new CompanyMapper());
     }
 
     /**
      * @param idCompany the id to check
      * @return true is company id is present in DB
-     * @throws DaoException content couldn't be loaded
+     * @throws SQLException content couldn't be loaded
      */
     @Override
-    public boolean companyExists(Long idCompany) throws DaoException {
+    public boolean companyExists(Long idCompany) throws SQLException {
         return conn.executeQuery((Connection conn) -> {
             try (PreparedStatement s = conn.prepareStatement(SELECT_COUNT_FROM_COMPANY_WHERE_ID)) {
                 s.setLong(1, idCompany);
@@ -57,10 +59,10 @@ public class CompanyDaoImpl implements ICompanyDao {
 
     /**
      * @return the first page of the full company list from DB
-     * @throws DaoException content couldn't be loaded
+     * @throws SQLException content couldn't be loaded
      */
     @Override
-    public Page<Company> getCompanyPage() throws DaoException {
+    public Page<Company> getCompanyPage() throws SQLException {
         Long size = getCompanyCount();
 
         PageQuery<Company> command = (Page<Company> p) -> {
@@ -74,10 +76,10 @@ public class CompanyDaoImpl implements ICompanyDao {
 
     /**
      * @return the number of company in DB
-     * @throws DaoException content couldn't be loaded
+     * @throws SQLException content couldn't be loaded
      */
     @Override
-    public Long getCompanyCount() throws DaoException {
+    public Long getCompanyCount() throws SQLException {
         Long size = conn.executeSelectQuery(SELECT_COUNT_FROM_COMPANY, (ResultSet r) -> {
             return (r.next() ? r.getLong(1) : null);
         });
@@ -86,10 +88,10 @@ public class CompanyDaoImpl implements ICompanyDao {
 
     /**
      * @param id id to delete
-     * @throws DaoException failed to delete
+     * @throws SQLException failed to delete
      */
     @Override
-    public void deleteCompany(Long id) throws DaoException {
+    public void deleteCompany(Long id) throws SQLException {
 
         conn.executeQuery((Connection conn) -> {
 

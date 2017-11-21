@@ -17,17 +17,8 @@ $(document).ready(function() {
 		
 		if (isValidDate(introduced)) {
 			$("#introduced").removeClass("error");
-			// $('.error').hide();
 		} else {
 			$("#introduced").addClass("error");
-
-//			$("#nameError").html("Name should contain atleast 5 characters");
-			
-//			$( "<div class=\"alert alert-warning\">Test</div>" ).insertAfter("#introduced" )
-//			// $("#introducedError").addClass("alert alert-danger");
-			// $("#introducedError").attr("align", "left")
-
-			// $('.error').show();
 			error = true;
 		}
 		
@@ -49,14 +40,14 @@ function isValidDate(dateString) {
 	if (dateString == null || dateString == "") {
 		return true;
 	}
-	var regEx = /^\d{2}-\d{2}-\d{4}$/;
+	var regEx = /^\d{4}-\d{2}-\d{2}$/;
 	if (!dateString.match(regEx))
 		return false; // Invalid format
 
 	var date = dateString.split("-");
-    var d = parseInt(date[0], 10),
+    var d = parseInt(date[2], 10),
         m = parseInt(date[1], 10),
-        y = parseInt(date[2], 10);
+        y = parseInt(date[0], 10);
     
 	var d = new Date(y, m - 1, d);
 	

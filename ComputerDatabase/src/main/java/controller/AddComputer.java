@@ -2,8 +2,6 @@ package controller;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -12,8 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -29,7 +25,6 @@ public class AddComputer extends HttpServlet {
 
     private static final String JSP_PAGE = "/WEB-INF/pages/computer_form.jsp";
     private static final long   serialVersionUID = -8465135918905858327L;
-    private static final Logger LOGGER           = LoggerFactory.getLogger(AddComputer.class);
 
     private ICompanyService     companyService;
     private IComputerService    computerService;
@@ -65,7 +60,6 @@ public class AddComputer extends HttpServlet {
      */
     private void loadCompanies(HttpServletRequest req) {
         List<Company> companies = companyService.getList();
-
         req.setAttribute("companies", companies);
     }
 
@@ -87,15 +81,8 @@ public class AddComputer extends HttpServlet {
         if (!v.validate(name, introduced, discontinued, companyId)) {
 
             RequestUtils.putBackAttributes(req, name, introduced, discontinued, companyId);
-
-            StringBuilder sb = new StringBuilder();
-            Map<String, String> map = v.getErrors();
-            for (Entry<String, String> elem : map.entrySet()) {
-                String msg = "Computer cannot be created, reason [" + elem.getKey() + "] : \"" + elem.getValue() + "\"";
-                sb.append(msg + "<br/>");
-            }
-            RequestUtils.showMsg(req, false, sb.toString());
-            LOGGER.debug(sb.toString());
+            RequestUtils.showMsg(req, false, "Computer cannot be added, ");
+            req.setAttribute("errors", v.getErrors());
 
         } else {
 

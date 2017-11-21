@@ -87,13 +87,13 @@ public class ComputerValidator {
         }
 
         if (!isEmptyOrNull(introduced)) {
-            introducedDate = ValidationUtils.checkDate(introduced);
+            introducedDate = ValidationUtils.getDate(introduced);
             if (introducedDate == null) {
                 errors.put(ValidationUtils.INTRODUCED, DATEFORMAT_ERROR);
             }
         }
         if (!isEmptyOrNull(discontinued)) {
-            discontinuedDate = ValidationUtils.checkDate(discontinued);
+            discontinuedDate = ValidationUtils.getDate(discontinued);
             if (discontinuedDate == null) {
                 errors.put(ValidationUtils.DISCONTINUED, DATEFORMAT_ERROR);
             }

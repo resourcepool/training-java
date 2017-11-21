@@ -1,5 +1,6 @@
 package service.impl;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -8,14 +9,13 @@ import org.slf4j.LoggerFactory;
 import model.Computer;
 import model.pages.Page;
 import persistence.IComputerDao;
-import persistence.exceptions.DaoException;
 import persistence.querycommands.PageQuery;
 import service.IComputerService;
 import service.PageRequest;
 
-public class ComputerServiceImpl implements IComputerService {
+public class ComputerService implements IComputerService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ComputerServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
     private IComputerDao        computerDao;
 
     /**
@@ -23,76 +23,83 @@ public class ComputerServiceImpl implements IComputerService {
      *
      * @param dao CompanyDao to access Data
      */
-    private ComputerServiceImpl(IComputerDao dao) {
+    private ComputerService(IComputerDao dao) {
         computerDao = dao;
     }
 
     /**
      * @param id the computer id to search
      * @return the first computer corresponding exactly to @id
-     * @throws DaoException content couldn't be loaded
+     * @throws SQLException content couldn't be loaded
      */
     @Override
-    public Computer getDetail(Long id) throws DaoException {
+    public Computer getDetail(Long id) {
         try {
             return computerDao.getComputerDetail(id);
-        } catch (DaoException e) {
+        } catch (SQLException e) {
             LOGGER.error("Computer " + id + " could not be loaded");
-            throw e;
+            throw new RuntimeException(e);
         }
     }
 
     /**
      * @param newComputer complete computer to create, without id
      * @return the id of the created computer
-     * @throws DaoException content couldn't be loaded
+     * @throws SQLException content couldn't be loaded
      */
     @Override
-    public Long create(Computer newComputer) throws DaoException {
+    public Long create(Computer newComputer) {
         try {
             return computerDao.createComputer(newComputer);
-        } catch (DaoException e) {
+        } catch (SQLException e) {
             String msg = "Computer cannot be created, reason \"" + e.getMessage() + "\"";
             LOGGER.error(msg);
-            throw e;
+            throw new RuntimeException(e);
         }
     }
 
     /**
      * @param c full computer to update with id != null
-     * @throws DaoException content couldn't be loaded
+     * @throws SQLException content couldn't be loaded
      */
     @Override
-    public void update(Computer c) throws DaoException {
+    public void update(Computer c) {
         try {
             computerDao.updateComputer(c);
-        } catch (DaoException e) {
+        } catch (SQLException e) {
             String msg = "Computer cannot be edited, reason \"" + e.getMessage() + "\"";
             LOGGER.error(msg);
+            throw new RuntimeException(e);
         }
     }
 
     /**
      * @param id id of the computer to delete
-     * @throws DaoException content couldn't be loaded
+     * @throws SQLException content couldn't be loaded
      */
     @Override
-    public void delete(Long id) throws DaoException {
-        computerDao.deleteComputer(id);
+    public void delete(Long id) {
+        try {
+            computerDao.deleteComputer(id);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
      * @param ids ids list of the computer to delete
-     * @throws DaoException content couldn't be loaded
+     * @throws SQLException content couldn't be loaded
      */
     @Override
-    public void delete(List<Long> ids) throws DaoException {
+    public void delete(List<Long> ids) {
         try {
             computerDao.deleteComputers(ids);
 
-        } catch (DaoException e) {
+        } catch (SQLException e) {
             String msg = "failed to execute deletion, reason :" + e.getMessage();
             LOGGER.error(msg);
+            throw new RuntimeException(e);
         }
 
     }
@@ -100,7 +107,7 @@ public class ComputerServiceImpl implements IComputerService {
     /**
      * @param request page request
      * @return the first page of the full computer preview list from DB
-     * @throws DaoException content couldn't be loaded
+     * @throws SQLException content couldn't be loaded
      */
     @Override
     public Page<Computer> loadPage(PageRequest<Computer> request) {
@@ -109,28 +116,36 @@ public class ComputerServiceImpl implements IComputerService {
             Long size = getCount(request.getSearch());
             return request.build(pageQuery, size).load();
 
-        } catch (DaoException e) {
+        } catch (SQLException e) {
             LOGGER.error(e.getMessage());
-            return null;
+            throw new RuntimeException(e);
         }
     }
 
     /**
      * @param search filter to search (computer or company name like) or null
      * @return number of elem
-     * @throws DaoException fail to load
+     * @throws SQLException fail to load
      */
-    private Long getCount(String search) throws DaoException {
-        return search == null ? computerDao.getComputerTotalCount() : computerDao.getComputerTotalCount(search);
+    private Long getCount(String search) {
+        try {
+            return search == null ? computerDao.getComputerTotalCount() : computerDao.getComputerTotalCount(search);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
      * @param id id of the company to delete computers from
-     * @throws DaoException deletion failed
+     * @throws SQLException deletion failed
      */
     @Override
-    public void deleteByCompany(Long id) throws DaoException {
-        computerDao.deleteByCompany(id);
+    public void deleteByCompany(Long id) {
+        try {
+            computerDao.deleteByCompany(id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

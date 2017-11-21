@@ -15,7 +15,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import mapper.ComputerMapper;
 import model.Computer;
-import persistence.exceptions.DaoException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ComputerMapperTest {
@@ -25,10 +24,10 @@ public class ComputerMapperTest {
 
     /**
      * Init Mocks.
-     * @throws DaoException never thrown
+     * @throws SQLException never thrown
      */
     @Before
-    public void setUp() throws DaoException {
+    public void setUp() throws SQLException {
         mapper = new ComputerMapper();
     }
 

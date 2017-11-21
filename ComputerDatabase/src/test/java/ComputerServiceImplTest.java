@@ -2,6 +2,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.sql.SQLException;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,33 +13,32 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import model.Computer;
-import persistence.ComputerDaoImpl;
-import persistence.exceptions.DaoException;
-import service.impl.ComputerServiceImpl;
+import persistence.impl.ComputerDao;
+import service.impl.ComputerService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ComputerServiceImplTest {
 
     @Mock
-    private static ComputerDaoImpl computerDao;
+    private static ComputerDao computerDao;
 
     @InjectMocks
-    private ComputerServiceImpl service;
+    private ComputerService service;
 
     /**
      * Init mock, mostly Dao.
-     * @throws DaoException never thrown
+     * @throws SQLException never thrown
      */
     @Before
-    public void setUp() throws DaoException {
+    public void setUp() throws SQLException {
         Mockito.when(computerDao.getComputerDetail(1L)).thenReturn(Mockito.mock(Computer.class));
     }
 
     /**
-     * @throws DaoException never thrown
+     * @throws SQLException never thrown
      */
     @Test
-    public void testGetComputerList() throws DaoException {
+    public void testGetComputerList() throws SQLException {
         assertNotNull(service.getDetail(1L));
         verify(computerDao, times(1)).getComputerDetail(1L);
     }

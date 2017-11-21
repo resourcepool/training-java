@@ -7,16 +7,12 @@ import java.time.format.DateTimeFormatter;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import model.pages.Page;
 import validators.ValidationUtils;
 
 public class RequestUtils {
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(ValidationUtils.DATE_FORMAT);
-    private static final Logger LOGGER = LoggerFactory.getLogger(RequestUtils.class);
 
     /**
      * @param req req
@@ -98,7 +94,7 @@ public class RequestUtils {
             }
 
         } catch (UnsupportedEncodingException e) {
-            LOGGER.error("Encoding url failed { }", e);
+            throw new AssertionError("UTF-8 is unknown");
         }
         req.setAttribute("sortparams", sortParams);
         req.setAttribute("pageparams", pageParam.toString());

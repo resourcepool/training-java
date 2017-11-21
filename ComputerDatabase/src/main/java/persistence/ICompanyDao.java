@@ -1,42 +1,42 @@
 package persistence;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import model.Company;
 import model.pages.Page;
-import persistence.exceptions.DaoException;
 
 public interface ICompanyDao {
 
     /**
      * @return Full company list from DB
-     * @throws DaoException content couldn't be loaded
+     * @throws SQLException content couldn't be loaded
      */
-    List<Company> getCompanyList() throws DaoException;
+    List<Company> getCompanyList() throws SQLException;
 
     /**
      * @param idCompany the id to check
      * @return true is company id is present in DB
-     * @throws DaoException content couldn't be loaded
+     * @throws SQLException content couldn't be loaded
      */
-    boolean companyExists(Long idCompany) throws DaoException;
+    boolean companyExists(Long idCompany) throws SQLException;
 
     /**
      * @return the first page of the full company list from DB
-     * @throws DaoException content couldn't be loaded
+     * @throws SQLException content couldn't be loaded
      */
-    Page<Company> getCompanyPage() throws DaoException;
+    Page<Company> getCompanyPage() throws SQLException;
 
     /**
      * @return the number of company in DB
-     * @throws DaoException content couldn't be loaded
+     * @throws SQLException content couldn't be loaded
      */
-    Long getCompanyCount() throws DaoException;
+    Long getCompanyCount() throws SQLException;
 
     /**
      * @param id id to delete
-     * @throws DaoException failed to delete
+     * @throws SQLException failed to delete
      */
-    void deleteCompany(Long id) throws DaoException;
+    void deleteCompany(Long id) throws SQLException;
 
 }

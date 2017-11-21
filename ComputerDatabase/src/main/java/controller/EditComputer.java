@@ -2,8 +2,6 @@ package controller;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -12,8 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -30,7 +26,6 @@ public class EditComputer extends HttpServlet {
     private static final String COMPUTER_FORM_JSP = "/WEB-INF/pages/computer_form.jsp";
     private static final String ID_IS_NOT_VALID = "id is not valid";
     private static final long serialVersionUID = -7371267190245615780L;
-    private static final Logger LOGGER = LoggerFactory.getLogger(Dashboard.class);
 
     private ICompanyService companyService;
     private IComputerService computerService;
@@ -85,14 +80,8 @@ public class EditComputer extends HttpServlet {
         ComputerValidator v = new ComputerValidator();
         if (!v.validate(idStr, name, introducedStr, discontinuedStr, companyIdStr)) {
 
-            StringBuilder sb = new StringBuilder("Computer cannot be edited, ");
-            Map<String, String> map = v.getErrors();
-            for (Entry<String, String> elem : map.entrySet()) {
-                String msg = "reason [" + elem.getKey() + "] : \"" + elem.getValue() + "\"";
-                sb.append(msg + "<br/>");
-            }
-            RequestUtils.showMsg(req, false, sb.toString());
-            LOGGER.debug(sb.toString());
+            RequestUtils.showMsg(req, false, "Computer cannot be edited, ");
+            req.setAttribute("errors", v.getErrors());
 
         } else {
 

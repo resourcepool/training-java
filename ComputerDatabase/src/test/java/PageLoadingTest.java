@@ -17,31 +17,30 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import model.Company;
 import model.pages.Page;
-import persistence.CompanyDaoImpl;
-import persistence.exceptions.DaoException;
+import persistence.impl.CompanyDao;
 import persistence.querycommands.PageQuery;
-import service.impl.CompanyServiceImpl;
+import service.impl.CompanyService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PageLoadingTest {
 
     @Mock
-    private static CompanyDaoImpl companyDao;
+    private static CompanyDao companyDao;
 
     @Mock
     private PageQuery<Company> query;
 
     @InjectMocks
-    private CompanyServiceImpl service;
+    private CompanyService service;
 
     private Company content;
 
     /**
      * Init Mocks.
-     * @throws DaoException never thrown
+     * @throws SQLException never thrown
      */
     @Before
-    public void setUp() throws DaoException {
+    public void setUp() throws SQLException {
         content = new Company("name");
         List<Company> list = new ArrayList<Company>();
         list.add(content);
@@ -55,10 +54,9 @@ public class PageLoadingTest {
     /**
      * verify content is retrieved from page > from service > from dao.
      * @throws SQLException never thrown
-     * @throws DaoException never thrown
      */
     @Test
-    public void processTest() throws SQLException, DaoException {
+    public void processTest() throws SQLException {
         Page<Company> page = service.getPage();
         verify(companyDao, times(1)).getCompanyPage();
 

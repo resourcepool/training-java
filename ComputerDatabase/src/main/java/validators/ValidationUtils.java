@@ -15,7 +15,7 @@ public class ValidationUtils {
     public static final String INTRODUCED    = "introduced";
     public static final String COMPUTER_NAME = "computerName";
     public static final String ID            = "id";
-    public static final String DATE_FORMAT   = "dd-MM-yyyy";
+    public static final String DATE_FORMAT   = "yyyy-MM-dd";
 
     /**
      * @param param parse to validate and parse
@@ -54,7 +54,7 @@ public class ValidationUtils {
      *            (true)
      * @return true if valid
      */
-    public static LocalDate checkDate(String dateStr) {
+    public static LocalDate getDate(String dateStr) {
 
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
         sdf.setLenient(false);

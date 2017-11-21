@@ -2,6 +2,8 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.sql.SQLException;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,42 +12,41 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import persistence.CompanyDaoImpl;
-import persistence.exceptions.DaoException;
-import service.impl.CompanyServiceImpl;
+import persistence.impl.CompanyDao;
+import service.impl.CompanyService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CompanyServiceImplTest {
 
     @Mock
-    private static CompanyDaoImpl companyDao;
+    private static CompanyDao companyDao;
 
     @InjectMocks
-    private CompanyServiceImpl service;
+    private CompanyService service;
 
     /**
      * Init mock, mostly Dao.
-     * @throws DaoException never thrown
+     * @throws SQLException never thrown
      */
     @Before
-    public void setUp() throws DaoException {
+    public void setUp() throws SQLException {
         Mockito.when(companyDao.companyExists(10L)).thenReturn(true);
     }
 
     /**
-     * @throws DaoException never thrown
+     * @throws SQLException never thrown
      */
     @Test
-    public void testCompanyExists() throws DaoException {
+    public void testCompanyExists() throws SQLException {
         assertTrue(service.exists(10L));
         verify(companyDao, times(1)).companyExists(10L);
     }
 
     /**
-     * @throws DaoException never thrown
+     * @throws SQLException never thrown
      */
     @Test(expected = IllegalArgumentException.class)
-    public void testCompanyExistsWithNullObject() throws DaoException {
+    public void testCompanyExistsWithNullObject() throws SQLException {
         service.exists(null);
     }
 }

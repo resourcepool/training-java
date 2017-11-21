@@ -1,9 +1,10 @@
-package persistence;
+package persistence.impl;
 
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
@@ -12,10 +13,11 @@ import java.util.stream.Collectors;
 import mapper.ComputerMapper;
 import model.Computer;
 import model.pages.Page;
-import persistence.exceptions.DaoException;
+import persistence.DaoConnection;
+import persistence.IComputerDao;
 import service.PageUtils;
 
-public class ComputerDaoImpl implements IComputerDao {
+public class ComputerDao implements IComputerDao {
 
     private static final String SEARCH_FILTER                         = "where lower(CO.name) like '%%%1$s%%' or lower(CA.name) like '%%%1$s%%'";
     private static final String COUNT_FROM_COMPUTER                   = "select count(*) from computer";
@@ -30,7 +32,7 @@ public class ComputerDaoImpl implements IComputerDao {
     /**
      * @param conn Dao Connection Manager
      */
-    public ComputerDaoImpl(DaoConnection conn) {
+    public ComputerDao(DaoConnection conn) {
         this.conn = conn;
     }
 
@@ -38,20 +40,20 @@ public class ComputerDaoImpl implements IComputerDao {
 
     /**
      * @return total number of computer in DB
-     * @throws DaoException content couldn't be loaded
+     * @throws SQLException content couldn't be loaded
      */
     @Override
-    public Long getComputerTotalCount() throws DaoException {
+    public Long getComputerTotalCount() throws SQLException {
         return conn.getCount(COUNT_FROM_COMPUTER);
     }
 
     /**
      * @param search filter to used
      * @return total number of computer in DB
-     * @throws DaoException content couldn't be loaded
+     * @throws SQLException content couldn't be loaded
      */
     @Override
-    public Long getComputerTotalCount(String search) throws DaoException {
+    public Long getComputerTotalCount(String search) throws SQLException {
         String req = COUNT_FROM_COMPUTER_WITH_COMPANY + ' ' + String.format(SEARCH_FILTER, search);
         return conn.getCount(req);
     }
@@ -59,10 +61,10 @@ public class ComputerDaoImpl implements IComputerDao {
     /**
      * @param id the computer id to search
      * @return the first computer corresponding exactly to @id
-     * @throws DaoException content couldn't be loaded
+     * @throws SQLException content couldn't be loaded
      */
     @Override
-    public Computer getComputerDetail(Long id) throws DaoException {
+    public Computer getComputerDetail(Long id) throws SQLException {
         return conn.executeQuery((Connection conn) -> {
             PreparedStatement s = conn.prepareStatement(SELECT_FROM_COMPUTER_WITH_COMPANY + ID_FILTER);
             s.setString(1, id.toString());
@@ -80,10 +82,10 @@ public class ComputerDaoImpl implements IComputerDao {
     /**
      * @param page number of total elements than can be loaded
      * @return the content of one computer page from DB
-     * @throws DaoException content couldn't be loaded
+     * @throws SQLException content couldn't be loaded
      */
     @Override
-    public List<Computer> get(Page<Computer> page) throws DaoException {
+    public List<Computer> get(Page<Computer> page) throws SQLException {
         // TODO PrepareStatement
         Long start = PageUtils.getFirstEntityIndex(page);
         StringBuilder sb = new StringBuilder(SELECT_FROM_COMPUTER_WITH_COMPANY);
@@ -111,10 +113,10 @@ public class ComputerDaoImpl implements IComputerDao {
     /**
      * @param newComputer complete computer to create, without id
      * @return the id of the created computer
-     * @throws DaoException content couldn't be loaded
+     * @throws SQLException content couldn't be loaded
      */
     @Override
-    public Long createComputer(Computer newComputer) throws DaoException {
+    public Long createComputer(Computer newComputer) throws SQLException {
         return conn.executeQuery((Connection c) -> {
             PreparedStatement s = c.prepareStatement(INSERT_INTO_COMPUTER_VALUES, Statement.RETURN_GENERATED_KEYS);
 
@@ -141,10 +143,10 @@ public class ComputerDaoImpl implements IComputerDao {
 
     /**
      * @param c full computer to update with id != null
-     * @throws DaoException content couldn't be loaded
+     * @throws SQLException content couldn't be loaded
      */
     @Override
-    public void updateComputer(Computer c) throws DaoException {
+    public void updateComputer(Computer c) throws SQLException {
         conn.executeQuery((Connection conn) -> {
             PreparedStatement s = conn.prepareStatement(
                     "update computer set name = ?, introduced = ?, discontinued = ?, company_id = ? where id = ?");
@@ -168,10 +170,10 @@ public class ComputerDaoImpl implements IComputerDao {
 
     /**
      * @param id id of the computer to delete
-     * @throws DaoException content couldn't be loaded
+     * @throws SQLException content couldn't be loaded
      */
     @Override
-    public void deleteComputer(Long id) throws DaoException {
+    public void deleteComputer(Long id) throws SQLException {
         conn.executeQuery((Connection conn) -> {
             try (Statement s = conn.createStatement()) {
                 s.executeUpdate("delete from computer where id = " + id);
@@ -182,10 +184,10 @@ public class ComputerDaoImpl implements IComputerDao {
 
     /**
      * @param id id of the computer to delete
-     * @throws DaoException content couldn't be loaded
+     * @throws SQLException content couldn't be loaded
      */
     @Override
-    public void deleteByCompany(Long id) throws DaoException {
+    public void deleteByCompany(Long id) throws SQLException {
         conn.executeQuery((Connection conn) -> {
             try (PreparedStatement s = conn.prepareStatement(DELETE_FROM_COMPUTER_WHERE_COMPANY_ID)) {
                 s.setObject(1, id);
@@ -197,10 +199,10 @@ public class ComputerDaoImpl implements IComputerDao {
 
     /**
      * @param ids ids to delete
-     * @throws DaoException failed
+     * @throws SQLException failed
      */
     @Override
-    public void deleteComputers(List<Long> ids) throws DaoException {
+    public void deleteComputers(List<Long> ids) throws SQLException {
 
         String filter = ids.stream().map(number -> String.valueOf(number)).collect(Collectors.joining(","));
 
