@@ -64,7 +64,7 @@ public class Dashboard {
      * @return view name to load
      */
     @PostMapping("/delete-company")
-    public String doPost(
+    public String deleteCompany(
             ModelMap model,
             @RequestParam(value = "pagination", required = false, defaultValue = DEFAULT_PAGESIZE) Long pageSize,
             @RequestParam(value = "page", required = false, defaultValue = DEFAULT_STARTING_PAGE) Long pageNumber,
@@ -83,7 +83,6 @@ public class Dashboard {
         return "dashboard";
     }
 
-
     /**
      * @param model model
      * @param pageSize pageSize
@@ -95,7 +94,7 @@ public class Dashboard {
      * @return view name to load
      */
     @PostMapping("/delete-computer")
-    public String doPost(
+    public String deleteComputer(
             ModelMap model,
             @RequestParam(value = "pagination", required = false, defaultValue = DEFAULT_PAGESIZE) Long pageSize,
             @RequestParam(value = "page", required = false, defaultValue = DEFAULT_STARTING_PAGE) Long pageNumber,

@@ -1,18 +1,12 @@
 package controller;
 
-import java.io.IOException;
-
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import model.Computer;
 import model.ComputerDto;
@@ -21,12 +15,12 @@ import service.IComputerService;
 import validators.ComputerValidator;
 import validators.ValidationUtils;
 
-@WebServlet
-public class EditComputer extends HttpServlet {
+@Controller
+@RequestMapping("/edit-computer")
+public class EditComputer {
 
-    private static final String COMPUTER_FORM_JSP = "/WEB-INF/pages/computer_form.jsp";
+    private static final String FORMPAGE = "computer_form";
     private static final String ID_IS_NOT_VALID = "id is not valid";
-    private static final long serialVersionUID = -7371267190245615780L;
 
     @Autowired
     private IComputerService computerService;
@@ -34,45 +28,27 @@ public class EditComputer extends HttpServlet {
     private ICompanyService companyService;
 
     /**
-     * @param config ServletConfig
-     * @see javax.servlet.GenericServlet#init(javax.servlet.ServletConfig)
-     * @throws ServletException exception
-     */
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-
-        WebApplicationContext wc = WebApplicationContextUtils
-                .getWebApplicationContext(getServletContext());
-        AutowireCapableBeanFactory ctx = wc.getAutowireCapableBeanFactory();
-        ctx.autowireBean(this);
-    }
-
-    /**
      * @param req current request
-     * @param resp response
-     * @throws ServletException exception
-     * @throws IOException exception
+     * @return view name
      */
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    @GetMapping
+    protected String doGet(HttpServletRequest req) {
 
         if (!loadComputer(req)) {
-            resp.sendRedirect("add-computer");
-            return;
+
+            return "redirect:/ComputerDatabase/add-computer";
         }
 
-        loadPage(req, resp);
+        loadPage(req);
+        return FORMPAGE;
     }
 
     /**
      * @param req current request
-     * @param resp response
-     * @throws ServletException exception
-     * @throws IOException exception
+     * @return view name
      */
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    @PostMapping
+    protected String doPost(HttpServletRequest req) {
 
         ComputerValidator v = new ComputerValidator();
         ComputerDto dto = new ComputerDto(req);
@@ -90,21 +66,18 @@ public class EditComputer extends HttpServlet {
         }
 
         RequestUtils.putBackAttributes(req, dto);
-        loadPage(req, resp);
+        loadPage(req);
+        return FORMPAGE;
     }
 
     /**
      * Calls the matching jsp.
      * @param req req
-     * @param resp resp
-     * @throws ServletException could not be loaded
-     * @throws IOException could not be loaded
      */
-    private void loadPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void loadPage(HttpServletRequest req) {
 
         loadCompanies(req);
         req.setAttribute("edit", true);
-        req.getRequestDispatcher(COMPUTER_FORM_JSP).forward(req, resp);
     }
 
     /**
@@ -122,7 +95,6 @@ public class EditComputer extends HttpServlet {
         Long id = Long.parseLong(idStr);
         Computer c = computerService.getDetail(id);
         RequestUtils.putAttributes(req, id, c.getName(), c.getIntroduced(), c.getDiscontinued(), c.getCompany().getId());
-
         return true;
     }
 

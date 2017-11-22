@@ -1,19 +1,14 @@
 package controller;
 
-import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import model.Company;
 import model.Computer;
@@ -22,42 +17,24 @@ import service.ICompanyService;
 import service.IComputerService;
 import validators.ComputerValidator;
 
-@WebServlet
-public class AddComputer extends HttpServlet {
+@Controller
+@RequestMapping("/add-computer")
+public class AddComputer {
 
-    private static final String JSP_PAGE = "/WEB-INF/pages/computer_form.jsp";
-    private static final long   serialVersionUID = -8465135918905858327L;
-
+    private static final String FORMPAGE = "computer_form";
     @Autowired
     private IComputerService computerService;
     @Autowired
     private ICompanyService companyService;
 
     /**
-     * @param config ServletConfig
-     * @see javax.servlet.GenericServlet#init(javax.servlet.ServletConfig)
-     * @throws ServletException exception
-     */
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-
-        WebApplicationContext wc = WebApplicationContextUtils
-                .getWebApplicationContext(getServletContext());
-        AutowireCapableBeanFactory ctx = wc.getAutowireCapableBeanFactory();
-        ctx.autowireBean(this);
-    }
-
-    /**
      * @param req current request
-     * @param resp response
-     * @throws ServletException exception
-     * @throws IOException exception
+     * @return view name
      */
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    @GetMapping
+    protected String doGet(HttpServletRequest req) {
         loadCompanies(req);
-        req.getRequestDispatcher(JSP_PAGE).forward(req, resp);
+        return FORMPAGE;
     }
 
     /**
@@ -70,12 +47,10 @@ public class AddComputer extends HttpServlet {
 
     /**
      * @param req current request
-     * @param resp response
-     * @throws ServletException exception
-     * @throws IOException exception
+     * @return pageView
      */
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    @PostMapping
+    protected String doPost(HttpServletRequest req) {
 
         ComputerValidator v = new ComputerValidator();
         ComputerDto dto = new ComputerDto(req);
@@ -95,6 +70,6 @@ public class AddComputer extends HttpServlet {
         }
 
         loadCompanies(req);
-        req.getRequestDispatcher(JSP_PAGE).forward(req, resp);
+        return FORMPAGE;
     }
 }
