@@ -19,7 +19,7 @@
 
 <ul class="pagination">
 	<c:if test="${ current_page > 1 }">
-		<li><a href="/${target}?page=1&pagination=${pagination_size}${params}" aria-label="First"> <span aria-hidden="true">&laquo;</span></a></li>
+		<li><a href="/ComputerDatabase/${target}?page=1&pagination=${pagination_size}${params}" aria-label="First"> <span aria-hidden="true">&laquo;</span></a></li>
 	</c:if>
 
 	<c:forEach var="i" begin="${startDrawIndex}" end="${endDrawIndex}" step="1">

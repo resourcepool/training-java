@@ -18,33 +18,8 @@
 	<context:component-scan base-package="persistence" />
 	<context:component-scan base-package="persistence.impl" />
 	<context:component-scan base-package="service.impl" />
-
-	<!-- #### TRANSACTIONS ######################################### -->
-	<aop:config>
-		<aop:pointcut id="computerServiceOperation"
-			expression="execution(* service.IComputerService.*(..))" />
-		<aop:pointcut id="companyServiceOperation"
-			expression="execution(* service.ICompanyService.*(..))" />
-		<aop:advisor advice-ref="defaultAdvice" pointcut-ref="computerServiceOperation" />
-		<aop:advisor advice-ref="txAdvice" pointcut-ref="companyServiceOperation" />
-	</aop:config>
-
-	<tx:advice id="txAdvice" transaction-manager="txManager">
-		<tx:attributes>
-			<!-- all methods starting with 'get' are read-only -->
-			<tx:method name="get*" read-only="true" />
-			<tx:method name="delete*" isolation="DEFAULT"
-				rollback-for="java.sql.SQLException;" />
-			<tx:method name="*" />
-		</tx:attributes>
-	</tx:advice>
-	<tx:advice id="defaultAdvice" transaction-manager="txManager">
-		<tx:attributes>
-			<tx:method name="get*" read-only="true" />
-			<tx:method name="*" />
-		</tx:attributes>
-	</tx:advice>
-
+	<tx:annotation-driven transaction-manager="txManager"/>
+	
 	<bean id="txManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
