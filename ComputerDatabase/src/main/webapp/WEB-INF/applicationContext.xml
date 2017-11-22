@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
     http://www.springframework.org/schema/aop
@@ -10,16 +10,21 @@
     http://www.springframework.org/schema/tx
     http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
     http://www.springframework.org/schema/context
-    http://www.springframework.org/schema/context/spring-context.xsd">
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
+	<mvc:annotation-driven />
 	<context:component-scan base-package="persistence" />
 	<context:component-scan base-package="persistence.impl" />
 	<context:component-scan base-package="service.impl" />
-	
+
 	<!-- #### TRANSACTIONS ######################################### -->
 	<aop:config>
-		<aop:pointcut id="computerServiceOperation" expression="execution(* service.IComputerService.*(..))" />
-		<aop:pointcut id="companyServiceOperation" expression="execution(* service.ICompanyService.*(..))" />
+		<aop:pointcut id="computerServiceOperation"
+			expression="execution(* service.IComputerService.*(..))" />
+		<aop:pointcut id="companyServiceOperation"
+			expression="execution(* service.ICompanyService.*(..))" />
 		<aop:advisor advice-ref="defaultAdvice" pointcut-ref="computerServiceOperation" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="companyServiceOperation" />
 	</aop:config>
@@ -28,7 +33,8 @@
 		<tx:attributes>
 			<!-- all methods starting with 'get' are read-only -->
 			<tx:method name="get*" read-only="true" />
-			<tx:method name="delete*" isolation="DEFAULT" rollback-for="java.sql.SQLException;"/>
+			<tx:method name="delete*" isolation="DEFAULT"
+				rollback-for="java.sql.SQLException;" />
 			<tx:method name="*" />
 		</tx:attributes>
 	</tx:advice>

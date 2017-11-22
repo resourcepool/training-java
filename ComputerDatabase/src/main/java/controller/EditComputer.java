@@ -58,7 +58,7 @@ public class EditComputer extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         if (!loadComputer(req)) {
-            resp.sendRedirect("addComputer");
+            resp.sendRedirect("add-computer");
             return;
         }
 

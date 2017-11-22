@@ -1,17 +1,11 @@
 package service;
 
-import javax.servlet.http.HttpServletRequest;
-
 import mapper.ComputerMapping;
 import model.pages.Order;
 import model.pages.Page;
 import persistence.querycommands.PageQuery;
-import validators.ValidationUtils;
 
 public class PageRequest<T> {
-    private static final Long DEFAULT_PAGESIZE      = 20L;
-    private static final Long DEFAULT_STARTING_PAGE = 1L;
-
     private Long              pageSize;
     private Long              nbPage;
     private String            search;
@@ -25,25 +19,10 @@ public class PageRequest<T> {
     }
 
     /**
-     * @param req req
-     * @return this
-     */
-    public PageRequest<T> with(HttpServletRequest req) {
-        Long pageSize = ValidationUtils.retrieveLong(req.getParameter("pagination"), DEFAULT_PAGESIZE);
-        Long pageNumber = ValidationUtils.retrieveLong(req.getParameter("page"), DEFAULT_STARTING_PAGE);
-        this.atPage(pageNumber);
-        this.withPageSize(pageSize);
-        this.withSearch(req.getParameter("search"));
-        this.withSort(req.getParameter("sort"));
-        this.withOrder(req.getParameter("order"));
-        return this;
-    }
-
-    /**
      * @param parameter order as String ASC/DESC
      * @return this
      */
-    private PageRequest<T> withOrder(String parameter) {
+    public PageRequest<T> withOrder(String parameter) {
         if (parameter == null || parameter.isEmpty()) {
             return this;
         }
@@ -56,7 +35,7 @@ public class PageRequest<T> {
      * @param parameter sort column (see ComputerMapper)
      * @return this
      */
-    private PageRequest<T> withSort(String parameter) {
+    public PageRequest<T> withSort(String parameter) {
         if (parameter == null || parameter.isEmpty()) {
             return this;
         }
@@ -68,7 +47,7 @@ public class PageRequest<T> {
      * @param parameter search String
      * @return this
      */
-    private PageRequest<T> withSearch(String parameter) {
+    public PageRequest<T> withSearch(String parameter) {
         if (parameter == null || parameter.isEmpty()) {
             return this;
         }
@@ -81,7 +60,7 @@ public class PageRequest<T> {
      * @param pageSize pageSize
      * @return this
      */
-    private PageRequest<T> withPageSize(Long pageSize) {
+    public PageRequest<T> withPageSize(Long pageSize) {
         this.pageSize = Math.min(pageSize, 150L);
         return this;
     }
@@ -90,7 +69,7 @@ public class PageRequest<T> {
      * @param pageNumber pageNumber
      * @return this
      */
-    private PageRequest<T> atPage(Long pageNumber) {
+    public PageRequest<T> atPage(Long pageNumber) {
         this.nbPage = pageNumber;
         return this;
     }

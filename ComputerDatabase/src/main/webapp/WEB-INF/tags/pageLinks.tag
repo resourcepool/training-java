@@ -19,7 +19,7 @@
 
 <ul class="pagination">
 	<c:if test="${ current_page > 1 }">
-		<li><a href="${target}?page=1&pagination=${pagination_size}${params}" aria-label="First"> <span aria-hidden="true">&laquo;</span></a></li>
+		<li><a href="/${target}?page=1&pagination=${pagination_size}${params}" aria-label="First"> <span aria-hidden="true">&laquo;</span></a></li>
 	</c:if>
 
 	<c:forEach var="i" begin="${startDrawIndex}" end="${endDrawIndex}" step="1">
@@ -35,13 +35,13 @@
 			</c:choose>
 			
 			<li ${ active }>
-				<a href="${target}?page=${i}&pagination=${pagination_size}${params}"> <c:out value="${current_page == i ? [i] : i}" /></a>
+				<a href="/ComputerDatabase/${target}?page=${i}&pagination=${pagination_size}${params}"> <c:out value="${current_page == i ? [i] : i}" /></a>
 			</li>
 			
 		</c:if>
 	</c:forEach>
 	
 	<c:if test="${current_page < pages_limit}">
-		<li><a href="${target}?page=${pages_limit}&pagination=${pagination_size}${params}" aria-label="Last"> <span aria-hidden="true">&raquo;</span></a></li>
+		<li><a href="/ComputerDatabase/${target}?page=${pages_limit}&pagination=${pagination_size}${params}" aria-label="Last"> <span aria-hidden="true">&raquo;</span></a></li>
 	</c:if>
 </ul>

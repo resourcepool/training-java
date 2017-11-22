@@ -17,6 +17,6 @@
 		</c:otherwise>
 	</c:choose>
 	
-	<a class="btn btn-default${active}" href="dashboard?pagination=${value}${params}">${value}</a>
+	<a class="btn btn-default${active}" href="/dashboard?pagination=${value}${params}">${value}</a>
 </c:forTokens>
 </div>

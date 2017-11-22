@@ -1,155 +1,158 @@
 package controller;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import model.Computer;
 import model.pages.Page;
 import service.ICompanyService;
 import service.IComputerService;
 import service.PageRequest;
-import validators.ValidationUtils;
 
-@WebServlet
-public class Dashboard extends HttpServlet {
-    private static final String DASHBOARD_JSP_PATH = "/WEB-INF/pages/dashboard.jsp";
-    private static final long serialVersionUID = 1L;
+@Controller
+@RequestMapping("/dashboard")
+public class Dashboard {
+
+    private static final String DEFAULT_PAGESIZE      = "20";
+    private static final String DEFAULT_STARTING_PAGE = "1";
 
     @Autowired
-    private IComputerService computerService;
+    private IComputerService    computerService;
     @Autowired
-    private ICompanyService companyService;
+    private ICompanyService     companyService;
 
     /**
-     * @param config ServletConfig
-     * @see javax.servlet.GenericServlet#init(javax.servlet.ServletConfig)
-     * @throws ServletException exception
+     * @param model model
+     * @param pageSize pageSize
+     * @param pageNumber pageNumber
+     * @param search search
+     * @param sort sort
+     * @param order order
+     * @return view name to load
      */
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-
-        WebApplicationContext wc = WebApplicationContextUtils
-                .getWebApplicationContext(getServletContext());
-        AutowireCapableBeanFactory ctx = wc.getAutowireCapableBeanFactory();
-        ctx.autowireBean(this);
-
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see HttpServlet#doGet(HttpServletRequest req, HttpServletResponse resp)
-     * @param req req
-     * @param resp resp
-     * @throws ServletException req
-     * @throws IOException exception
-     */
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        loadDashboard(req, resp);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see HttpServlet#doPost(HttpServletRequest req, HttpServletResponse resp)
-     * @param req req
-     * @param resp resp
-     * @throws ServletException req
-     * @throws IOException exception
-     */
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        handleComputerDeletion(req);
-        handleCompanyDeletion(req);
-        loadDashboard(req, resp);
-    }
-
-    /**
-     * @param req req
-     */
-    private void handleCompanyDeletion(HttpServletRequest req) {
-        String id = req.getParameter("company_id_delete");
-
-        if (id == null) {
-            return;
-        }
-
-        if (!ValidationUtils.isLong(id)) {
-            RequestUtils.showMsg(req, false, "please provide a company id");
-        } else {
-
-            companyService.delete(Long.parseLong(id));
-            String msg = "Sucessfully deleted company : n°" + id;
-            RequestUtils.showMsg(req, true, msg);
-        }
-    }
-
-    /**
-     * @param req req containing parameters of computers to delete ("selection") or
-     *            none (ignored then)
-     */
-    private void handleComputerDeletion(HttpServletRequest req) {
-        String[] computerSelection = req.getParameterValues("computer_selection_delete");
-
-        if (computerSelection == null) {
-            return;
-        }
-
-        List<Long> ids = new ArrayList<Long>();
-        Boolean result = ValidationUtils.isLongList(computerSelection, ids);
-
-        if (result) {
-            computerService.delete(ids);
-            RequestUtils.showMsg(req, true, "Success, " + ids.size() + " computer ids deleted");
-            req.setAttribute("page", 1);
-        } else {
-            RequestUtils.showMsg(req, false, "all ids are not valid");
-        }
-    }
-
-    /**
-     * @param req req
-     * @param resp resp
-     * @throws ServletException could not load
-     * @throws IOException could not load
-     */
-    private void loadDashboard(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    @GetMapping
+    public String doGet(ModelMap model,
+            @RequestParam(value = "pagination", required = false, defaultValue = DEFAULT_PAGESIZE) Long pageSize,
+            @RequestParam(value = "page", required = false, defaultValue = DEFAULT_STARTING_PAGE) Long pageNumber,
+            @RequestParam(value = "search", required = false) String search,
+            @RequestParam(value = "sort", required = false) String sort,
+            @RequestParam(value = "order", required = false) String order) {
 
         PageRequest<Computer> builder = new PageRequest<Computer>();
-        Page<Computer> page = computerService.loadPage(builder.with(req));
+        builder.atPage(pageNumber).withPageSize(pageSize).withSearch(search).withSort(sort).withOrder(order);
 
-        if (page != null) {
-            buildParams(req, page);
-        }
-
-        req.getRequestDispatcher(DASHBOARD_JSP_PATH).forward(req, resp);
+        loadDashboard(model, builder);
+        return "dashboard";
     }
 
     /**
-     * @param req req
+     * @param model model
+     * @param pageSize pageSize
+     * @param pageNumber pageNumber
+     * @param search search
+     * @param sort sort
+     * @param order order
+     * @param id id to delete Company
+     * @return view name to load
+     */
+    @PostMapping("/delete-company")
+    public String doPost(
+            ModelMap model,
+            @RequestParam(value = "pagination", required = false, defaultValue = DEFAULT_PAGESIZE) Long pageSize,
+            @RequestParam(value = "page", required = false, defaultValue = DEFAULT_STARTING_PAGE) Long pageNumber,
+            @RequestParam(value = "search", required = false) String search,
+            @RequestParam(value = "sort", required = false) String sort,
+            @RequestParam(value = "order", required = false) String order,
+            @RequestParam(value = "company_id_delete", required = true) Long id) {
+        //
+        //         handleComputerDeletion(req);
+        PageRequest<Computer> request = new PageRequest<Computer>();
+        request.atPage(pageNumber).withPageSize(pageSize).withSearch(search).withSort(sort).withOrder(order);
+
+        handleCompanyDeletion(model, id);
+        loadDashboard(model, request);
+
+        return "dashboard";
+    }
+
+
+    /**
+     * @param model model
+     * @param pageSize pageSize
+     * @param pageNumber pageNumber
+     * @param search search
+     * @param sort sort
+     * @param order order
+     * @param ids ids of computers to delete
+     * @return view name to load
+     */
+    @PostMapping("/delete-computer")
+    public String doPost(
+            ModelMap model,
+            @RequestParam(value = "pagination", required = false, defaultValue = DEFAULT_PAGESIZE) Long pageSize,
+            @RequestParam(value = "page", required = false, defaultValue = DEFAULT_STARTING_PAGE) Long pageNumber,
+            @RequestParam(value = "search", required = false) String search,
+            @RequestParam(value = "sort", required = false) String sort,
+            @RequestParam(value = "order", required = false) String order,
+            @RequestParam(value = "computer_selection_delete", required = true) Long[] ids) {
+
+        PageRequest<Computer> request = new PageRequest<Computer>();
+        request.atPage(pageNumber).withPageSize(pageSize).withSearch(search).withSort(sort).withOrder(order);
+
+        handleComputerDeletion(model, Arrays.asList(ids));
+        loadDashboard(model, request);
+
+        return "dashboard";
+    }
+
+    /**
+     * @param model model
+     * @param id id to delete
+     */
+    private void handleCompanyDeletion(ModelMap model, Long id) {
+        companyService.delete(id);
+        String msg = "Sucessfully deleted company : n°" + id;
+        RequestUtils.showMsg(model, true, msg);
+    }
+
+    /**
+     * @param model model
+     * @param ids ids
+     */
+    private void handleComputerDeletion(ModelMap model, List<Long> ids) {
+
+        computerService.delete(ids);
+        RequestUtils.showMsg(model, true, "Success, " + ids.size() + " computer ids deleted");
+        model.addAttribute("page", 1);
+    }
+
+    /**
+     * @param model model
+     * @param builder loaded request
+     */
+    private void loadDashboard(ModelMap model, PageRequest<Computer> builder) {
+
+        Page<Computer> page = computerService.loadPage(builder);
+        buildParams(model, page);
+    }
+
+    /**
+     * @param model model
      * @param page page
      */
-    public static void buildParams(HttpServletRequest req, Page<Computer> page) {
+    public static void buildParams(ModelMap model, Page<Computer> page) {
+        RequestUtils.buildPageParams(model, page);
         List<Computer> content = page.getContent();
-        RequestUtils.buildPageParams(req, page);
-        req.setAttribute("computers", content);
-        req.setAttribute("page", page);
+        model.addAttribute("computers", content);
+        model.addAttribute("page", page);
     }
 
 }

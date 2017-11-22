@@ -31,8 +31,13 @@
 				</div>
 			</div>
 		</div>
-		<form id="deleteComputerForm" action="#" method="POST">
+		<form id="deleteComputerForm" action="dashboard/delete-computer" method="POST">
 			<input type="hidden" name="computer_selection_delete" value="">
+			<input type="hidden" name="search" value="${ page.search }" />
+			<input type="hidden" name="sort" value="${ page.formSort }" />
+			<input type="hidden" name="order" value="${ page.order }" />
+			<input type="hidden" name="page" value="${ page.currentPage }" />
+			<input type="hidden" name="pagination" value="${ page.pageSize }" />
 		</form>
 		<div class="container" style="margin-top: 10px;">
 			<table class="table table-striped table-bordered">
@@ -71,7 +76,7 @@
 							</td>
 							<td class="editMode">
 								<c:if test="${ not empty computer.company.id }">
-									<form id="deleteCompanyForm" action="dashboard" method="POST" onsubmit="return $.fn.confirmDeleteCompany();">
+									<form id="deleteCompanyForm" action="dashboard/delete-company" method="POST" onsubmit="return $.fn.confirmDeleteCompany();">
 										<input type="hidden" name="company_id_delete" value="${ computer.getCompany().getId() }" />
 										<input class="btn btn-default" type="submit" id="btnSubmit" value="Delete Company" />
 									</form>

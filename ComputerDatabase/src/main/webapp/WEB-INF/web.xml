@@ -7,9 +7,7 @@
 
 	<!-- ################################## WELCOME PAGE ######################################## -->
 
-	<welcome-file-list>
-		<welcome-file>dashboard</welcome-file>
-	</welcome-file-list>
+
 
 
 	<!-- ################################## SPRING ######################################## -->
@@ -28,33 +26,19 @@
 	<!-- ################################## SERVLET ######################################## -->
 
 	<servlet>
-		<servlet-name>Dashboard</servlet-name>
-		<servlet-class>controller.Dashboard</servlet-class>
-		<!-- <load-on-startup>1</load-on-startup> -->
-	</servlet>
-	<servlet>
-		<servlet-name>AddComputer</servlet-name>
-		<servlet-class>controller.AddComputer</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>EditComputer</servlet-name>
-		<servlet-class>controller.EditComputer</servlet-class>
-	</servlet>
+      <servlet-name>Controllers</servlet-name>
+      <servlet-class>
+         org.springframework.web.servlet.DispatcherServlet
+      </servlet-class>
+      <load-on-startup>1</load-on-startup>
+   </servlet>
 
 	<!-- ################################## MAPPINGS ######################################## -->
 
-	<servlet-mapping>
-		<servlet-name>Dashboard</servlet-name>
-		<url-pattern>/dashboard</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>AddComputer</servlet-name>
-		<url-pattern>/add-computer</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>EditComputer</servlet-name>
-		<url-pattern>/edit-computer</url-pattern>
-	</servlet-mapping>
+   <servlet-mapping>
+      <servlet-name>Controllers</servlet-name>
+      <url-pattern>/</url-pattern>
+   </servlet-mapping>
 	
 	<!-- ################################## ERROR PAGES ######################################## -->
 
