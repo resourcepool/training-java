@@ -33,4 +33,13 @@ public class PageUtils {
     public static Long getFirstEntityIndex(Long pageNumber, Long pageSize) {
         return (pageNumber - 1) * pageSize;
     }
+
+    /**
+     * @param pageSize pageSize
+     * @param total total of elem/entities count
+     * @return return the last possible page
+     */
+    public static Long getLimit(Long pageSize, Long total) {
+        return (total + pageSize - 1) / pageSize;
+    }
 }

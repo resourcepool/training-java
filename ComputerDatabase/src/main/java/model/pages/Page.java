@@ -6,6 +6,7 @@ import java.util.List;
 import mapper.ComputerMapping;
 import persistence.querycommands.PageQuery;
 import service.PageRequest;
+import service.PageUtils;
 
 public class Page<T> {
 
@@ -134,7 +135,7 @@ public class Page<T> {
      *         (with imcomplete page)
      */
     public Long getTotalPages() {
-        return (total + getPageSize() - 1) / getPageSize();
+        return PageUtils.getLimit(this.pageSize, this.total);
     }
 
     public String getSearch() {

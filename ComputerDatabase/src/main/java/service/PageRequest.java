@@ -61,7 +61,7 @@ public class PageRequest<T> {
      * @return this
      */
     public PageRequest<T> withPageSize(Long pageSize) {
-        this.pageSize = Math.min(pageSize, 150L);
+        this.pageSize = Math.min(pageSize, 100L);
         return this;
     }
 
@@ -112,7 +112,7 @@ public class PageRequest<T> {
      */
     private void movePageIfDeleted(Long size, Long firstEntityIndex) {
         if (size != 0 && firstEntityIndex >= size) {
-            this.nbPage = size / this.pageSize;
+            this.nbPage = PageUtils.getLimit(pageSize, size);
         }
     }
 }
