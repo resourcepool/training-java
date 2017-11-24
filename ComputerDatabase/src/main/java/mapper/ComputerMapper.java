@@ -7,10 +7,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import model.Company;
 import model.Computer;
 
-public class ComputerMapper implements IResultMapper<List<Computer>> {
+public class ComputerMapper implements RowMapper<Computer> {
 
     public static final String COMPANY_NAME = "company_name";
     public static final String COMPANY_ID   = "CO.company_id";
@@ -24,8 +26,7 @@ public class ComputerMapper implements IResultMapper<List<Computer>> {
      * @return the model list
      * @throws SQLException an unexpected error occur while accessing datas
      */
-    @Override
-    public List<Computer> process(ResultSet rs) throws SQLException {
+    public List<Computer> mapRows(ResultSet rs) throws SQLException {
         List<Computer> list = new ArrayList<>();
 
         while (rs.next()) {
@@ -36,14 +37,12 @@ public class ComputerMapper implements IResultMapper<List<Computer>> {
 
     /**
      * @param rs one computer loaded from DB
+     * @param i index
      * @return the computer details
      * @throws SQLException an unexpected error occur while accessing datas
      */
-    public Computer mapComputer(ResultSet rs) throws SQLException {
-
-        if (!rs.next()) {
-            return null;
-        }
+    @Override
+    public Computer mapRow(ResultSet rs, int i) throws SQLException {
 
         return mapOneComputer(rs);
     }

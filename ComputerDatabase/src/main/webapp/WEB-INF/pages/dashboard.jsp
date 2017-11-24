@@ -2,6 +2,7 @@
 <%@ taglib prefix="mylib" tagdir="/WEB-INF/tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,7 +32,7 @@
 				</div>
 			</div>
 		</div>
-		<form id="deleteComputerForm" action="dashboard/delete-computer" method="POST">
+		<form id="deleteComputerForm" action="/ComputerDatabase/dashboard/delete-computer" method="POST">
 			<input type="hidden" name="computer_selection_delete" value="">
 			<input type="hidden" name="search" value="${ page.search }" />
 			<input type="hidden" name="sort" value="${ page.formSort }" />

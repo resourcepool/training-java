@@ -1,18 +1,17 @@
 package persistence.impl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import mapper.CompanyMapper;
 import model.Company;
 import model.pages.Page;
-import persistence.DaoConnection;
 import persistence.ICompanyDao;
 import persistence.querycommands.PageQuery;
 import service.PageUtils;
@@ -25,14 +24,15 @@ public class CompanyDao implements ICompanyDao {
     private static final String SELECT_COUNT_FROM_COMPANY_WHERE_ID = "select count(*) from company where id = ?";
     private static final String SELECT_ID_NAME_FROM_COMPANY = "select id, name from company order by name";
 
-    private DaoConnection conn;
+    private JdbcTemplate jdbc;
 
     /**
-     * @param conn Dao Connection Manager
+     * @param ds dataSource
      */
     @Autowired
-    public CompanyDao(DaoConnection conn) {
-        this.conn = conn;
+    public CompanyDao(DataSource ds) {
+        this.jdbc = new JdbcTemplate(ds);
+
     }
 
     /**
@@ -41,7 +41,7 @@ public class CompanyDao implements ICompanyDao {
      */
     @Override
     public List<Company> getCompanyList() throws SQLException {
-        return conn.executeSelectQuery(SELECT_ID_NAME_FROM_COMPANY, new CompanyMapper());
+        return jdbc.queryForObject(SELECT_ID_NAME_FROM_COMPANY, new CompanyMapper());
     }
 
     /**
@@ -51,15 +51,8 @@ public class CompanyDao implements ICompanyDao {
      */
     @Override
     public boolean companyExists(Long idCompany) throws SQLException {
-        return conn.executeQuery((Connection conn) -> {
-            try (PreparedStatement s = conn.prepareStatement(SELECT_COUNT_FROM_COMPANY_WHERE_ID)) {
-                s.setLong(1, idCompany);
-
-                try (ResultSet r = s.executeQuery()) {
-                    return (r.next() ? r.getLong(1) > 0 : false);
-                }
-            }
-        });
+        Long count =  jdbc.queryForObject(SELECT_COUNT_FROM_COMPANY_WHERE_ID, Long.class);
+        return count != null && count > 0;
     }
 
     /**
@@ -72,8 +65,8 @@ public class CompanyDao implements ICompanyDao {
 
         PageQuery<Company> command = (Page<Company> p) -> {
             Long startElem = PageUtils.getFirstEntityIndex(p);
-            String filter = String.format(" ORDER BY id LIMIT %d,%d", startElem, p.getPageSize());
-            return conn.executeSelectQuery(SELECT_ID_NAME_FROM_COMPANY + filter, new CompanyMapper());
+            String filter = " ORDER BY id LIMIT ?, ?";
+            return jdbc.queryForList(SELECT_ID_NAME_FROM_COMPANY + filter, Company.class, startElem, p.getPageSize());
         };
 
         return new Page<Company>(command, size, 10L, 1L);
@@ -85,10 +78,7 @@ public class CompanyDao implements ICompanyDao {
      */
     @Override
     public Long getCompanyCount() throws SQLException {
-        Long size = conn.executeSelectQuery(SELECT_COUNT_FROM_COMPANY, (ResultSet r) -> {
-            return (r.next() ? r.getLong(1) : null);
-        });
-        return size;
+        return jdbc.queryForObject(SELECT_COUNT_FROM_COMPANY, Long.class);
     }
 
     /**
@@ -97,26 +87,6 @@ public class CompanyDao implements ICompanyDao {
      */
     @Override
     public void deleteCompany(Long id) throws SQLException {
-
-        conn.executeQuery((Connection conn) -> {
-
-            PreparedStatement deleteCompany = null;
-
-            try {
-                deleteCompany = conn.prepareStatement(DELETE_FROM_COMPANY_WHERE_ID);
-                deleteCompany.setLong(1, id);
-
-                deleteCompany.executeUpdate();
-
-            } finally {
-
-                if (deleteCompany != null) {
-                    deleteCompany.close();
-                }
-            }
-
-            return true;
-        });
-
+        jdbc.update(DELETE_FROM_COMPANY_WHERE_ID, id);
     }
 }

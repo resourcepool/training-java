@@ -22,6 +22,14 @@
     <level value="error"/>
 </logger>
 
+<!-- <logger name="org.springframework.jdbc.core.JdbcTemplate"> -->
+<!--   <level value="debug" /> -->
+<!-- </logger> -->
+
+<!-- <logger name="org.springframework.jdbc.core.StatementCreatorUtils"> -->
+<!--     <level value="trace"/> -->
+<!-- </logger> -->
+
  <root level="info">
   <appender-ref ref="STDOUT" />
   <appender-ref ref="FILE" />

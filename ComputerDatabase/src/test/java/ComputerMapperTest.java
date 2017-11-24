@@ -51,7 +51,7 @@ public class ComputerMapperTest {
         Mockito.when(resultSet.getString(ComputerMapper.COMPANY_NAME)).thenReturn(companyName);
         Mockito.when(resultSet.next()).thenReturn(true).thenReturn(false);
 
-        List<Computer> result = mapper.process(resultSet);
+        List<Computer> result = mapper.mapRows(resultSet);
         assertEquals(result.size(), 1);
 
         Computer first = result.get(0);

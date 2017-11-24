@@ -7,38 +7,45 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import mapper.ComputerMapper;
 import model.Computer;
 import model.pages.Page;
-import persistence.DaoConnection;
 import persistence.IComputerDao;
 import service.PageUtils;
 
 @Repository
 public class ComputerDao implements IComputerDao {
 
-    private static final String SEARCH_FILTER                         = "where lower(CO.name) like '%%%1$s%%' or lower(CA.name) like '%%%1$s%%'";
     private static final String COUNT_FROM_COMPUTER                   = "select count(*) from computer";
     private static final String COUNT_FROM_COMPUTER_WITH_COMPANY      = "select count(*) from computer CO left join company CA on CA.Id = CO.company_id";
     private static final String SELECT_FROM_COMPUTER_WITH_COMPANY     = "select CO.*, CA.name as company_name from computer CO left join company CA on CA.Id = CO.company_id";
     private static final String INSERT_INTO_COMPUTER_VALUES           = "insert into computer values (null, ?, ?, ?, ?)";
-    private static final String ID_FILTER                             = " where CO.id = ?";
+    private static final String UPDATE_COMPUTER                       = "update computer set name = ?, introduced = ?, discontinued = ?, company_id = ? where id = ?";
     private static final String DELETE_FROM_COMPUTER_WHERE_COMPANY_ID = "delete from computer where company_id = ?";
+    private static final String DELETE_FROM_COMPUTER_WHERE_ID         = "delete from computer where id = ?";
+    private static final String ID_FILTER                             = " where CO.id = ?";
+    private static final String SEARCH_FILTER                         = " where lower(CO.name) like ? or lower(CA.name) like ?";
 
-    private DaoConnection       conn;
+    private JdbcTemplate        jdbc;
 
     /**
-     * @param conn Dao Connection Manager
+     * @param ds Datasource
      */
     @Autowired
-    public ComputerDao(DaoConnection conn) {
-        this.conn = conn;
+    public ComputerDao(DataSource ds) {
+        this.jdbc = new JdbcTemplate(ds);
     }
 
     // ########################## SELECT, GETTERS #################
@@ -48,8 +55,8 @@ public class ComputerDao implements IComputerDao {
      * @throws SQLException content couldn't be loaded
      */
     @Override
-    public Long getComputerTotalCount() throws SQLException {
-        return conn.getCount(COUNT_FROM_COMPUTER);
+    public Long getComputerTotalCount() {
+        return jdbc.queryForObject(COUNT_FROM_COMPUTER, Long.class);
     }
 
     /**
@@ -58,9 +65,9 @@ public class ComputerDao implements IComputerDao {
      * @throws SQLException content couldn't be loaded
      */
     @Override
-    public Long getComputerTotalCount(String search) throws SQLException {
-        String req = COUNT_FROM_COMPUTER_WITH_COMPANY + ' ' + String.format(SEARCH_FILTER, search);
-        return conn.getCount(req);
+    public Long getComputerTotalCount(String search) {
+        String toSearch = '%' + search + '%';
+        return jdbc.queryForObject(COUNT_FROM_COMPUTER_WITH_COMPANY + SEARCH_FILTER, Long.class, toSearch, toSearch);
     }
 
     /**
@@ -69,18 +76,10 @@ public class ComputerDao implements IComputerDao {
      * @throws SQLException content couldn't be loaded
      */
     @Override
-    public Computer getComputerDetail(Long id) throws SQLException {
-        return conn.executeQuery((Connection conn) -> {
-            PreparedStatement s = conn.prepareStatement(SELECT_FROM_COMPUTER_WITH_COMPANY + ID_FILTER);
-            s.setString(1, id.toString());
-            ResultSet r = s.executeQuery();
-
-            Computer c = new ComputerMapper().mapComputer(r);
-
-            r.close();
-            s.close();
-            return c;
-        });
+    public Computer getComputerDetail(Long id) {
+        return jdbc.queryForObject(SELECT_FROM_COMPUTER_WITH_COMPANY + ID_FILTER, (ResultSet rs, int i) -> {
+            return new ComputerMapper().mapRow(rs, 0);
+        }, id);
     }
     // ########################## PAGES, SEARCH, SORT, LIMIT #######################
 
@@ -90,27 +89,29 @@ public class ComputerDao implements IComputerDao {
      * @throws SQLException content couldn't be loaded
      */
     @Override
-    public List<Computer> get(Page<Computer> page) throws SQLException {
-        // TODO PrepareStatement
-        Long start = PageUtils.getFirstEntityIndex(page);
+    public List<Computer> get(Page<Computer> page) {
+
         StringBuilder sb = new StringBuilder(SELECT_FROM_COMPUTER_WITH_COMPANY);
-        sb.append(' ');
+        List<Object> parameters = new ArrayList<Object>();
+        Long start = PageUtils.getFirstEntityIndex(page);
 
         if (page.getSearch() != null) {
-            sb.append(String.format(SEARCH_FILTER, page.getSearch()));
-            sb.append(' ');
+            sb.append(SEARCH_FILTER);
+            parameters.add('%' + page.getSearch() + '%');
+            parameters.add('%' + page.getSearch() + '%');
         }
 
         if (page.getDbSort() != null) {
-            sb.append(String.format("ORDER BY %s %s", page.getDbSort(), page.getOrder()));
+            sb.append(String.format(" ORDER BY %s %s", page.getDbSort(), page.getOrder()));
         } else {
-            sb.append("ORDER BY CO.id");
+            sb.append(" ORDER BY CO.id");
         }
-        sb.append(' ');
 
-        sb.append(String.format(" LIMIT %d,%d", start, page.getPageSize()));
+        sb.append(" LIMIT ? OFFSET ?");
+        parameters.add(page.getPageSize());
+        parameters.add(start);
 
-        return conn.executeSelectQuery(sb.toString(), new ComputerMapper());
+        return jdbc.query(sb.toString(), parameters.toArray(), new ComputerMapper());
     }
 
     // ########################## CREATE, UPDATE and DELETE #################
@@ -121,29 +122,28 @@ public class ComputerDao implements IComputerDao {
      * @throws SQLException content couldn't be loaded
      */
     @Override
-    public Long createComputer(Computer newComputer) throws SQLException {
-        return conn.executeQuery((Connection c) -> {
-            PreparedStatement s = c.prepareStatement(INSERT_INTO_COMPUTER_VALUES, Statement.RETURN_GENERATED_KEYS);
+    public Long createComputer(Computer newComputer) {
+        GeneratedKeyHolder holder = new GeneratedKeyHolder();
+        jdbc.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection c) throws SQLException {
+                PreparedStatement s = c.prepareStatement(INSERT_INTO_COMPUTER_VALUES, Statement.RETURN_GENERATED_KEYS);
 
-            s.setString(1, newComputer.getName());
-            s.setDate(2, newComputer.getIntroduced() == null ? null : Date.valueOf(newComputer.getIntroduced()));
-            s.setDate(3, newComputer.getDiscontinued() == null ? null : Date.valueOf(newComputer.getDiscontinued()));
+                s.setString(1, newComputer.getName());
+                s.setDate(2, newComputer.getIntroduced() == null ? null : Date.valueOf(newComputer.getIntroduced()));
+                s.setDate(3, newComputer.getDiscontinued() == null ? null : Date.valueOf(newComputer.getDiscontinued()));
 
-            Long companyId = newComputer.getCompany().getId();
-            if (companyId != null) {
-                s.setLong(4, companyId);
-            } else {
-                s.setNull(4, Types.BIGINT);
+                Long companyId = newComputer.getCompany().getId();
+                if (companyId != null) {
+                    s.setLong(4, companyId);
+                } else {
+                    s.setNull(4, Types.BIGINT);
+                }
+                return s;
             }
+        }, holder);
 
-            s.executeUpdate();
-            ResultSet r = s.getGeneratedKeys();
-            Long id = r.next() ? r.getLong(1) : null;
-
-            r.close();
-            s.close();
-            return id;
-        });
+        return holder.getKey().longValue();
     }
 
     /**
@@ -151,10 +151,9 @@ public class ComputerDao implements IComputerDao {
      * @throws SQLException content couldn't be loaded
      */
     @Override
-    public void updateComputer(Computer c) throws SQLException {
-        conn.executeQuery((Connection conn) -> {
-            PreparedStatement s = conn.prepareStatement(
-                    "update computer set name = ?, introduced = ?, discontinued = ?, company_id = ? where id = ?");
+    public void updateComputer(Computer c) {
+        jdbc.update((Connection conn) -> {
+            PreparedStatement s = conn.prepareStatement(UPDATE_COMPUTER);
             s.setString(1, c.getName());
             s.setDate(2, c.getIntroduced() == null ? null : Date.valueOf(c.getIntroduced()));
             s.setDate(3, c.getDiscontinued() == null ? null : Date.valueOf(c.getDiscontinued()));
@@ -166,10 +165,7 @@ public class ComputerDao implements IComputerDao {
             }
 
             s.setLong(5, c.getId());
-            s.executeUpdate();
-
-            s.close();
-            return true;
+            return s;
         });
     }
 
@@ -178,13 +174,8 @@ public class ComputerDao implements IComputerDao {
      * @throws SQLException content couldn't be loaded
      */
     @Override
-    public void deleteComputer(Long id) throws SQLException {
-        conn.executeQuery((Connection conn) -> {
-            try (Statement s = conn.createStatement()) {
-                s.executeUpdate("delete from computer where id = " + id);
-            }
-            return true;
-        });
+    public void deleteComputer(Long id) {
+        jdbc.update(DELETE_FROM_COMPUTER_WHERE_ID, id);
     }
 
     /**
@@ -192,14 +183,8 @@ public class ComputerDao implements IComputerDao {
      * @throws SQLException content couldn't be loaded
      */
     @Override
-    public void deleteByCompany(Long id) throws SQLException {
-        conn.executeQuery((Connection conn) -> {
-            try (PreparedStatement s = conn.prepareStatement(DELETE_FROM_COMPUTER_WHERE_COMPANY_ID)) {
-                s.setObject(1, id);
-                s.executeUpdate();
-            }
-            return true;
-        });
+    public void deleteByCompany(Long id) {
+        jdbc.update(DELETE_FROM_COMPUTER_WHERE_COMPANY_ID, id);
     }
 
     /**
@@ -207,16 +192,9 @@ public class ComputerDao implements IComputerDao {
      * @throws SQLException failed
      */
     @Override
-    public void deleteComputers(List<Long> ids) throws SQLException {
-
+    public void deleteComputers(List<Long> ids) {
         String filter = ids.stream().map(number -> String.valueOf(number)).collect(Collectors.joining(","));
-
-        conn.executeQuery((Connection conn) -> {
-            try (Statement s = conn.createStatement()) {
-                s.executeUpdate("delete from computer where id in (" + filter + ")");
-            }
-            return true;
-        });
+        jdbc.update("delete from computer where id in (" + filter + ")");
     }
 
 }
