@@ -1,4 +1,6 @@
 
+configdb.properties
+
 # Created by https://www.gitignore.io/api/java,linux,eclipse
 
 ### Eclipse ###
@@ -14,7 +16,6 @@ local.properties
 .settings/
 .loadpath
 .recommenders
-*.properties
 
 # External tool builders
 .externalToolBuilders/

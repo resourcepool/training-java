@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,12 +15,10 @@
 	<section id="main">
 		<div class="container">
 			<div class="alert alert-danger">
-				Error 403: Access denied! <br />
-				<!-- stacktrace -->
+				<spring:message code="error.message.403"/>
 			</div>
 		</div>
 	</section>
-	
 	<jsp:include page="/WEB-INF/pages/footer.jsp" />
 </body>
 </html>

@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.ui.ModelMap;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import model.ComputerDto;
 import model.pages.Page;
@@ -65,14 +66,13 @@ public class RequestUtils {
     }
 
     /**
-     * @param model model
+     * @param r RedirectAttributes
      * @param success success
      * @param msg msg
      */
-    public static void showMsg(ModelMap model, boolean success, String msg) {
-        model.addAttribute("msg", msg);
-        model.addAttribute("success", success);
-
+    public static void showMsg(RedirectAttributes r, boolean success, String msg) {
+        r.addFlashAttribute("msg", msg);
+        r.addFlashAttribute("success", success);
     }
 
     /**

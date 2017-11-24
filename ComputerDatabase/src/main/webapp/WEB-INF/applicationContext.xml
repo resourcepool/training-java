@@ -18,31 +18,11 @@
 	<context:component-scan base-package="persistence" />
 	<context:component-scan base-package="persistence.impl" />
 	<context:component-scan base-package="service.impl" />
-	
-	<!-- #### Languages ######################################### -->
-	
-    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-        <property name="basename" value="classpath:messages"/>
-        <property name="defaultEncoding" value="UTF-8"/>
-    </bean>
 
-    <bean id="cookieResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
-        <property name="defaultLocale" value="en"/>
-        <property name="cookieName" value="my-locale-cookie"/>
-        <property name="cookieMaxAge" value="3600"/>
-    </bean>
-
-    <mvc:interceptors>
-        <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
-            <property name="paramName" value="lang"/>
-        </bean>
-    </mvc:interceptors>
-    
-    
 	<!-- #### Transactions ######################################### -->
-	
-	<tx:annotation-driven transaction-manager="txManager"/>
-	
+
+	<tx:annotation-driven transaction-manager="txManager" />
+
 	<bean id="txManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
@@ -52,7 +32,7 @@
 	<!-- #### HikariCP configuration ######################################### -->
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location" value="classpath:config.properties" />
+		<property name="location" value="classpath:configdb.properties" />
 	</bean>
 
 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">

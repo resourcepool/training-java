@@ -30,3 +30,6 @@ input[type='checkbox'] {
 
 .table > thead > tr > th.active { background-color : #DDEEEE; }
 
+.flag {
+	height: 10px;
+}

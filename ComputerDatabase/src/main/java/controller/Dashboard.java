@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import model.Computer;
 import model.pages.Page;
@@ -55,82 +56,36 @@ public class Dashboard {
 
     /**
      * @param model model
-     * @param pageSize pageSize
-     * @param pageNumber pageNumber
-     * @param search search
-     * @param sort sort
-     * @param order order
+     * @param r RedirectAttributes
      * @param id id to delete Company
      * @return view name to load
      */
-    @PostMapping("/delete-company")
+    @PostMapping("delete-company")
     public String deleteCompany(
             ModelMap model,
-            @RequestParam(value = "pagination", required = false, defaultValue = DEFAULT_PAGESIZE) Long pageSize,
-            @RequestParam(value = "page", required = false, defaultValue = DEFAULT_STARTING_PAGE) Long pageNumber,
-            @RequestParam(value = "search", required = false) String search,
-            @RequestParam(value = "sort", required = false) String sort,
-            @RequestParam(value = "order", required = false) String order,
+            final RedirectAttributes r,
             @RequestParam(value = "company_id_delete", required = true) Long id) {
-        //
-        //         handleComputerDeletion(req);
-        PageRequest<Computer> request = new PageRequest<Computer>();
-        request.atPage(pageNumber).withPageSize(pageSize).withSearch(search).withSort(sort).withOrder(order);
 
-        handleCompanyDeletion(model, id);
-        loadDashboard(model, request);
+        companyService.delete(id);
+        RequestUtils.showMsg(r, true, "Sucessfully deleted company : n°" + id);
 
-        return "dashboard";
+        return "redirect:/dashboard";
     }
 
     /**
      * @param model model
-     * @param pageSize pageSize
-     * @param pageNumber pageNumber
-     * @param search search
-     * @param sort sort
-     * @param order order
+     * @param r RedirectAttributes
      * @param ids ids of computers to delete
      * @return view name to load
      */
-    @PostMapping("/delete-computer")
-    public String deleteComputer(
-            ModelMap model,
-            @RequestParam(value = "pagination", required = false, defaultValue = DEFAULT_PAGESIZE) Long pageSize,
-            @RequestParam(value = "page", required = false, defaultValue = DEFAULT_STARTING_PAGE) Long pageNumber,
-            @RequestParam(value = "search", required = false) String search,
-            @RequestParam(value = "sort", required = false) String sort,
-            @RequestParam(value = "order", required = false) String order,
+    @PostMapping("delete-computer")
+    public String deleteComputer(ModelMap model,
+            final RedirectAttributes r,
             @RequestParam(value = "computer_selection_delete", required = true) Long[] ids) {
 
-        PageRequest<Computer> request = new PageRequest<Computer>();
-        request.atPage(pageNumber).withPageSize(pageSize).withSearch(search).withSort(sort).withOrder(order);
-
-        handleComputerDeletion(model, Arrays.asList(ids));
-        loadDashboard(model, request);
-
-        return "dashboard";
-    }
-
-    /**
-     * @param model model
-     * @param id id to delete
-     */
-    private void handleCompanyDeletion(ModelMap model, Long id) {
-        companyService.delete(id);
-        String msg = "Sucessfully deleted company : n°" + id;
-        RequestUtils.showMsg(model, true, msg);
-    }
-
-    /**
-     * @param model model
-     * @param ids ids
-     */
-    private void handleComputerDeletion(ModelMap model, List<Long> ids) {
-
-        computerService.delete(ids);
-        RequestUtils.showMsg(model, true, "Success, " + ids.size() + " computer ids deleted");
-        model.addAttribute("page", 1);
+        computerService.delete(Arrays.asList(ids));
+        RequestUtils.showMsg(r, true, "Success, " + ids.length + " computer ids deleted");
+        return "redirect:/dashboard";
     }
 
     /**
@@ -138,16 +93,7 @@ public class Dashboard {
      * @param builder loaded request
      */
     private void loadDashboard(ModelMap model, PageRequest<Computer> builder) {
-
         Page<Computer> page = computerService.loadPage(builder);
-        buildParams(model, page);
-    }
-
-    /**
-     * @param model model
-     * @param page page
-     */
-    public static void buildParams(ModelMap model, Page<Computer> page) {
         RequestUtils.buildPageParams(model, page);
         List<Computer> content = page.getContent();
         model.addAttribute("computers", content);

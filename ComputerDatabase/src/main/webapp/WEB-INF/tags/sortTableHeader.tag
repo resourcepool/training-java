@@ -6,6 +6,7 @@
 <%@ attribute name="params" required="false" rtexprvalue="true" type="String" %>
 
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <c:set var="sort_name" value="${ current_order eq 'ASC' && current_sort eq column_name ? 'DESC' : 'ASC' }" />
 						
@@ -20,5 +21,5 @@
 	</c:otherwise>
 	</c:choose>
 	
-	</a> ${ content }
+	</a> <spring:message code="${ content }"/>
 </th>

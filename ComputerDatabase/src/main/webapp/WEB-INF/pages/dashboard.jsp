@@ -1,34 +1,49 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="mylib" tagdir="/WEB-INF/tags"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
-	<jsp:include page="/WEB-INF/pages/header.jsp" />
+<jsp:include page="/WEB-INF/pages/header.jsp" />
+<script type="text/javascript">
+  var settings = new Array();
+  settings['settings.toogle.on'] = "<spring:message code='button.hide' javaScriptEscape='true' />";
+  settings['settings.toogle.off'] = "<spring:message code='button.edit' javaScriptEscape='true' />";
+  settings['settings.confirm.computer'] = "<spring:message code='confirm.computers' javaScriptEscape='true' />";
+  settings['settings.confirm.company'] = "<spring:message code='confirm.company' javaScriptEscape='true' />";
+</script>
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
+			<a class="navbar-brand" href="/ComputerDatabase/dashboard"> Application - Computer Database </a>
+			<mylib:lang/>
 		</div>
 	</header>
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${page.totalCount} Computers found</h1>
-			<mylib:showMsg/>
+			<h1 id="homeTitle">
+				<spring:message code="dashboard.count" arguments="${page.totalCount}" />
+			</h1>
+			<mylib:showMsg />
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
-						<input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" value="${ page.search }" />
+						<input type="search" id="searchbox" name="search" class="form-control" placeholder="<spring:message code="dashboard.search"/>" value="${ page.search }" />
 						<input type="hidden" name="sort" value="${ page.formSort }" />
 						<input type="hidden" name="order" value="${ page.order }" />
-						<input type="submit" id="searchsubmit" value="Filter by name" class="btn btn-primary" />
+						<input type="submit" id="searchsubmit" value="<spring:message code="button.search"/>" class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="add-computer">Add Computer</a> <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
+					<a class="btn btn-success" id="addComputer" href="/ComputerDatabase/add-computer">
+						<spring:message code="button.add" />
+					</a>
+					<a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">
+						<spring:message code="button.edit" />
+					</a>
 				</div>
 			</div>
 		</div>
@@ -46,15 +61,16 @@
 					<tr>
 						<th class="editMode" style="width: 60px; height: 22px;">
 							<input type="checkbox" id="selectall" />
-							<span style="vertical-align: top;"> - <a href="#" id="deleteSelected" onclick="$.fn.deleteSelected();"> <i class="fa fa-trash-o fa-lg"></i>
-							</a>
+							<span style="vertical-align: top;"> - <a href="#" id="deleteSelected" onclick="$.fn.deleteSelected();">
+									<i class="fa fa-trash-o fa-lg"></i>
+								</a>
 							</span>
 						</th>
-						<mylib:sortTableHeader content="Computer name" column_name="computerName" current_order="${ page.order }"  current_sort="${ page.formSort }" params="${sortparams}"/>
-						<mylib:sortTableHeader content="Introduced date" column_name="introduced" current_order="${ page.order }"  current_sort="${ page.formSort }" params="${sortparams}"/>
-						<mylib:sortTableHeader content="Discontinued date" column_name="discontinued" current_order="${ page.order }"  current_sort="${ page.formSort }" params="${sortparams}"/>
-						<mylib:sortTableHeader content="Company" column_name="company" current_order="${ page.order }"  current_sort="${ page.formSort }" params="${sortparams}"/>
-						<th class="editMode" style="width: 60px; height: 22px;">Delete company ?</th>
+						<mylib:sortTableHeader content="computer.name" column_name="computerName" current_order="${ page.order }" current_sort="${ page.formSort }" params="${sortparams}" />
+						<mylib:sortTableHeader content="computer.introduced" column_name="introduced" current_order="${ page.order }" current_sort="${ page.formSort }" params="${sortparams}" />
+						<mylib:sortTableHeader content="computer.discontinued" column_name="discontinued" current_order="${ page.order }" current_sort="${ page.formSort }" params="${sortparams}" />
+						<mylib:sortTableHeader content="computer.company" column_name="company" current_order="${ page.order }" current_sort="${ page.formSort }" params="${sortparams}" />
+						<th class="editMode" style="width: 60px; height: 22px;"><spring:message code="dashboard.delete.company"/></th>
 					</tr>
 				</thead>
 				<tbody id="results">
@@ -64,7 +80,9 @@
 								<input type="checkbox" name="cb" class="cb" value="${computer.getId()}">
 							</td>
 							<td>
-								<a href="edit-computer?id=${computer.getId()}" onclick=""><c:out value="${computer.getName()}" /></a>
+								<a href="edit-computer?id=${computer.getId()}" onclick="">
+									<c:out value="${computer.getName()}" />
+								</a>
 							</td>
 							<td>
 								<c:out value="${computer.getIntroduced()}" />
@@ -77,9 +95,9 @@
 							</td>
 							<td class="editMode">
 								<c:if test="${ not empty computer.company.id }">
-									<form id="deleteCompanyForm" action="dashboard/delete-company" method="POST" onsubmit="return $.fn.confirmDeleteCompany();">
+									<form id="deleteCompanyForm" action="/ComputerDatabase/dashboard/delete-company" method="POST" onsubmit="return $.fn.confirmDeleteCompany();">
 										<input type="hidden" name="company_id_delete" value="${ computer.getCompany().getId() }" />
-										<input class="btn btn-default" type="submit" id="btnSubmit" value="Delete Company" />
+										<input class="btn btn-default" type="submit" id="btnSubmit" value="<spring:message code="dashboard.delete.company"/>" />
 									</form>
 								</c:if>
 							</td>
@@ -95,7 +113,6 @@
 			<mylib:pagination page_count="${page.pageSize}" params="${pageparams}" />
 		</div>
 	</footer>
-	
 	<jsp:include page="/WEB-INF/pages/footer.jsp" />
 	<script src="<c:url value ="/resources/js/dashboard.js"/>"></script>
 </body>

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,8 +15,15 @@
 	<section id="main">
 		<div class="container">
 			<div class="alert alert-danger">
-				Error 500: An error has occured! <br />
-				<c:out value="${exception}"/>
+				<spring:message code="error.message.500"/> 
+				
+			</div>
+			<div class="alert alert-danger">
+				<c:set var="exception" value="${requestScope['javax.servlet.error.exception']}"/>
+				<c:out value="${exception.message}"/>
+				<c:forEach items="${exception.stackTrace}" var="element">
+				   <c:out value="${element}" />
+				</c:forEach>
 			</div>
 		</div>
 	</section>

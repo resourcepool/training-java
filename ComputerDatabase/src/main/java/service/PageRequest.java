@@ -101,9 +101,18 @@ public class PageRequest<T> {
      */
     public Page<T> build(PageQuery<T> pageQuery, Long size) {
         Long firstEntityIndex = PageUtils.getFirstEntityIndex(this.nbPage, this.pageSize);
-        if (firstEntityIndex >= size) {
+        movePageIfDeleted(size, firstEntityIndex);
+        return new Page<T>(pageQuery, size, this);
+    }
+
+    /**
+     * Reset the page number if the selected page is empty, is case of deletion for instance.
+     * @param size size
+     * @param firstEntityIndex index
+     */
+    private void movePageIfDeleted(Long size, Long firstEntityIndex) {
+        if (size != 0 && firstEntityIndex >= size) {
             this.nbPage = size / this.pageSize;
         }
-        return new Page<T>(pageQuery, size, this);
     }
 }

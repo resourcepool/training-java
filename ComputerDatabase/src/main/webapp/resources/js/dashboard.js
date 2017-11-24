@@ -42,11 +42,11 @@ $(function() {
     $.fn.toggleEditMode = function() {
         if($(".editMode").is(":visible")) {
             $(".editMode").hide();
-            $("#editComputer").text("Edit");
+            $("#editComputer").text(settings['settings.toogle.off']);
         }
         else {
             $(".editMode").show();
-            $("#editComputer").text("View");
+            $("#editComputer").text(settings['settings.toogle.on']);
         }
         return this;
     };
@@ -54,14 +54,14 @@ $(function() {
 
 (function ( $ ) {
     $.fn.confirmDeleteCompany = function() {
-       return (confirm("Are you sure you want to delete the selected company?"));
+       return (confirm(settings['settings.confirm.company']));
     };
 }( jQuery ));
 
 // Function delete selected: Asks for confirmation to delete selected computers, then submits it to the deleteComputerForm
 (function ( $ ) {
     $.fn.deleteSelected = function() {
-        if (confirm("Are you sure you want to delete the selected computers?")) { 
+        if (confirm(settings['settings.confirm.computer'])) { 
             $('#deleteComputerForm input[name=computer_selection_delete]').setCheckboxValues('selection','cb');
             $('#deleteComputerForm').submit();
         }

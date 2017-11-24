@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,8 +15,7 @@
 	<section id="main">
 		<div class="container">
 			<div class="alert alert-danger">
-				Error 404: Page not found. Too bad bitch! <br />
-				<!-- stacktrace -->
+				<spring:message code="error.message.404"/>
 			</div>
 		</div>
 	</section>
