@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:jsp="http://java.sun.com/xml/ns/javaee/jsp"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+	<display-name>ComputerDatabase</display-name>
+
+	<!-- ################################## WELCOME PAGE ######################################## -->
+
+	<welcome-file-list>
+		<welcome-file>dashboard</welcome-file>
+	</welcome-file-list>
+
+	<!-- ################################## SERVLET ######################################## -->
+
+	<servlet>
+		<servlet-name>Dashboard</servlet-name>
+		<servlet-class>controller.Dashboard</servlet-class>
+		<!-- <load-on-startup>1</load-on-startup> -->
+	</servlet>
+	<servlet>
+		<servlet-name>AddComputer</servlet-name>
+		<servlet-class>controller.AddComputer</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>EditComputer</servlet-name>
+		<servlet-class>controller.EditComputer</servlet-class>
+	</servlet>
+
+	<!-- ################################## MAPPINGS ######################################## -->
+
+	<servlet-mapping>
+		<servlet-name>Dashboard</servlet-name>
+		<url-pattern>/dashboard</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AddComputer</servlet-name>
+		<url-pattern>/addComputer</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>EditComputer</servlet-name>
+		<url-pattern>/editComputer</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ################################## ERROR PAGES ######################################## -->
+
+	<error-page>
+		<error-code>403</error-code>
+		<location>/WEB-INF/pages/403.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/pages/404.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/WEB-INF/pages/500.jsp</location>
+	</error-page>
+
+	<!-- ################################## DISABLE JAVA in JSP ######################################## -->
+
+	<jsp-config>
+		<jsp-property-group>
+			<url-pattern>*.jsp</url-pattern>
+			<scripting-invalid>true</scripting-invalid>
+		</jsp-property-group>
+	</jsp-config>
+
+<!-- <jsp-config> -->
+<!--    <jsp-property-group> -->
+<!--      <display-name>Display</display-name> -->
+<!--      <url-pattern>*.jsp</url-pattern> -->
+<!--      <el-ignored>false</el-ignored> -->
+<!--      <scripting-invalid>false</scripting-invalid> -->
+<!--      <is-xml>false</is-xml> -->
+<!--      <include-prelude>/template/header.jsp</include-prelude>header -->
+<!--      <include-coda>/template/footer.jsp</include-coda>footer -->
+<!--    </jsp-property-group> -->
+<!--  </jsp-config> -->
+ 
+</web-app>
