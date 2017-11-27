@@ -11,7 +11,7 @@
 	<mvc:annotation-driven />
 	<mvc:resources mapping="/**" location="/" />
 	<context:component-scan base-package="controller" />
-	<context:annotation-config />
+<!-- 	<context:annotation-config /> -->
 
 	<!-- #### Languages ######################################### -->
 
@@ -31,7 +31,7 @@
 	<mvc:interceptors>
 		<bean id="localeChangeInterceptor"
 			class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
-			<property name="paramName" value="lang"></property>
+			<property name="paramName" value="lang"/>
 		</bean>
 	</mvc:interceptors>
 

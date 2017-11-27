@@ -31,11 +31,11 @@
 		<spring.version>5.0.1.RELEASE</spring.version>
 		<jcloverslf4j.version>1.7.25</jcloverslf4j.version>
 		<spring.aspectweaver.version>1.8.13</spring.aspectweaver.version>
+		<hibernate.version>5.2.12.Final</hibernate.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -90,7 +90,6 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>${jcloverslf4j.version}</version>
-
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -125,6 +124,12 @@
 			<artifactId>aspectjweaver</artifactId>
 			<version>${spring.aspectweaver.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+
 
 		<!-- TEST -->
 		<dependency>

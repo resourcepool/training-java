@@ -8,11 +8,11 @@
 <head>
 <jsp:include page="/WEB-INF/pages/header.jsp" />
 <script type="text/javascript">
-  var settings = new Array();
-  settings['settings.toogle.on'] = "<spring:message code='button.hide' javaScriptEscape='true' />";
-  settings['settings.toogle.off'] = "<spring:message code='button.edit' javaScriptEscape='true' />";
-  settings['settings.confirm.computer'] = "<spring:message code='confirm.computers' javaScriptEscape='true' />";
-  settings['settings.confirm.company'] = "<spring:message code='confirm.company' javaScriptEscape='true' />";
+  var lang = new Array();
+  lang['toogle.on'] = "<spring:message code='button.hide' javaScriptEscape='true' />";
+  lang['toogle.off'] = "<spring:message code='button.edit' javaScriptEscape='true' />";
+  lang['confirm.computer'] = "<spring:message code='confirm.computers' javaScriptEscape='true' />";
+  lang['confirm.company'] = "<spring:message code='confirm.company' javaScriptEscape='true' />";
 </script>
 </head>
 <body>
