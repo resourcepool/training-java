@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -51,16 +50,14 @@ public class ComputerMapperTest {
         Mockito.when(resultSet.getString(ComputerMapper.COMPANY_NAME)).thenReturn(companyName);
         Mockito.when(resultSet.next()).thenReturn(true).thenReturn(false);
 
-        List<Computer> result = mapper.mapRows(resultSet);
-        assertEquals(result.size(), 1);
+        Computer result =  mapper.mapRow(resultSet, 0);
 
-        Computer first = result.get(0);
-        assertEquals(id.longValue(), first.getId().longValue());
-        assertEquals(host, first.getName());
-        assertEquals(null, first.getIntroduced());
-        assertEquals(date, first.getDiscontinued());
-        assertEquals(companyId.longValue(), first.getCompany().getId().longValue());
-        assertEquals(companyName, first.getCompany().getName());
+        assertEquals(id.longValue(), result.getId().longValue());
+        assertEquals(host, result.getName());
+        assertEquals(null, result.getIntroduced());
+        assertEquals(date, result.getDiscontinued());
+        assertEquals(companyId.longValue(), result.getCompany().getId().longValue());
+        assertEquals(companyName, result.getCompany().getName());
     }
 
     /**

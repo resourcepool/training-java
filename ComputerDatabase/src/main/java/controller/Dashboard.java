@@ -40,7 +40,7 @@ public class Dashboard {
      * @return view name to load
      */
     @GetMapping
-    public String doGet(ModelMap model,
+    public String getDashboard(ModelMap model,
             @RequestParam(value = "pagination", required = false, defaultValue = DEFAULT_PAGESIZE) Long pageSize,
             @RequestParam(value = "page", required = false, defaultValue = DEFAULT_STARTING_PAGE) Long pageNumber,
             @RequestParam(value = "search", required = false) String search,
