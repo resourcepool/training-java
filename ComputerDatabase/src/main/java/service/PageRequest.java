@@ -6,8 +6,12 @@ import model.pages.Page;
 import persistence.querycommands.PageQuery;
 
 public class PageRequest<T> {
-    private Long              pageSize;
-    private Long              nbPage;
+
+    private static final Long DEFAULT_PAGESIZE      = 20L;
+    private static final Long DEFAULT_STARTING_PAGE = 1L;
+
+    private Long              pageSize = DEFAULT_PAGESIZE;
+    private Long              nbPage = DEFAULT_STARTING_PAGE;
     private String            search;
     private ComputerMapping   columnSort;
     private String            order;
