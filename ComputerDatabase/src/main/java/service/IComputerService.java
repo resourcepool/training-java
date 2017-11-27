@@ -1,5 +1,6 @@
 package service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import model.Computer;
@@ -44,6 +45,11 @@ public interface IComputerService {
      */
     void deleteByCompany(Long id);
 
-
+    /**
+     * @param search filter to search (computer or company name like) or null
+     * @return number of elem
+     * @throws SQLException fail to load
+     */
+    Long getCount(String search);
 
 }

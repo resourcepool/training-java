@@ -20,8 +20,9 @@
 		<mysql.version>5.1.26</mysql.version>
 		<slf4j.version>1.7.25</slf4j.version>
 		<logback.version>1.0.1</logback.version>
-		<junit.version>4.8.1</junit.version>
+		<junit.version>4.12</junit.version>
 		<mockito.version>1.9.5</mockito.version>
+		<selenium.version>3.7.1</selenium.version>
 		<jstl.version>1.2</jstl.version>
 		<servlet.version>3.1.0</servlet.version>
 		<jsp.version>2.2</jsp.version>
@@ -50,7 +51,6 @@
 			<artifactId>logback-classic</artifactId>
 			<version>${logback.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
@@ -90,13 +90,14 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>${jcloverslf4j.version}</version>
-			
+
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${spring.version}</version>
-			<!-- @ToSee empty99 from logback to retrieve/resolve empty dependancy without having to exclude -->
+			<!-- @ToSee empty99 from logback to retrieve/resolve empty dependancy 
+				without having to exclude -->
 			<exclusions>
 				<exclusion>
 					<groupId>commons-logging</groupId>
@@ -136,6 +137,30 @@
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>${mockito.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>${selenium.version}</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>com.google.guava</groupId>
+					<artifactId>guava</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>21.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

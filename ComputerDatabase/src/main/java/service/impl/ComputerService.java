@@ -137,7 +137,7 @@ public class ComputerService implements IComputerService {
      * @return number of elem
      * @throws SQLException fail to load
      */
-    private Long getCount(String search) {
+    public Long getCount(String search) {
         try {
             return search == null ? computerDao.getComputerTotalCount() : computerDao.getComputerTotalCount(search);
         } catch (SQLException e) {
