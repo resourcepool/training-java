@@ -24,6 +24,7 @@ public class CompanyDao implements ICompanyDao {
     private static final String SELECT_COUNT_FROM_COMPANY_WHERE_ID = "select count(*) from company where id = ?";
     private static final String SELECT_ID_NAME_FROM_COMPANY = "select id, name from company order by name";
 
+    private CompanyMapper ROW_MAPPER = new CompanyMapper();
     private JdbcTemplate jdbc;
 
     /**
@@ -41,7 +42,7 @@ public class CompanyDao implements ICompanyDao {
      */
     @Override
     public List<Company> getCompanyList() throws SQLException {
-        return jdbc.queryForObject(SELECT_ID_NAME_FROM_COMPANY, new CompanyMapper());
+        return jdbc.queryForObject(SELECT_ID_NAME_FROM_COMPANY, ROW_MAPPER);
     }
 
     /**

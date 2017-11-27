@@ -4,8 +4,6 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.jdbc.core.RowMapper;
 
@@ -22,20 +20,6 @@ public class ComputerMapper implements RowMapper<Computer> {
     public static final String ID           = "CO.id";
 
     /**
-     * @param rs ComputerPreview Set loaded from DB
-     * @return the model list
-     * @throws SQLException an unexpected error occur while accessing datas
-     */
-    public List<Computer> mapRows(ResultSet rs) throws SQLException {
-        List<Computer> list = new ArrayList<>();
-
-        while (rs.next()) {
-            list.add(mapOneComputer(rs));
-        }
-        return list;
-    }
-
-    /**
      * @param rs one computer loaded from DB
      * @param i index
      * @return the computer details
@@ -44,15 +28,6 @@ public class ComputerMapper implements RowMapper<Computer> {
     @Override
     public Computer mapRow(ResultSet rs, int i) throws SQLException {
 
-        return mapOneComputer(rs);
-    }
-
-    /**
-     * @param rs Already loaded ResultSet (next() have already been called)
-     * @return a computer with each fields filled
-     * @throws SQLException One value couldn't be loaded
-     */
-    private Computer mapOneComputer(ResultSet rs) throws SQLException {
         Long id = rs.getLong(ID);
         String name = rs.getString(NAME);
         Date introducedDate = rs.getDate(INTRODUCED);

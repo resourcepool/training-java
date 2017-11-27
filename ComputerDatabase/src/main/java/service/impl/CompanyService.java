@@ -73,7 +73,7 @@ public class CompanyService implements ICompanyService {
      * @throws SQLException failed to delete
      */
     @Override
-    @Transactional(readOnly = false, rollbackFor = SQLException.class)
+    @Transactional(readOnly = false)
     public void delete(Long id) {
 
         try {

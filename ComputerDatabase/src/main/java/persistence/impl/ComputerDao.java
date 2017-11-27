@@ -3,19 +3,19 @@ package persistence.impl;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
@@ -38,14 +38,18 @@ public class ComputerDao implements IComputerDao {
     private static final String ID_FILTER                             = " where CO.id = ?";
     private static final String SEARCH_FILTER                         = " where lower(CO.name) like ? or lower(CA.name) like ?";
 
-    private JdbcTemplate        jdbc;
+    private ComputerMapper mapper;
+    private NamedParameterJdbcTemplate        njdbc;
+    private JdbcOperations jdbc;
 
     /**
      * @param ds Datasource
      */
     @Autowired
     public ComputerDao(DataSource ds) {
-        this.jdbc = new JdbcTemplate(ds);
+        this.njdbc = new NamedParameterJdbcTemplate(ds);
+        this.jdbc = njdbc.getJdbcOperations();
+        this.mapper = new ComputerMapper();
     }
 
     // ########################## SELECT, GETTERS #################
@@ -77,9 +81,7 @@ public class ComputerDao implements IComputerDao {
      */
     @Override
     public Computer getComputerDetail(Long id) {
-        return jdbc.queryForObject(SELECT_FROM_COMPUTER_WITH_COMPANY + ID_FILTER, (ResultSet rs, int i) -> {
-            return new ComputerMapper().mapRow(rs, 0);
-        }, id);
+        return jdbc.queryForObject(SELECT_FROM_COMPUTER_WITH_COMPANY + ID_FILTER, this.mapper, id);
     }
     // ########################## PAGES, SEARCH, SORT, LIMIT #######################
 
@@ -111,7 +113,7 @@ public class ComputerDao implements IComputerDao {
         parameters.add(page.getPageSize());
         parameters.add(start);
 
-        return jdbc.query(sb.toString(), parameters.toArray(), new ComputerMapper());
+        return jdbc.query(sb.toString(), parameters.toArray(), this.mapper);
     }
 
     // ########################## CREATE, UPDATE and DELETE #################
@@ -124,23 +126,20 @@ public class ComputerDao implements IComputerDao {
     @Override
     public Long createComputer(Computer newComputer) {
         GeneratedKeyHolder holder = new GeneratedKeyHolder();
-        jdbc.update(new PreparedStatementCreator() {
-            @Override
-            public PreparedStatement createPreparedStatement(Connection c) throws SQLException {
-                PreparedStatement s = c.prepareStatement(INSERT_INTO_COMPUTER_VALUES, Statement.RETURN_GENERATED_KEYS);
+        jdbc.update((Connection conn) -> {
+            PreparedStatement s = conn.prepareStatement(INSERT_INTO_COMPUTER_VALUES, Statement.RETURN_GENERATED_KEYS);
 
-                s.setString(1, newComputer.getName());
-                s.setDate(2, newComputer.getIntroduced() == null ? null : Date.valueOf(newComputer.getIntroduced()));
-                s.setDate(3, newComputer.getDiscontinued() == null ? null : Date.valueOf(newComputer.getDiscontinued()));
+            s.setString(1, newComputer.getName());
+            s.setDate(2, newComputer.getIntroduced() == null ? null : Date.valueOf(newComputer.getIntroduced()));
+            s.setDate(3, newComputer.getDiscontinued() == null ? null : Date.valueOf(newComputer.getDiscontinued()));
 
-                Long companyId = newComputer.getCompany().getId();
-                if (companyId != null) {
-                    s.setLong(4, companyId);
-                } else {
-                    s.setNull(4, Types.BIGINT);
-                }
-                return s;
+            Long companyId = newComputer.getCompany().getId();
+            if (companyId != null) {
+                s.setLong(4, companyId);
+            } else {
+                s.setNull(4, Types.BIGINT);
             }
+            return s;
         }, holder);
 
         return holder.getKey().longValue();
@@ -193,8 +192,8 @@ public class ComputerDao implements IComputerDao {
      */
     @Override
     public void deleteComputers(List<Long> ids) {
-        String filter = ids.stream().map(number -> String.valueOf(number)).collect(Collectors.joining(","));
-        jdbc.update("delete from computer where id in (" + filter + ")");
+        Map<String, List<Long>> params = Collections.singletonMap("ids", ids); //list doesn't work without "Named"JdbcTemplate
+        njdbc.update("delete from computer where id in ( :ids )", params);
     }
 
 }

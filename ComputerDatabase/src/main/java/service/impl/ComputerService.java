@@ -17,7 +17,7 @@ import service.IComputerService;
 import service.PageRequest;
 
 @Service("computerService")
-@Transactional(readOnly = true, rollbackFor = SQLException.class)
+@Transactional(readOnly = true)
 public class ComputerService implements IComputerService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ComputerService.class);
@@ -137,6 +137,7 @@ public class ComputerService implements IComputerService {
      * @return number of elem
      * @throws SQLException fail to load
      */
+    @Override
     public Long getCount(String search) {
         try {
             return search == null ? computerDao.getComputerTotalCount() : computerDao.getComputerTotalCount(search);
