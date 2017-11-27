@@ -36,7 +36,7 @@ public class EditComputer {
 
         if (!loadComputer(req)) {
 
-            return "redirect:/ComputerDatabase/add-computer";
+            return "redirect:/add-computer";
         }
 
         loadPage(req);

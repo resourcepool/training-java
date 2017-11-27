@@ -22,26 +22,30 @@
 			<mylib:showMsg />
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
-					<h1><spring:message code="${ edit ? 'dashboard.edit.title' : 'dashboard.add.title' }" /></h1>
-					<form action="${ edit ? 'edit-computer' : 'add-computer' }" method="POST" name="${edit ? 'edit-computer' : 'add-computer'}">
-						<c:if test="${ edit }">
-							<input type="hidden" value="${ id }" id="id" />
-						</c:if>
+					<h1>
+						<spring:message code="${ edit ? 'dashboard.edit.title' : 'dashboard.add.title' }" />
+					</h1>
+					<form action="${ edit ? 'edit-computer' : 'add-computer' }" method="POST" name="${ edit ? 'edit-computer' : 'add-computer'}">
 						<fieldset>
+							<c:if test="${ edit }">
+								<input type="hidden" id="id" name="id" value="${ id }" />
+							</c:if>
 							<div class="form-group">
-								<label for="computerName"><spring:message code="computer.name"/></label>
-								<input type="text" class="form-control" id="computerName" placeholder="Computer name" name="computerName" value="${ computerName }">
-							</div>
-							<div class="form-group">
-								<label for="introduced"><spring:message code="computer.introduced"/></label>
+								<label for="introduced">
+									<spring:message code="computer.introduced" />
+								</label>
 								<input type="date" class="form-control" id="introduced" placeholder="Introduced date" name="introduced" value="${ introduced }">
 							</div>
 							<div class="form-group">
-								<label for="discontinued"><spring:message code="computer.discontinued"/></label>
+								<label for="discontinued">
+									<spring:message code="computer.discontinued" />
+								</label>
 								<input type="date" class="form-control" id="discontinued" placeholder="Discontinued date" name="discontinued" value="${ discontinued }">
 							</div>
 							<div class="form-group">
-								<label for="companyId"><spring:message code="computer.company"/></label>
+								<label for="companyId">
+									<spring:message code="computer.company" />
+								</label>
 								<select class="form-control" id="companyId" name="companyId">
 									<option value="--">--</option>
 									<c:forEach items="${ companies }" var="item">
@@ -52,7 +56,10 @@
 						</fieldset>
 						<div class="actions pull-right">
 							<input id="btnSubmit" type="submit" value="<spring:message code="${ edit ? 'button.edit' : 'button.add' }"/>" class="btn btn-primary">
-							or <a href="dashboard" class="btn btn-default"><spring:message code="button.cancel"/></a>
+							or
+							<a href="dashboard" class="btn btn-default">
+								<spring:message code="button.cancel" />
+							</a>
 						</div>
 					</form>
 				</div>

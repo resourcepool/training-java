@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -85,6 +86,16 @@ public class RequestUtils {
         }
         DateTimeFormatter formatter = DATE_FORMATTER;
         return date.format(formatter);
+    }
+
+    /**
+     * @param req request
+     */
+    public static void printParameters(HttpServletRequest req) {
+        Enumeration<String> params =  req.getParameterNames();
+        while (params.hasMoreElements()) {
+            System.out.println(params.nextElement());
+        }
     }
 
     /**

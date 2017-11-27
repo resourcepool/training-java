@@ -17,11 +17,11 @@ public class ComputerDto {
      * @param req init params from httpRequest params
      */
     public ComputerDto(HttpServletRequest req) {
+        this.id = req.getParameter(ValidationUtils.ID);
         this.name = req.getParameter(ValidationUtils.COMPUTER_NAME);
         this.introduced = req.getParameter(ValidationUtils.INTRODUCED);
         this.discontinued = req.getParameter(ValidationUtils.DISCONTINUED);
         this.companyId = req.getParameter(ValidationUtils.COMPANY_ID);
-        this.id = req.getParameter(ValidationUtils.ID);
     }
 
     public String getName() {
