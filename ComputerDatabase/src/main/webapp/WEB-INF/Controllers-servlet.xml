@@ -11,8 +11,7 @@
 	<mvc:annotation-driven />
 	<mvc:resources mapping="/**" location="/" />
 	<context:component-scan base-package="controller" />
-<!-- 	<context:annotation-config /> -->
-
+	
 	<!-- #### Languages ######################################### -->
 
 	<bean id="messageSource"
